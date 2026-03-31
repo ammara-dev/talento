@@ -132,7 +132,7 @@
       display: inline-flex; align-items: center; gap: 10px;
       height: 34px; padding: 0 12px;
       border: 1px solid #e8e7eb; border-radius: 999px;
-      background: #fff;
+      background: #F6F5F7;
       font-size: 13px; color: #4b405c;
     }
     .date-nav-pill button {
@@ -197,14 +197,14 @@
     ───────────────────────────────────────── */
     .leave-table { width: 100%; border-collapse: collapse; min-width: 780px; }
 
-    .leave-table thead tr { border-bottom: 1px solid #f0eef6; }
+    .leave-table thead tr { border-bottom: 1px solid #f0eef6; background: #F6F5F7; }
     .leave-table th {
       padding: 8px 10px; text-align: left;
       font-size: 12px; font-weight: 400; color: #787085;
       letter-spacing: -0.12px; white-space: nowrap;
     }
     .leave-table th:first-child { padding-left: 14px; width: 220px; }
-    .leave-table th.col-actions { width: 36px; }
+    .leave-table th.col-actions { width: 50px; }
 
     .leave-table tbody tr { border-bottom: 1px solid #f0eef6; transition: background 120ms; }
     .leave-table tbody tr:last-child { border-bottom: none; }
@@ -215,7 +215,7 @@
       vertical-align: middle;
     }
     .leave-table td:first-child { padding-left: 14px; }
-    .leave-table td.col-actions { padding: 0; text-align: center; }
+    .leave-table td.col-actions { padding: 0 8px; text-align: center; }
 
     /* sort icon inline */
     .sort-icon { display: inline-block; vertical-align: middle; margin-left: 3px; }
@@ -248,7 +248,9 @@
     .pg-wrap {
       display: flex; align-items: center; justify-content: flex-start;
       flex-wrap: wrap; gap: 8px;
+      min-width: 0;
     }
+    .pg-wrap > * { flex-shrink: 0; }
     .pg-nav-btn {
       display: inline-flex; align-items: center; gap: 4px;
       height: 30px; padding: 0 10px;
@@ -259,7 +261,7 @@
     }
     .pg-nav-btn:hover { background: #f5f3fb; }
     .pg-pages-wrap {
-      display: flex; align-items: center; gap: 2px; flex-wrap: wrap;
+      display: flex; align-items: center; gap: 2px; flex-wrap: wrap; justify-content: flex-start;
       background: #F6F5F7; border: 1px solid #e8e7eb; border-radius: 6px;
       padding: 3px 6px;
     }
@@ -293,19 +295,24 @@
       justify-content: space-between; flex-wrap: wrap; gap: 10px;
     }
     .tabs-config-wrap {
-      display: flex; align-items: center; flex-wrap: wrap; gap: 6px;
+      display: flex; align-items: flex-start; flex-wrap: wrap; gap: 6px; justify-content: flex-start;
+      min-width: 0;
     }
+    .tabs-config-wrap > * { flex-shrink: 0; }
 
     /* toolbar: wraps on small screens */
     .toolbar-row {
       display: flex; align-items: center;
       justify-content: space-between; flex-wrap: wrap; gap: 8px;
     }
-    .toolbar-right { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
+    .toolbar-right { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; justify-content: flex-start; }
+    .toolbar-right > * { flex-shrink: 0; }
 
     /* pagination: stack on very small */
     @media (max-width: 480px) {
-      .pg-wrap { justify-content: center; }
+      .pg-wrap { justify-content: flex-start; gap: 4px; }
+      .pg-nav-btn { padding: 0 8px; font-size: 11px; height: 28px; }
+      .pg-page-btn { min-width: 22px; height: 22px; font-size: 11px; padding: 0 4px; }
     }
 
     /* shrink tab text a bit on tablets */
@@ -313,7 +320,12 @@
       .leave-tab { font-size: 11px; padding: 0 7px; }
     }
     @media (max-width: 680px) {
-      .tabs-config-wrap { flex-direction: column; align-items: flex-start; }
+      .tabs-config-wrap { flex-direction: row; align-items: center; }
+    }
+    @media (max-width: 480px) {
+      .leave-tab { font-size: 10px; padding: 0 6px; height: 26px; gap: 4px; }
+      .leave-tab svg { width: 11px; height: 11px; }
+      .toolbar-btn { font-size: 11px; padding: 0 8px; height: 28px; }
     }
   </style>
 </head>
@@ -566,21 +578,25 @@
             <!-- Tabs + Config -->
             <div class="tabs-config-wrap">
               <!-- Tab group -->
-              <div style="display:flex;align-items:center;background:#f6f5f7;border:1.5px solid rgba(30,16,51,0.1);border-radius:8px;padding:2px;gap:0;flex-wrap:nowrap;overflow-x:auto;">
+              <div style="display:flex;align-items:center;background:#f6f5f7;border:1.5px solid rgba(30,16,51,0.1);border-radius:8px;padding:2px;gap:0;flex-wrap:wrap;justify-content:flex-start;max-width:100%;">
                 <button class="leave-tab active" onclick="switchTab(this)">
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 13h4"/></svg>
+                  <!-- Sparkle / auto_awesome icon -->
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M19 9l1.25-2.75L23 5l-2.75-1.25L19 1l-1.25 2.75L15 5l2.75 1.25L19 9zm-7.5.5L9 4 6.5 9.5 1 12l5.5 2.5L9 20l2.5-5.5L17 12l-5.5-2.5zM19 15l-1.25 2.75L15 19l2.75 1.25L19 23l1.25-2.75L23 19l-2.75-1.25L19 15z"/></svg>
                   Summary
                 </button>
                 <button class="leave-tab" onclick="switchTab(this)">
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M2 12h20"/></svg>
+                  <!-- Calendar icon -->
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
                   Leave reconciliations
                 </button>
                 <button class="leave-tab" onclick="switchTab(this)">
+                  <!-- Return / undo arrow icon -->
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 14 4 9 9 4"/><path d="M20 20v-7a4 4 0 0 0-4-4H4"/></svg>
                   Return from leave
                 </button>
                 <button class="leave-tab" onclick="switchTab(this)">
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                  <!-- Document / file icon -->
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
                   Reports
                 </button>
               </div>
@@ -588,7 +604,8 @@
               <!-- Configuration -->
               <button class="toolbar-btn" style="gap:6px;border-radius:8px;">
                 Configuration
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+                <!-- Gear / settings icon -->
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
               </button>
             </div>
           </div>
@@ -613,7 +630,8 @@
             <div class="toolbar-right">
               <!-- Filters -->
               <button class="filter-btn">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+                <!-- Filter / sliders icon -->
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>
                 Filters
                 <span style="color:#787085;">2</span>
               </button>
@@ -646,7 +664,7 @@
           </div>
 
           <!-- ── DATA TABLE ── -->
-          <div class="table-scroll-wrap" style="border: 1px solid #f0eef6; border-radius: 12px; overflow: hidden;">
+          <div class="table-scroll-wrap" style="border: 1px solid #f0eef6; border-radius: 12px; overflow-x: auto; overflow-y: hidden;">
             <table class="leave-table">
               <thead>
                 <tr>
@@ -654,32 +672,32 @@
                     <div style="display:flex;align-items:center;gap:8px;">
                       <input type="checkbox" style="width:14px;height:14px;border:1px solid #e8e7eb;border-radius:3px;cursor:pointer;accent-color:#7c3aed;flex-shrink:0;" />
                       Employee name
-                      <svg class="sort-icon" width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#b0a8bc" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 6 12 2 16 6"/><polyline points="16 18 12 22 8 18"/></svg>
+                      <svg class="sort-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#787085" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 10 12 6 16 10"/><polyline points="8 14 12 18 16 14"/></svg>
                     </div>
                   </th>
                   <th>
                     Leave type
-                    <svg class="sort-icon" width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#b0a8bc" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 6 12 2 16 6"/><polyline points="16 18 12 22 8 18"/></svg>
+                    <svg class="sort-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#787085" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 10 12 6 16 10"/><polyline points="8 14 12 18 16 14"/></svg>
                   </th>
                   <th>
                     Status
-                    <svg class="sort-icon" width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#b0a8bc" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 6 12 2 16 6"/><polyline points="16 18 12 22 8 18"/></svg>
+                    <svg class="sort-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#787085" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 10 12 6 16 10"/><polyline points="8 14 12 18 16 14"/></svg>
                   </th>
                   <th>
                     Start date
-                    <svg class="sort-icon" width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#b0a8bc" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 6 12 2 16 6"/><polyline points="16 18 12 22 8 18"/></svg>
+                    <svg class="sort-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#787085" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 10 12 6 16 10"/><polyline points="8 14 12 18 16 14"/></svg>
                   </th>
                   <th>
                     End date
-                    <svg class="sort-icon" width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#b0a8bc" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 6 12 2 16 6"/><polyline points="16 18 12 22 8 18"/></svg>
+                    <svg class="sort-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#787085" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 10 12 6 16 10"/><polyline points="8 14 12 18 16 14"/></svg>
                   </th>
                   <th>
                     Durations
-                    <svg class="sort-icon" width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#b0a8bc" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 6 12 2 16 6"/><polyline points="16 18 12 22 8 18"/></svg>
+                    <svg class="sort-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#787085" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 10 12 6 16 10"/><polyline points="8 14 12 18 16 14"/></svg>
                   </th>
                   <th>
                     Remaining leave bala...
-                    <svg class="sort-icon" width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#b0a8bc" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 6 12 2 16 6"/><polyline points="16 18 12 22 8 18"/></svg>
+                    <svg class="sort-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#787085" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 10 12 6 16 10"/><polyline points="8 14 12 18 16 14"/></svg>
                   </th>
                   <th class="col-actions"></th>
                 </tr>
@@ -706,7 +724,7 @@
                   <td style="color:#A59FAD;">0 days</td>
                   <td class="col-actions">
                     <button style="color:#787085;padding:6px;" aria-label="More">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="2.5"/><circle cx="12" cy="12" r="2.5"/><circle cx="12" cy="19" r="2.5"/></svg>
                     </button>
                   </td>
                 </tr>
@@ -731,7 +749,7 @@
                   <td style="color:#4b405c;">12 days</td>
                   <td class="col-actions">
                     <button style="color:#787085;padding:6px;" aria-label="More">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="2.5"/><circle cx="12" cy="12" r="2.5"/><circle cx="12" cy="19" r="2.5"/></svg>
                     </button>
                   </td>
                 </tr>
@@ -756,7 +774,7 @@
                   <td style="color:#4b405c;">12 days</td>
                   <td class="col-actions">
                     <button style="color:#787085;padding:6px;" aria-label="More">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="2.5"/><circle cx="12" cy="12" r="2.5"/><circle cx="12" cy="19" r="2.5"/></svg>
                     </button>
                   </td>
                 </tr>
@@ -766,11 +784,11 @@
           </div>
 
           <!-- ── PAGINATION (matching Figma: < Back  01 02 03 04 05 06 ...  30  Next >) ── -->
-          <div class="pg-wrap" style="margin-top:16px; padding:10px 16px; border-radius:10px;">
+          <div class="pg-wrap" style="margin-top:16px; padding:10px 0; border-radius:10px;">
 
             <!-- Back button -->
             <button class="pg-nav-btn">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
               Back
             </button>
 
@@ -789,7 +807,7 @@
             <!-- Next button -->
             <button class="pg-nav-btn">
               Next
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
             </button>
 
           </div>

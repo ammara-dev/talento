@@ -391,6 +391,10 @@
         min-width: 0;
       }
     }
+    @media (max-width: 639px) {
+      #user-info, #user-chevron { display: none !important; }
+      .hide-on-mobile { display: none !important; }
+    }
   </style>
 </head>
 
@@ -457,11 +461,18 @@
 
         <!-- Attendance sub-items (hidden by default) -->
         <div id="attendance-submenu" style="display:none;flex-direction:column;">
+          <!-- Attendance sub-link -->
+          <button style="display:flex;align-items:center;gap:10px;width:calc(100% - 32px);height:36px;border-radius:8px;padding:0 8px;margin:1px 8px 1px 24px;text-align:left;outline:none;cursor:pointer;transition:background 150ms;" 
+                  onmouseover="this.style.background='rgba(236,233,239,.55)'" onmouseout="this.style.background='transparent'">
+            <i class="fa-regular fa-clock" style="width:16px;font-size:13px;color:#787085;flex-shrink:0;"></i>
+            <span class="s-label" style="color:#787085;font-size:13px;letter-spacing:-0.13px;line-height:1;white-space:nowrap;">Attendance</span>
+          </button>
+          <!-- Leave sub-link -->
           <a href="leave.html" style="text-decoration:none;">
             <button style="display:flex;align-items:center;gap:10px;width:calc(100% - 32px);height:36px;border-radius:8px;padding:0 8px;margin:1px 8px 1px 24px;text-align:left;outline:none;cursor:pointer;transition:background 150ms;"
                     onmouseover="this.style.background='rgba(236,233,239,.55)'" onmouseout="this.style.background='transparent'">
               <i class="fa-regular fa-calendar-minus" style="width:16px;font-size:14px;color:#1e1033;flex-shrink:0;"></i>
-              <span class="s-label" style="color:#1e1033;font-size:13px;letter-spacing:-0.13px;line-height:1;white-space:nowrap;">Leave</span>
+              <span class="s-label" style="color:#1e1033;font-size:13px;letter-spacing:-0.13px;line-height:1;white-space:nowrap;">Leave (Time off)</span>
             </button>
           </a>
         </div>
@@ -589,7 +600,7 @@
         <button style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:999px;border:1px solid #ba8aff;color:#7c3aed;font-size:13px;white-space:nowrap;transition:background 150ms;outline:none;"
                 onmouseover="this.style.background='#f5f0ff'" onmouseout="this.style.background='transparent'">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-          Talento AI analyst
+          <span class="hide-on-mobile">Talento AI analyst</span>
         </button>
       </div>
 
@@ -1452,6 +1463,7 @@ document.addEventListener('DOMContentLoaded', function () {
   /* ── NAV ACTIVE STATE ── */
   navItems.forEach(function (item) {
     item.addEventListener('click', function () {
+      if (item.id === 'attendance-toggle') return;
       navItems.forEach(function (n) { n.classList.remove('active'); n.removeAttribute('aria-current'); });
       item.classList.add('active');
       item.setAttribute('aria-current', 'page');
