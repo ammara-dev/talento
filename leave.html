@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <title>Talento – Leave (Time Off)</title>
+  <meta name="description" content="Talento HR Platform – Leave Management" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+  <style>
+    /* ─────────────────────────────────────────
+       GLOBAL RESET
+    ───────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; }
+    * { font-family: 'Alexandria', Helvetica, sans-serif; margin: 0; padding: 0; }
+    html, body { height: 100%; overflow: hidden; background: #fff; }
+
+    /* ─────────────────────────────────────────
+       SIDEBAR
+    ───────────────────────────────────────── */
+    #sidebar {
+      position: fixed; top: 0; left: 0; z-index: 40;
+      height: 100%; width: 240px;
+      display: flex; flex-direction: column;
+      background: #f6f5f7; border-right: 1px solid #e8e7eb;
+      transform: translateX(-100%);
+      transition: transform 300ms ease, width 300ms ease;
+      flex-shrink: 0;
+    }
+    #sidebar.open { transform: translateX(0); }
+
+    @media (min-width: 1024px) {
+      #sidebar {
+        position: relative; transform: translateX(0);
+        height: 100vh; z-index: auto;
+      }
+      #sidebar.collapsed { width: 68px; }
+    }
+
+    #sidebar.collapsed .s-label,
+    #sidebar.collapsed .s-arrow,
+    #sidebar.collapsed .logo-full,
+    #sidebar.collapsed .settings-label,
+    #sidebar.collapsed #attendance-submenu { display: none !important; }
+    #sidebar:not(.collapsed) .logo-icon-only { display: none !important; }
+    #sidebar.collapsed .logo-icon-only { display: flex !important; }
+
+    /* nav items */
+    .nav-item { cursor: pointer; transition: background 150ms ease; }
+    .nav-item.active { background: #ece9ef; box-shadow: inset -3px -4px 4px #e6e4e9; }
+    .nav-item:not(.active):hover { background: rgba(236,233,239,.55); }
+
+    .nav-sub-item { cursor: pointer; transition: background 150ms ease; border-radius: 8px; }
+    .nav-sub-item.active { background: #ece9ef; box-shadow: inset -3px -4px 4px #e6e4e9; }
+    .nav-sub-item:not(.active):hover { background: rgba(236,233,239,.55); }
+
+    /* sidebar scroll */
+    #sb-scroll { overflow-y: auto; overflow-x: hidden; flex: 1; }
+    #sb-scroll::-webkit-scrollbar { width: 4px; }
+    #sb-scroll::-webkit-scrollbar-thumb { background: #d2cfd6; border-radius: 4px; }
+
+    /* ─────────────────────────────────────────
+       OVERLAY
+    ───────────────────────────────────────── */
+    #overlay {
+      display: none; position: fixed; inset: 0; z-index: 30;
+      background: rgba(0,0,0,.35);
+    }
+    #overlay.show { display: block; }
+
+    /* ─────────────────────────────────────────
+       LAYOUT
+    ───────────────────────────────────────── */
+    #app { display: flex; height: 100vh; overflow: hidden; }
+    #main-col { display: flex; flex-direction: column; flex: 1; min-width: 0; overflow: hidden; }
+
+    /* ─────────────────────────────────────────
+       MAIN SCROLL
+    ───────────────────────────────────────── */
+    #main-scroll { overflow-y: auto; overflow-x: hidden; flex: 1; }
+    #main-scroll::-webkit-scrollbar { width: 6px; }
+    #main-scroll::-webkit-scrollbar-thumb { background: #d2cfd6; border-radius: 4px; }
+
+    /* ─────────────────────────────────────────
+       MISC UTILS
+    ───────────────────────────────────────── */
+    button { background: none; border: none; cursor: pointer; }
+    input  { outline: none; border: none; background: transparent; width: 100%; }
+    .card  { background: #fff; border-radius: 16px; border: 1px solid #e8e7eb; }
+
+    /* ─────────────────────────────────────────
+       NAVBAR: hide user text on mobile
+    ───────────────────────────────────────── */
+    #user-info  { display: flex; }
+    #user-chevron { display: block; }
+    @media (max-width: 639px) {
+      #user-info    { display: none !important; }
+      #user-chevron { display: none !important; }
+    }
+
+    /* ─────────────────────────────────────────
+       LEAVE TABS
+    ───────────────────────────────────────── */
+    .leave-tab {
+      display: inline-flex; align-items: center; gap: 5px;
+      height: 28px; padding: 0 10px;
+      border-radius: 6px;
+      font-size: 12px; color: #4b405c;
+      cursor: pointer; white-space: nowrap;
+      transition: background 150ms;
+      font-family: 'Alexandria', Helvetica, sans-serif;
+      border: none; background: transparent;
+    }
+    .leave-tab:hover:not(.active) { background: rgba(236,233,239,.55); }
+    .leave-tab.active {
+      background: #fff;
+      color: #1e1033;
+      border: 1px solid #e8e7eb;
+      box-shadow: 0 0.5px 1px rgba(30,16,51,0.15);
+      font-weight: 500;
+    }
+
+    /* ─────────────────────────────────────────
+       DATE NAV PILL (bordered)
+    ───────────────────────────────────────── */
+    .date-nav-pill {
+      display: inline-flex; align-items: center; gap: 10px;
+      height: 34px; padding: 0 12px;
+      border: 1px solid #e8e7eb; border-radius: 999px;
+      background: #fff;
+      font-size: 13px; color: #4b405c;
+    }
+    .date-nav-pill button {
+      display: flex; align-items: center; justify-content: center;
+      width: 18px; height: 18px;
+      color: #4b405c; background: transparent; border: none;
+      cursor: pointer; padding: 0; flex-shrink: 0;
+    }
+    .date-nav-pill .dot {
+      width: 4px; height: 4px; border-radius: 50%;
+      background: #c4b5e8; flex-shrink: 0;
+    }
+
+    /* ─────────────────────────────────────────
+       TOOLBAR BUTTONS
+    ───────────────────────────────────────── */
+    .toolbar-btn {
+      display: inline-flex; align-items: center; gap: 5px;
+      height: 32px; padding: 0 10px;
+      border: 1px solid #e8e7eb; border-radius: 8px;
+      font-size: 13px; color: #1e1033; background: #fff;
+      cursor: pointer; white-space: nowrap;
+      box-shadow: 0 0.5px 1px rgba(30,16,51,.12);
+      font-family: 'Alexandria', Helvetica, sans-serif;
+      transition: background 150ms;
+    }
+    .toolbar-btn:hover { background: #f5f3fb; }
+
+    .filter-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      height: 32px; padding: 0 12px;
+      border: 1px solid #e8e7eb; border-radius: 999px;
+      font-size: 13px; color: #1e1033; background: #fff;
+      cursor: pointer; white-space: nowrap;
+      font-family: 'Alexandria', Helvetica, sans-serif;
+      transition: background 150ms;
+    }
+    .filter-btn:hover { background: #f5f3fb; }
+
+    /* ─────────────────────────────────────────
+       VIEW TOGGLE
+    ───────────────────────────────────────── */
+    .view-wrap {
+      display: flex; align-items: center;
+      background: #f6f5f7; border: 1px solid #e8e7eb;
+      border-radius: 999px; padding: 2px; height: 32px;
+    }
+    .view-btn {
+      display: flex; align-items: center; justify-content: center;
+      width: 26px; height: 26px; border-radius: 50%;
+      cursor: pointer; transition: background 150ms;
+      border: none; background: transparent; color: #787085;
+    }
+    .view-btn.active {
+      background: #fff; border: 1px solid #e8e7eb;
+      box-shadow: 0 0.5px 1px rgba(30,16,51,.15); color: #1e1033;
+    }
+    .view-btn:not(.active):hover { background: rgba(236,233,239,.55); }
+
+    /* ─────────────────────────────────────────
+       TABLE
+    ───────────────────────────────────────── */
+    .leave-table { width: 100%; border-collapse: collapse; min-width: 780px; }
+
+    .leave-table thead tr { border-bottom: 1px solid #f0eef6; }
+    .leave-table th {
+      padding: 8px 10px; text-align: left;
+      font-size: 12px; font-weight: 400; color: #787085;
+      letter-spacing: -0.12px; white-space: nowrap;
+    }
+    .leave-table th:first-child { padding-left: 14px; width: 220px; }
+    .leave-table th.col-actions { width: 36px; }
+
+    .leave-table tbody tr { border-bottom: 1px solid #f0eef6; transition: background 120ms; }
+    .leave-table tbody tr:last-child { border-bottom: none; }
+    .leave-table tbody tr:hover { background: #faf9fc; }
+
+    .leave-table td {
+      padding: 8px 10px; font-size: 13px; color: #1e1033; white-space: nowrap;
+      vertical-align: middle;
+    }
+    .leave-table td:first-child { padding-left: 14px; }
+    .leave-table td.col-actions { padding: 0; text-align: center; }
+
+    /* sort icon inline */
+    .sort-icon { display: inline-block; vertical-align: middle; margin-left: 3px; }
+
+    /* status badges */
+    .badge-approved {
+      display: inline-flex; align-items: center;
+      padding: 3px 10px; border-radius: 999px;
+      font-size: 11px; font-weight: 500;
+      background: #dcfce7; color: #16a34a;
+    }
+    .badge-review {
+      display: inline-flex; align-items: center;
+      padding: 3px 10px; border-radius: 999px;
+      font-size: 11px; font-weight: 400;
+      background: #f3f4f6; color: #6b7280;
+    }
+
+    /* duration pill */
+    .duration-pill {
+      display: inline-flex; align-items: center;
+      padding: 3px 10px; border-radius: 999px;
+      font-size: 11px; font-weight: 400;
+      background: #fff; color: #4b405c;
+      border: 1px solid #e8e7eb;
+    }
+
+    /* ─────────────────────────────────────────
+       PAGINATION
+    ───────────────────────────────────────── */
+    .pg-wrap {
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 8px;
+    }
+    .pg-nav-btn {
+      display: inline-flex; align-items: center; gap: 4px;
+      height: 30px; padding: 0 10px;
+      border: 1px solid #e8e7eb; border-radius: 6px;
+      font-size: 12px; color: #4b405c; background: #fff;
+      cursor: pointer; font-family: 'Alexandria', Helvetica, sans-serif;
+      transition: background 150ms;
+    }
+    .pg-nav-btn:hover { background: #f5f3fb; }
+    .pg-page-btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 30px; height: 30px;
+      border: 1px solid #e8e7eb; border-radius: 6px;
+      font-size: 12px; color: #4b405c; background: #fff;
+      cursor: pointer; font-family: 'Alexandria', Helvetica, sans-serif;
+      transition: background 150ms;
+    }
+    .pg-page-btn:hover:not(.pg-active) { background: #f5f3fb; }
+    .pg-page-btn.pg-active {
+      background: #1e1033; color: #fff; border-color: #1e1033;
+    }
+    .pg-dots { font-size: 12px; color: #787085; padding: 0 2px; }
+
+    /* ─────────────────────────────────────────
+       MOBILE / RESPONSIVE HELPERS
+    ───────────────────────────────────────── */
+
+    /* table wrapper: horizontal scroll on small screens */
+    .table-scroll-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .table-scroll-wrap::-webkit-scrollbar { height: 4px; }
+    .table-scroll-wrap::-webkit-scrollbar-thumb { background: #d2cfd6; border-radius: 4px; }
+
+    /* header: allow wrapping */
+    .page-header-row {
+      display: flex; align-items: flex-start;
+      justify-content: space-between; flex-wrap: wrap; gap: 10px;
+    }
+    .tabs-config-wrap {
+      display: flex; align-items: center; flex-wrap: wrap; gap: 6px;
+    }
+
+    /* toolbar: wraps on small screens */
+    .toolbar-row {
+      display: flex; align-items: center;
+      justify-content: space-between; flex-wrap: wrap; gap: 8px;
+    }
+    .toolbar-right { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
+
+    /* pagination: stack on very small */
+    @media (max-width: 480px) {
+      .pg-wrap { justify-content: center; }
+    }
+
+    /* shrink tab text a bit on tablets */
+    @media (max-width: 900px) {
+      .leave-tab { font-size: 11px; padding: 0 7px; }
+    }
+    @media (max-width: 680px) {
+      .tabs-config-wrap { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+
+<body>
+<div id="app">
+
+  <!-- OVERLAY (mobile) -->
+  <div id="overlay" aria-hidden="true"></div>
+
+  <!-- =============================================
+       SIDEBAR
+  ============================================= -->
+  <aside id="sidebar" aria-label="Main navigation">
+
+    <!-- Logo + Collapse -->
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 12px 10px;flex-shrink:0;">
+      <span class="logo-full" style="font-size:24px;font-weight:700;color:#1e1033;">Talento</span>
+      <div class="logo-icon-only" style="display:none;align-items:center;justify-content:center;width:100%;">
+        <i class="fa-solid fa-house" style="font-size:20px;color:#1e1033;"></i>
+      </div>
+      <button id="collapse-btn" aria-label="Collapse sidebar"
+              style="display:none;align-items:center;justify-content:center;width:28px;height:28px;border-radius:6px;flex-shrink:0;transition:background 150ms;"
+              onmouseover="this.style.background='#ece9ef'" onmouseout="this.style.background='transparent'">
+        <svg id="collapse-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4b405c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Nav (scrollable) -->
+    <div id="sb-scroll">
+      <nav style="display:flex;flex-direction:column;padding:4px 0;">
+
+        <!-- Dashboard -->
+        <a href="index.html" style="text-decoration:none;">
+          <button class="nav-item"
+            style="display:flex;align-items:center;gap:10px;width:calc(100% - 16px);height:40px;border-radius:8px;padding:0 8px;margin:0 8px;text-align:left;outline:none;">
+            <i class="fa-solid fa-house" style="width:20px;font-size:16px;color:#1e1033;flex-shrink:0;"></i>
+            <span class="s-label" style="color:#1e1033;font-size:14px;letter-spacing:-0.14px;line-height:1;white-space:nowrap;">Dashboard</span>
+          </button>
+        </a>
+
+        <!-- Requests -->
+        <button class="nav-item"
+          style="display:flex;align-items:center;gap:10px;width:100%;height:40px;border-radius:8px;padding:0 16px;text-align:left;outline:none;">
+          <i class="fa-solid fa-clipboard-list" style="width:20px;font-size:16px;color:#1e1033;flex-shrink:0;"></i>
+          <span class="s-label" style="color:#1e1033;font-size:14px;letter-spacing:-0.14px;line-height:1;white-space:nowrap;flex:1;">Requests</span>
+        </button>
+
+        <!-- Attendance & leave (expanded, no active on parent) -->
+        <button class="nav-item" id="attendance-toggle" aria-haspopup="true" aria-expanded="true"
+          style="display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;height:40px;border-radius:8px;padding:0 16px;outline:none;">
+          <span style="display:flex;align-items:center;gap:10px;">
+            <i class="fa-solid fa-calendar-check" style="width:20px;font-size:16px;color:#1e1033;flex-shrink:0;"></i>
+            <span class="s-label" style="color:#1e1033;font-size:14px;letter-spacing:-0.14px;line-height:1;white-space:nowrap;">Attendance &amp; leave</span>
+          </span>
+          <svg class="s-arrow" id="attendance-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4b405c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;transform:rotate(180deg);transition:transform 200ms;"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+
+        <!-- Sub-items -->
+        <div id="attendance-submenu" style="display:flex;flex-direction:column;">
+          <!-- Attendance sub-link -->
+          <button class="nav-sub-item"
+            style="display:flex;align-items:center;gap:10px;width:calc(100% - 32px);height:36px;padding:0 8px;margin:1px 8px 1px 24px;text-align:left;outline:none;">
+            <i class="fa-regular fa-clock" style="width:16px;font-size:13px;color:#787085;flex-shrink:0;"></i>
+            <span class="s-label" style="color:#787085;font-size:13px;letter-spacing:-0.13px;line-height:1;white-space:nowrap;">Attendance</span>
+          </button>
+          <!-- Leave (Time off) — active -->
+          <a href="leave.html" style="text-decoration:none;">
+            <button class="nav-sub-item active"
+              style="display:flex;align-items:center;gap:10px;width:calc(100% - 32px);height:36px;padding:0 8px;margin:1px 8px 1px 24px;text-align:left;outline:none;">
+              <i class="fa-regular fa-calendar-minus" style="width:16px;font-size:13px;color:#1e1033;flex-shrink:0;"></i>
+              <span class="s-label" style="color:#1e1033;font-size:13px;font-weight:500;letter-spacing:-0.13px;line-height:1;white-space:nowrap;">Leave (Time off)</span>
+            </button>
+          </a>
+        </div>
+
+        <!-- Employees -->
+        <button class="nav-item"
+          style="display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;height:40px;border-radius:8px;padding:0 16px;outline:none;">
+          <span style="display:flex;align-items:center;gap:10px;">
+            <i class="fa-solid fa-users" style="width:20px;font-size:16px;color:#1e1033;flex-shrink:0;"></i>
+            <span class="s-label" style="color:#1e1033;font-size:14px;letter-spacing:-0.14px;white-space:nowrap;">Employees</span>
+          </span>
+          <svg class="s-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4b405c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+
+        <!-- Finance -->
+        <button class="nav-item"
+          style="display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;height:40px;border-radius:8px;padding:0 16px;outline:none;">
+          <span style="display:flex;align-items:center;gap:10px;">
+            <i class="fa-solid fa-wallet" style="width:20px;font-size:16px;color:#1e1033;flex-shrink:0;"></i>
+            <span class="s-label" style="color:#1e1033;font-size:14px;letter-spacing:-0.14px;white-space:nowrap;">Finance</span>
+          </span>
+          <svg class="s-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4b405c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+
+        <!-- Business missions -->
+        <button class="nav-item"
+          style="display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;height:40px;border-radius:8px;padding:0 16px;outline:none;">
+          <span style="display:flex;align-items:center;gap:10px;">
+            <i class="fa-solid fa-briefcase" style="width:20px;font-size:16px;color:#1e1033;flex-shrink:0;"></i>
+            <span class="s-label" style="color:#1e1033;font-size:14px;letter-spacing:-0.14px;white-space:nowrap;">Business missions</span>
+          </span>
+          <svg class="s-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4b405c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+
+        <!-- Hiring -->
+        <button class="nav-item"
+          style="display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;height:40px;border-radius:8px;padding:0 16px;outline:none;">
+          <span style="display:flex;align-items:center;gap:10px;">
+            <i class="fa-solid fa-user-plus" style="width:20px;font-size:16px;color:#1e1033;flex-shrink:0;"></i>
+            <span class="s-label" style="color:#1e1033;font-size:14px;letter-spacing:-0.14px;white-space:nowrap;">Hiring</span>
+          </span>
+          <svg class="s-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4b405c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+
+        <!-- Documents -->
+        <button class="nav-item"
+          style="display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;height:40px;border-radius:8px;padding:0 16px;outline:none;">
+          <span style="display:flex;align-items:center;gap:10px;">
+            <i class="fa-solid fa-folder-open" style="width:20px;font-size:16px;color:#1e1033;flex-shrink:0;"></i>
+            <span class="s-label" style="color:#1e1033;font-size:14px;letter-spacing:-0.14px;white-space:nowrap;">Documents</span>
+          </span>
+          <svg class="s-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4b405c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+
+        <!-- Team engagement -->
+        <button class="nav-item"
+          style="display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;height:40px;border-radius:8px;padding:0 16px;outline:none;">
+          <span style="display:flex;align-items:center;gap:10px;">
+            <i class="fa-solid fa-people-group" style="width:20px;font-size:16px;color:#1e1033;flex-shrink:0;"></i>
+            <span class="s-label" style="color:#1e1033;font-size:14px;letter-spacing:-0.14px;white-space:nowrap;">Team engagement</span>
+          </span>
+          <svg class="s-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4b405c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+
+        <!-- Mobile app -->
+        <button class="nav-item"
+          style="display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;height:40px;border-radius:8px;padding:0 16px;outline:none;">
+          <span style="display:flex;align-items:center;gap:10px;">
+            <i class="fa-solid fa-mobile-screen" style="width:20px;font-size:16px;color:#1e1033;flex-shrink:0;"></i>
+            <span class="s-label" style="color:#1e1033;font-size:14px;letter-spacing:-0.14px;white-space:nowrap;">Mobile app</span>
+          </span>
+          <svg class="s-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4b405c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+
+        <!-- Website -->
+        <button class="nav-item"
+          style="display:flex;align-items:center;gap:10px;width:100%;height:40px;border-radius:8px;padding:0 16px;text-align:left;outline:none;">
+          <i class="fa-solid fa-globe" style="width:20px;font-size:16px;color:#1e1033;flex-shrink:0;"></i>
+          <span class="s-label" style="color:#1e1033;font-size:14px;letter-spacing:-0.14px;white-space:nowrap;">Website</span>
+        </button>
+
+        <!-- Apps -->
+        <button class="nav-item"
+          style="display:flex;align-items:center;gap:10px;width:100%;height:40px;border-radius:8px;padding:0 16px;text-align:left;outline:none;">
+          <i class="fa-solid fa-grip" style="width:20px;font-size:16px;color:#1e1033;flex-shrink:0;"></i>
+          <span class="s-label" style="color:#1e1033;font-size:14px;letter-spacing:-0.14px;white-space:nowrap;">Apps</span>
+        </button>
+
+      </nav>
+    </div>
+
+    <!-- Settings (bottom) -->
+    <div style="padding:10px 8px 14px;flex-shrink:0;border-top:1px solid #e8e7eb;margin-top:4px;">
+      <button class="nav-item"
+        style="display:flex;align-items:center;gap:10px;width:100%;height:40px;border-radius:8px;padding:0 8px;outline:none;">
+        <i class="fa-solid fa-gear" style="width:20px;font-size:16px;color:#1e1033;flex-shrink:0;"></i>
+        <span class="s-label settings-label" style="color:#1e1033;font-size:14px;letter-spacing:-0.14px;white-space:nowrap;">Settings</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- =============================================
+       MAIN COLUMN
+  ============================================= -->
+  <div id="main-col">
+
+    <!-- ─── TOP NAVBAR ─── -->
+    <header style="display:flex;align-items:center;justify-content:space-between;padding:10px 16px;border-bottom:1px solid #e8e7eb;background:#fff;flex-shrink:0;gap:10px;min-height:56px;">
+
+      <!-- Left: hamburger + Talento AI -->
+      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+        <button id="menu-btn" aria-label="Open menu"
+                style="display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:6px;transition:background 150ms;"
+                onmouseover="this.style.background='#ece9ef'" onmouseout="this.style.background='transparent'">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4b405c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+          </svg>
+        </button>
+        <button style="display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 12px;border-radius:999px;border:1.5px solid #c4b0e8;background:#fff;color:#1e1033;font-size:13px;font-family:'Alexandria',Helvetica,sans-serif;font-weight:500;transition:background 150ms;white-space:nowrap;"
+                onmouseover="this.style.background='#f5f0ff'" onmouseout="this.style.background='#fff'">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Talento AI analyst
+        </button>
+      </div>
+
+      <!-- Right: icons + user -->
+      <div style="display:flex;align-items:center;gap:4px;flex-shrink:0;">
+        <!-- Calendar -->
+        <button style="width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;transition:background 150ms;"
+                onmouseover="this.style.background='#f0eef8'" onmouseout="this.style.background='transparent'" aria-label="Calendar">
+          <i class="fa-regular fa-calendar" style="font-size:16px;color:#4b405c;"></i>
+        </button>
+        <!-- Chat -->
+        <button style="width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;transition:background 150ms;"
+                onmouseover="this.style.background='#f0eef8'" onmouseout="this.style.background='transparent'" aria-label="Messages">
+          <i class="fa-regular fa-comment-dots" style="font-size:16px;color:#4b405c;"></i>
+        </button>
+        <!-- Bell -->
+        <button style="position:relative;width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;transition:background 150ms;"
+                onmouseover="this.style.background='#f0eef8'" onmouseout="this.style.background='transparent'" aria-label="Notifications">
+          <i class="fa-regular fa-bell" style="font-size:16px;color:#4b405c;"></i>
+          <span style="position:absolute;top:6px;right:6px;width:6px;height:6px;border-radius:50%;background:#e74c3c;border:1.5px solid #fff;"></span>
+        </button>
+        <!-- Divider -->
+        <div style="width:1px;height:20px;background:#e8e7eb;margin:0 4px;flex-shrink:0;"></div>
+        <!-- User -->
+        <button style="display:flex;align-items:center;gap:8px;padding:2px 6px;border-radius:8px;transition:background 150ms;outline:none;"
+                onmouseover="this.style.background='#f0eef8'" onmouseout="this.style.background='transparent'">
+          <div style="width:30px;height:30px;border-radius:50%;background:#c9b8d8;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="#5b3a7a"><circle cx="12" cy="8" r="5"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+          </div>
+          <div id="user-info" style="text-align:left;">
+            <p style="color:#1e1033;font-size:13px;font-weight:600;letter-spacing:-0.13px;line-height:1.2;">Huda AlQahtani</p>
+            <p style="color:#787085;font-size:10px;line-height:1.2;">alqahtani@gmail.com</p>
+          </div>
+          <svg id="user-chevron" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#787085" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- ─── SCROLL AREA ─── -->
+    <div id="main-scroll">
+      <div style="padding:16px;background:#f6f5f7;min-height:calc(100vh - 56px);">
+
+        <!-- ==============================
+             MAIN CONTENT CARD
+        ============================== -->
+        <div style="background:#fff;border-radius:20px;padding:20px 20px 24px;display:flex;flex-direction:column;gap:0;">
+
+          <!-- ── PAGE HEADER (title + tabs + config) ── -->
+          <div class="page-header-row" style="margin-bottom:12px;">
+
+            <!-- Title -->
+            <h1 style="color:#1e1033;font-size:22px;font-weight:400;letter-spacing:-0.22px;line-height:1.4;flex-shrink:0;">Leave (Time off)</h1>
+
+            <!-- Tabs + Config -->
+            <div class="tabs-config-wrap">
+              <!-- Tab group -->
+              <div style="display:flex;align-items:center;background:#f6f5f7;border:1.5px solid rgba(30,16,51,0.1);border-radius:8px;padding:2px;gap:0;flex-wrap:nowrap;overflow-x:auto;">
+                <button class="leave-tab active" onclick="switchTab(this)">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 13h4"/></svg>
+                  Summary
+                </button>
+                <button class="leave-tab" onclick="switchTab(this)">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M2 12h20"/></svg>
+                  Leave reconciliations
+                </button>
+                <button class="leave-tab" onclick="switchTab(this)">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 14 4 9 9 4"/><path d="M20 20v-7a4 4 0 0 0-4-4H4"/></svg>
+                  Return from leave
+                </button>
+                <button class="leave-tab" onclick="switchTab(this)">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                  Reports
+                </button>
+              </div>
+
+              <!-- Configuration -->
+              <button class="toolbar-btn" style="gap:6px;border-radius:8px;">
+                Configuration
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- ── TOOLBAR: date nav (left) + filters/actions (right) ── -->
+          <div class="toolbar-row" style="margin-bottom:16px;">
+
+            <!-- Date navigator — bordered pill matching Figma -->
+            <div class="date-nav-pill">
+              <button aria-label="Previous">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+              </button>
+              <span style="font-size:13px;color:#4b405c;letter-spacing:-0.07px;">Today</span>
+              <span class="dot"></span>
+              <span style="font-size:13px;color:#4b405c;letter-spacing:-0.07px;">Tuesday, 16 Dec</span>
+              <button aria-label="Next">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+              </button>
+            </div>
+
+            <!-- Right toolbar actions -->
+            <div class="toolbar-right">
+              <!-- Filters -->
+              <button class="filter-btn">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+                Filters
+                <span style="color:#787085;">2</span>
+              </button>
+
+              <!-- View toggle -->
+              <div class="view-wrap">
+                <button class="view-btn" onclick="switchView(this)" title="Grid view">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+                </button>
+                <button class="view-btn active" onclick="switchView(this)" title="List view">
+                  <svg width="13" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+                </button>
+                <button class="view-btn" onclick="switchView(this)" title="Calendar view">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                </button>
+              </div>
+
+              <!-- Export all -->
+              <button class="toolbar-btn">
+                Export all
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              </button>
+
+              <!-- Edit columns -->
+              <button class="toolbar-btn">
+                Edit columns
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- ── DATA TABLE ── -->
+          <div class="table-scroll-wrap" style="border: 1px solid #f0eef6; border-radius: 12px; overflow: hidden;">
+            <table class="leave-table">
+              <thead>
+                <tr>
+                  <th>
+                    <div style="display:flex;align-items:center;gap:8px;">
+                      <input type="checkbox" style="width:14px;height:14px;border:1px solid #e8e7eb;border-radius:3px;cursor:pointer;accent-color:#7c3aed;flex-shrink:0;" />
+                      Employee name
+                      <svg class="sort-icon" width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#b0a8bc" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 6 12 2 16 6"/><polyline points="16 18 12 22 8 18"/></svg>
+                    </div>
+                  </th>
+                  <th>
+                    Leave type
+                    <svg class="sort-icon" width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#b0a8bc" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 6 12 2 16 6"/><polyline points="16 18 12 22 8 18"/></svg>
+                  </th>
+                  <th>
+                    Status
+                    <svg class="sort-icon" width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#b0a8bc" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 6 12 2 16 6"/><polyline points="16 18 12 22 8 18"/></svg>
+                  </th>
+                  <th>
+                    Start date
+                    <svg class="sort-icon" width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#b0a8bc" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 6 12 2 16 6"/><polyline points="16 18 12 22 8 18"/></svg>
+                  </th>
+                  <th>
+                    End date
+                    <svg class="sort-icon" width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#b0a8bc" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 6 12 2 16 6"/><polyline points="16 18 12 22 8 18"/></svg>
+                  </th>
+                  <th>
+                    Durations
+                    <svg class="sort-icon" width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#b0a8bc" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 6 12 2 16 6"/><polyline points="16 18 12 22 8 18"/></svg>
+                  </th>
+                  <th>
+                    Remaining leave bala...
+                    <svg class="sort-icon" width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="#b0a8bc" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 6 12 2 16 6"/><polyline points="16 18 12 22 8 18"/></svg>
+                  </th>
+                  <th class="col-actions"></th>
+                </tr>
+              </thead>
+              <tbody>
+
+                <!-- Row 1 -->
+                <tr>
+                  <td>
+                    <div style="display:flex;align-items:center;gap:10px;">
+                      <input type="checkbox" style="width:14px;height:14px;border:1px solid #e8e7eb;border-radius:3px;cursor:pointer;accent-color:#7c3aed;flex-shrink:0;" />
+                      <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Fahad AlShahrani" style="width:32px;height:32px;border-radius:50%;object-fit:cover;flex-shrink:0;" />
+                      <div>
+                        <p style="font-size:13px;font-weight:500;color:#1e1033;line-height:1.3;">Fahad AlShahrani</p>
+                        <p style="font-size:11px;color:#787085;line-height:1.3;">Marketing lead</p>
+                      </div>
+                    </div>
+                  </td>
+                  <td style="color:#1e1033;">Annual leave</td>
+                  <td><span class="badge-approved">Approved</span></td>
+                  <td style="color:#4b405c;">12 Dec 2025</td>
+                  <td style="color:#4b405c;">15 Dec 2025</td>
+                  <td><span class="duration-pill">3 days</span></td>
+                  <td style="color:#4b405c;">0 days</td>
+                  <td class="col-actions">
+                    <button style="color:#787085;padding:6px;" aria-label="More">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>
+                    </button>
+                  </td>
+                </tr>
+
+                <!-- Row 2 -->
+                <tr>
+                  <td>
+                    <div style="display:flex;align-items:center;gap:10px;">
+                      <input type="checkbox" style="width:14px;height:14px;border:1px solid #e8e7eb;border-radius:3px;cursor:pointer;accent-color:#7c3aed;flex-shrink:0;" />
+                      <img src="https://randomuser.me/api/portraits/men/45.jpg" alt="Khalid AlAnazi" style="width:32px;height:32px;border-radius:50%;object-fit:cover;flex-shrink:0;" />
+                      <div>
+                        <p style="font-size:13px;font-weight:500;color:#1e1033;line-height:1.3;">Khalid AlAnazi</p>
+                        <p style="font-size:11px;color:#787085;line-height:1.3;">People & culture lead</p>
+                      </div>
+                    </div>
+                  </td>
+                  <td style="color:#1e1033;">Unpaid leave</td>
+                  <td><span class="badge-review">On review</span></td>
+                  <td style="color:#4b405c;">7 Dec 2025</td>
+                  <td style="color:#4b405c;">13 Dec 2025</td>
+                  <td><span class="duration-pill">6 days</span></td>
+                  <td style="color:#4b405c;">12 days</td>
+                  <td class="col-actions">
+                    <button style="color:#787085;padding:6px;" aria-label="More">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>
+                    </button>
+                  </td>
+                </tr>
+
+                <!-- Row 3 -->
+                <tr>
+                  <td>
+                    <div style="display:flex;align-items:center;gap:10px;">
+                      <input type="checkbox" style="width:14px;height:14px;border:1px solid #e8e7eb;border-radius:3px;cursor:pointer;accent-color:#7c3aed;flex-shrink:0;" />
+                      <img src="https://randomuser.me/api/portraits/men/45.jpg" alt="Khalid AlAnazi" style="width:32px;height:32px;border-radius:50%;object-fit:cover;flex-shrink:0;" />
+                      <div>
+                        <p style="font-size:13px;font-weight:500;color:#1e1033;line-height:1.3;">Khalid AlAnazi</p>
+                        <p style="font-size:11px;color:#787085;line-height:1.3;">People & culture lead</p>
+                      </div>
+                    </div>
+                  </td>
+                  <td style="color:#1e1033;">Sick leave</td>
+                  <td><span class="badge-review">On review</span></td>
+                  <td style="color:#4b405c;">7 Dec 2025</td>
+                  <td style="color:#4b405c;">13 Dec 2025</td>
+                  <td><span class="duration-pill">6 days</span></td>
+                  <td style="color:#4b405c;">12 days</td>
+                  <td class="col-actions">
+                    <button style="color:#787085;padding:6px;" aria-label="More">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>
+                    </button>
+                  </td>
+                </tr>
+
+              </tbody>
+            </table>
+          </div>
+
+          <!-- ── PAGINATION (matching Figma: < Back  01 02 03 04 05 06 ...  30  Next >) ── -->
+          <div class="pg-wrap" style="margin-top:16px;">
+
+            <!-- Back button -->
+            <button class="pg-nav-btn">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+              Back
+            </button>
+
+            <!-- Page numbers -->
+            <div style="display:flex;align-items:center;gap:4px;flex-wrap:wrap;justify-content:center;">
+              <button class="pg-page-btn pg-active">01</button>
+              <button class="pg-page-btn" onclick="pgSelect(this)">02</button>
+              <button class="pg-page-btn" onclick="pgSelect(this)">03</button>
+              <button class="pg-page-btn" onclick="pgSelect(this)">04</button>
+              <button class="pg-page-btn" onclick="pgSelect(this)">05</button>
+              <button class="pg-page-btn" onclick="pgSelect(this)">06</button>
+              <span class="pg-dots">...</span>
+              <button class="pg-page-btn" onclick="pgSelect(this)">30</button>
+            </div>
+
+            <!-- Next button -->
+            <button class="pg-nav-btn">
+              Next
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+
+          </div>
+
+        </div>
+        <!-- /MAIN CARD -->
+
+      </div>
+    </div>
+    <!-- /SCROLL -->
+
+  </div>
+  <!-- /MAIN COL -->
+
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+  /* ── COLLAPSE BUTTON (desktop) ── */
+  var sidebar     = document.getElementById('sidebar');
+  var collapseBtn = document.getElementById('collapse-btn');
+  var collapseIcon = document.getElementById('collapse-icon');
+  var isCollapsed = false;
+
+  function initCollapse() {
+    collapseBtn.style.display = window.innerWidth >= 1024 ? 'flex' : 'none';
+  }
+  initCollapse();
+  window.addEventListener('resize', initCollapse);
+
+  collapseBtn.addEventListener('click', function () {
+    isCollapsed = !isCollapsed;
+    sidebar.classList.toggle('collapsed', isCollapsed);
+    collapseBtn.setAttribute('aria-label', isCollapsed ? 'Expand sidebar' : 'Collapse sidebar');
+    collapseIcon.innerHTML = isCollapsed
+      ? '<rect x="3" y="3" width="18" height="18" rx="2"/><line x1="15" y1="3" x2="15" y2="21"/>'
+      : '<rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/>';
+  });
+
+  /* ── MOBILE DRAWER ── */
+  var overlay = document.getElementById('overlay');
+  var menuBtn = document.getElementById('menu-btn');
+  var isOpen  = false;
+
+  function openMobile() {
+    isOpen = true;
+    sidebar.classList.add('open');
+    overlay.classList.add('show');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeMobile() {
+    isOpen = false;
+    sidebar.classList.remove('open');
+    overlay.classList.remove('show');
+    document.body.style.overflow = '';
+  }
+  menuBtn.addEventListener('click', function () { isOpen ? closeMobile() : openMobile(); });
+  overlay.addEventListener('click', closeMobile);
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && isOpen) closeMobile(); });
+  window.addEventListener('resize', function () { if (window.innerWidth >= 1024 && isOpen) closeMobile(); });
+
+  /* ── ATTENDANCE SUBMENU TOGGLE ── */
+  var attToggle  = document.getElementById('attendance-toggle');
+  var attSubmenu = document.getElementById('attendance-submenu');
+  var attArrow   = document.getElementById('attendance-arrow');
+  var attOpen    = true; // open by default on leave page
+
+  attToggle.addEventListener('click', function () {
+    attOpen = !attOpen;
+    attSubmenu.style.display = attOpen ? 'flex' : 'none';
+    attArrow.style.transform = attOpen ? 'rotate(180deg)' : 'rotate(0deg)';
+    attToggle.setAttribute('aria-expanded', String(attOpen));
+  });
+
+});
+
+/* ── TAB SWITCHING ── */
+function switchTab(el) {
+  document.querySelectorAll('.leave-tab').forEach(function (t) { t.classList.remove('active'); });
+  el.classList.add('active');
+}
+
+/* ── VIEW TOGGLE ── */
+function switchView(el) {
+  document.querySelectorAll('.view-btn').forEach(function (b) { b.classList.remove('active'); });
+  el.classList.add('active');
+}
+
+/* ── PAGINATION ── */
+function pgSelect(el) {
+  document.querySelectorAll('.pg-page-btn').forEach(function (b) { b.classList.remove('pg-active'); });
+  el.classList.add('pg-active');
+}
+</script>
+</body>
+</html>
