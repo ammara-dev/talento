@@ -1,0 +1,1438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <title>Talento – Dashboard</title>
+  <meta name="description" content="Talento HR Platform Dashboard" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+  <style>
+    /* ─────────────────────────────────────────
+       GLOBAL
+    ───────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; }
+    * { font-family: 'Alexandria', Helvetica, sans-serif; margin: 0; padding: 0; }
+    html, body { height: 100%; overflow: hidden; background: #fff; }
+
+    /* ─────────────────────────────────────────
+       SIDEBAR
+    ───────────────────────────────────────── */
+    #sidebar {
+      position: fixed;
+      top: 0; left: 0;
+      z-index: 40;
+      height: 100%;
+      width: 240px;
+      display: flex;
+      flex-direction: column;
+      background: #f6f5f7;
+      border-right: 1px solid #e8e7eb;
+      transform: translateX(-100%);
+      transition: transform 300ms ease, width 300ms ease;
+      flex-shrink: 0;
+    }
+    #sidebar.open { transform: translateX(0); }
+
+    @media (min-width: 1024px) {
+      #sidebar {
+        position: relative;
+        transform: translateX(0);
+        height: 100vh;
+        z-index: auto;
+      }
+      #sidebar.collapsed { width: 68px; }
+    }
+
+    /* collapsed: hide labels / arrows */
+    #sidebar.collapsed .s-label,
+    #sidebar.collapsed .s-arrow,
+    #sidebar.collapsed .logo-full,
+    #sidebar.collapsed .settings-label { display: none !important; }
+    #sidebar:not(.collapsed) .logo-icon-only { display: none !important; }
+    #sidebar.collapsed .logo-icon-only { display: flex !important; }
+
+    /* nav active */
+    .nav-item { cursor: pointer; transition: background 150ms ease; }
+    .nav-item.active { background: #ece9ef; box-shadow: inset -3px -4px 4px #e6e4e9; }
+    .nav-item:not(.active):hover { background: rgba(236,233,239,.55); }
+
+    /* sidebar scroll */
+    #sb-scroll { overflow-y: auto; overflow-x: hidden; flex: 1; }
+    #sb-scroll::-webkit-scrollbar { width: 4px; }
+    #sb-scroll::-webkit-scrollbar-thumb { background: #d2cfd6; border-radius: 4px; }
+
+    /* ─────────────────────────────────────────
+       OVERLAY
+    ───────────────────────────────────────── */
+    #overlay {
+      display: none;
+      position: fixed; inset: 0; z-index: 30;
+      background: rgba(0,0,0,.35);
+    }
+    #overlay.show { display: block; }
+
+    /* ─────────────────────────────────────────
+       MAIN CONTENT SCROLL
+    ───────────────────────────────────────── */
+    #main-scroll { overflow-y: auto; overflow-x: hidden; flex: 1; }
+    #main-scroll::-webkit-scrollbar { width: 6px; }
+    #main-scroll::-webkit-scrollbar-thumb { background: #d2cfd6; border-radius: 4px; }
+
+    /* ─────────────────────────────────────────
+       ATTENDANCE WEEKLY CHART
+    ───────────────────────────────────────── */
+    .attendance-bottom {
+      display: flex;
+      align-items: flex-end;
+      gap: 0;
+      margin-top: 40px;
+    }
+    .attendance-stats {
+      flex-shrink: 0;
+      padding-bottom: 20px;
+      min-width: 150px;
+    }
+    .attendance-percent {
+      font-family: 'Alexandria', sans-serif;
+      font-size: 38px;
+      font-weight: 600;
+      letter-spacing: -0.38px;
+      display: block;
+      line-height: 1;
+      background: linear-gradient(135deg, #1e1033 0%, #5a3d7a 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .weekly-chart-container {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      padding: 80px 10px 20px 10px;
+    }
+    .weekly-chart {
+      display: flex;
+      justify-content: flex-end;
+      align-items: flex-end;
+      gap: 8px;
+      position: relative;
+    }
+    .week-day {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+    /* Gray rounded pill background for day label */
+    .week-label-bg {
+      background: #f5f4f7;
+      border-radius: 50%;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+    /* Day label text */
+    .week-label {
+      font-family: 'Alexandria', sans-serif;
+      font-size: 13px;
+      color: #787085;
+      font-weight: 400;
+    }
+    /* Line going UP from label */
+    .week-line {
+      width: 1px;
+      background: #E8E7EB;
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    /* Dot at TOP of line */
+    .week-dot {
+      width: 8px;
+      
+      height: 8px;
+      border-radius: 50%;
+      background: #A59FAD;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    /* Active day (Wednesday) */
+    .week-day.active .week-label-bg {
+      background: #1E1033;
+      margin-bottom: 4px;
+      border-radius: 50%;
+      padding: 12px;
+      z-index: 2;
+      position: relative;
+    }
+    .week-day.active .week-label {
+      color: #fff;
+      font-weight: 500;
+    }
+    /* Gradient glow rising from below Wed pill */
+    .week-day.active::before {
+      content: '';
+      position: absolute;
+      bottom: -6px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 160px;
+      background: linear-gradient(to top, rgba(210, 190, 250, 0.55) 0%, rgba(200, 180, 240, 0.35) 35%, rgba(180, 160, 220, 0.15) 65%, transparent 100%);
+      border-radius: 30px;
+      z-index: 0;
+    }
+    .week-day.active .week-line {
+      width: 2px;
+      background: #1E1033;
+      z-index: 1;
+    }
+    .week-day.active .week-dot {
+      width: 10px;
+      height: 10px;
+      background: #1E1033;
+      z-index: 2;
+    }
+    /* Percentage badge */
+    .week-percent {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #f5f3fa;
+      color: #1E1033;
+      font-family: 'Alexandria', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 8px 16px;
+      border-radius: 999px;
+      white-space: nowrap;
+      z-index: 3;
+    }
+
+    /* ─────────────────────────────────────────
+       DONUT CHART
+    ───────────────────────────────────────── */
+    .hiring-donut-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex: 1;
+      min-width: 280px;
+      background: #fafafa;
+      border-radius: 14px;
+      padding: 16px 18px;
+      gap: 18px;
+    }
+    .hiring-donut {
+      position: relative;
+      width: 172px;
+      height: 172px;
+      flex-shrink: 0;
+    }
+    .donut-svg {
+      width: 172px;
+      height: 172px;
+      transform: rotate(-90deg);
+      overflow: visible;
+    }
+    .donut-seg-teal,
+    .donut-seg-yellow,
+    .donut-seg-purple {
+      fill: none;
+      stroke-width: 30;
+      stroke-linecap: round;
+    }
+    .donut-seg-teal { stroke: #1099a6; }
+    .donut-seg-yellow { stroke: #f3c63f; }
+    .donut-seg-purple { stroke: #bca8ee; }
+    .donut-chip {
+      position: absolute;
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 14px;
+      line-height: 1;
+      font-weight: 700;
+      letter-spacing: -0.2px;
+      color: #1e1033;
+      background: #efe8ff;
+    }
+    .donut-chip-yellow { background: #fdeec3; }
+    .donut-chip-teal {
+      background: #c6edf0;
+      padding: 4px 9px;
+      font-size: 14px;
+    }
+    .hiring-stats {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      min-width: 158px;
+    }
+    .hiring-stat {
+      padding-left: 11px;
+      border-left-width: 3px;
+      border-left-style: solid;
+    }
+    .hiring-stat-label {
+      color: #787085;
+      font-size: 12px;
+      letter-spacing: -0.11px;
+      line-height: 1.15;
+    }
+    .hiring-stat-value {
+      color: #1e1033;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.2px;
+      line-height: 1.08;
+    }
+
+    /* ─────────────────────────────────────────
+       PROGRESS BAR
+    ───────────────────────────────────────── */
+    .progress-track { height: 6px; border-radius: 999px; background: #e8e7eb; overflow: hidden; }
+    .progress-fill { height: 100%; border-radius: 999px; background: #7c3aed; }
+
+    /* ─────────────────────────────────────────
+       ORG CHART
+    ───────────────────────────────────────── */
+    .org-v-line { width: 1px; background: #c4b5e8; margin: 0 auto; }
+    .org-h-line { border-top: 1px solid #c4b5e8; }
+    .org-card {
+      border: 1px solid #e8e7eb; border-radius: 12px; background: #fff;
+      display: flex; flex-direction: column; align-items: center;
+      padding: 12px 10px 10px; gap: 4px; min-width: 100px;
+    }
+    .org-avatar {
+      width: 44px; height: 44px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; margin-bottom: 4px;
+    }
+    .org-badge {
+      background: #ede8fb; color: #7c3aed; font-size: 11px;
+      padding: 2px 10px; border-radius: 999px; margin-top: 2px;
+    }
+
+    /* ─────────────────────────────────────────
+       STAT BOX (attendance)
+    ───────────────────────────────────────── */
+    .stat-box {
+      border: 1px solid #e8e7eb; border-radius: 10px;
+      padding: 12px 14px; background: #fff;
+      display: flex; flex-direction: column; gap: 6px; flex: 1;
+    }
+    .stat-box-row {
+      display: flex; align-items: center; gap: 8px;
+    }
+
+    /* ─────────────────────────────────────────
+       AVATAR STACK
+    ───────────────────────────────────────── */
+    .avatar-stack { display: flex; margin-left: 6px; }
+    .avatar-chip {
+      width: 24px; height: 24px; border-radius: 50%;
+      border: 2px solid #fff; margin-left: -8px;
+      display: flex; align-items: center; justify-content: center;
+      background: #d4c5b0; overflow: hidden; flex-shrink: 0;
+      object-fit: cover;
+    }
+    .avatar-chip:first-child { margin-left: 0; }
+    img.avatar-chip { display: block; }
+
+    /* ─────────────────────────────────────────
+       MISC
+    ───────────────────────────────────────── */
+    button { background: none; border: none; cursor: pointer; }
+    input { outline: none; border: none; background: transparent; width: 100%; }
+    .view-more-btn {
+      display: inline-flex; align-items: center; gap: 3px;
+      color: #787085; font-size: 12px; cursor: pointer;
+      transition: opacity 150ms;
+    }
+    .view-more-btn:hover { opacity: .7; }
+    .card { background: #fff; border-radius: 16px; border: 1px solid #e8e7eb; }
+
+    /* hiring stats left border */
+    .stat-border-yellow { border-left: 3px solid #f59e0b; padding-left: 8px; }
+    .stat-border-purple { border-left: 3px solid #7c3aed; padding-left: 8px; }
+    .stat-border-teal   { border-left: 3px solid #0d9488; padding-left: 8px; }
+
+    /* ─────────────────────────────────────────
+       RESPONSIVENESS HELPERS
+    ───────────────────────────────────────── */
+    #app { display: flex; height: 100vh; overflow: hidden; }
+    #main-col { display: flex; flex-direction: column; flex: 1; min-width: 0; overflow: hidden; }
+    .dashboard-grid { display: grid; grid-template-columns: 1fr 280px; gap: 16px; }
+    @media (max-width: 1023px) {
+      .dashboard-grid { grid-template-columns: 1fr; }
+    }
+
+    /* Mobile centering */
+    @media (max-width: 767px) {
+      .center-mobile { text-align: center; }
+      .stat-row-mobile { flex-wrap: wrap; gap: 8px; }
+      .stat-box { min-width: calc(50% - 8px); flex: none; }
+      .chart-grid-mobile { overflow-x: auto; min-width: 300px; }
+      .hiring-inner { flex-direction: column; }
+      .hiring-donut-wrap {
+        justify-content: center;
+      }
+      .hiring-stats {
+        min-width: 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+<div id="app">
+
+  <!-- =============================================
+       OVERLAY (mobile backdrop)
+  ============================================= -->
+  <div id="overlay" aria-hidden="true"></div>
+
+  <!-- =============================================
+       SIDEBAR
+  ============================================= -->
+  <aside id="sidebar" aria-label="Main navigation">
+
+    <!-- SIDEBAR: Logo + Collapse Toggle -->
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 12px 10px;flex-shrink:0;">
+      <!-- Full logo -->
+      <span class="logo-full" style="font-size:24px;font-weight:700;color:#1e1033;">Talento</span>
+      <!-- Collapsed: icon only -->
+      <div class="logo-icon-only" style="display:none;align-items:center;justify-content:center;width:100%;">
+        <i class="fa-solid fa-house" style="font-size:20px;color:#1e1033;"></i>
+      </div>
+      <!-- Collapse toggle (desktop) -->
+      <button id="collapse-btn" aria-label="Collapse sidebar"
+              style="display:none;align-items:center;justify-content:center;width:28px;height:28px;border-radius:6px;flex-shrink:0;transition:background 150ms;"
+              onmouseover="this.style.background='#ece9ef'" onmouseout="this.style.background='transparent'">
+        <!-- sidebar panel icon -->
+        <svg id="collapse-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4b405c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="18" height="18" rx="2"/>
+          <line x1="9" y1="3" x2="9" y2="21"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- SIDEBAR: Navigation (scrollable) -->
+    <div id="sb-scroll">
+      <nav style="display:flex;flex-direction:column;padding:4px 0;">
+
+        <!-- Dashboard -->
+        <button class="nav-item active" data-page="Dashboard" aria-current="page"
+          style="display:flex;align-items:center;gap:10px;width:calc(100% - 16px);height:40px;border-radius:8px;padding:0 8px;margin:0 8px;text-align:left;outline:none;">
+          <i class="fa-solid fa-house" style="width:20px;font-size:16px;color:#1e1033;flex-shrink:0;"></i>
+          <span class="s-label" style="color:#1e1033;font-size:14px;letter-spacing:-0.14px;line-height:1;white-space:nowrap;">Dashboard</span>
+        </button>
+
+        <!-- Requests -->
+        <button class="nav-item" data-page="Requests"
+          style="display:flex;align-items:center;gap:10px;width:100%;height:40px;border-radius:8px;padding:0 16px;text-align:left;outline:none;">
+          <i class="fa-solid fa-clipboard-list" style="width:20px;font-size:16px;color:#1e1033;flex-shrink:0;"></i>
+          <span class="s-label" style="color:#1e1033;font-size:14px;letter-spacing:-0.14px;line-height:1;white-space:nowrap;flex:1;">Requests</span>
+        </button>
+
+        <!-- Attendance & leave (dropdown) -->
+        <button class="nav-item" data-page="Attendance & leave" aria-haspopup="true"
+          style="display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;height:40px;border-radius:8px;padding:0 16px;outline:none;">
+          <span style="display:flex;align-items:center;gap:10px;">
+            <i class="fa-solid fa-calendar-check" style="width:20px;font-size:16px;color:#1e1033;flex-shrink:0;"></i>
+            <span class="s-label" style="color:#1e1033;font-size:14px;letter-spacing:-0.14px;line-height:1;white-space:nowrap;">Attendance &amp; leave</span>
+          </span>
+          <svg class="s-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4b405c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+
+        <!-- Employees -->
+        <button class="nav-item" data-page="Employees" aria-haspopup="true"
+          style="display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;height:40px;border-radius:8px;padding:0 16px;outline:none;">
+          <span style="display:flex;align-items:center;gap:10px;">
+            <i class="fa-solid fa-users" style="width:20px;font-size:16px;color:#1e1033;flex-shrink:0;"></i>
+            <span class="s-label" style="color:#1e1033;font-size:14px;letter-spacing:-0.14px;white-space:nowrap;">Employees</span>
+          </span>
+          <svg class="s-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4b405c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+
+        <!-- Finance -->
+        <button class="nav-item" data-page="Finance" aria-haspopup="true"
+          style="display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;height:40px;border-radius:8px;padding:0 16px;outline:none;">
+          <span style="display:flex;align-items:center;gap:10px;">
+            <i class="fa-solid fa-wallet" style="width:20px;font-size:16px;color:#1e1033;flex-shrink:0;"></i>
+            <span class="s-label" style="color:#1e1033;font-size:14px;letter-spacing:-0.14px;white-space:nowrap;">Finance</span>
+          </span>
+          <svg class="s-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4b405c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+
+        <!-- Business missions -->
+        <button class="nav-item" data-page="Business missions" aria-haspopup="true"
+          style="display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;height:40px;border-radius:8px;padding:0 16px;outline:none;">
+          <span style="display:flex;align-items:center;gap:10px;">
+            <i class="fa-solid fa-briefcase" style="width:20px;font-size:16px;color:#1e1033;flex-shrink:0;"></i>
+            <span class="s-label" style="color:#1e1033;font-size:14px;letter-spacing:-0.14px;white-space:nowrap;">Business missions</span>
+          </span>
+          <svg class="s-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4b405c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+
+        <!-- Hiring -->
+        <button class="nav-item" data-page="Hiring" aria-haspopup="true"
+          style="display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;height:40px;border-radius:8px;padding:0 16px;outline:none;">
+          <span style="display:flex;align-items:center;gap:10px;">
+            <i class="fa-solid fa-user-plus" style="width:20px;font-size:16px;color:#1e1033;flex-shrink:0;"></i>
+            <span class="s-label" style="color:#1e1033;font-size:14px;letter-spacing:-0.14px;white-space:nowrap;">Hiring</span>
+          </span>
+          <svg class="s-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4b405c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+
+        <!-- Documents -->
+        <button class="nav-item" data-page="Documents" aria-haspopup="true"
+          style="display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;height:40px;border-radius:8px;padding:0 16px;outline:none;">
+          <span style="display:flex;align-items:center;gap:10px;">
+            <i class="fa-solid fa-folder-open" style="width:20px;font-size:16px;color:#1e1033;flex-shrink:0;"></i>
+            <span class="s-label" style="color:#1e1033;font-size:14px;letter-spacing:-0.14px;white-space:nowrap;">Documents</span>
+          </span>
+          <svg class="s-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4b405c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+
+        <!-- Team engagement -->
+        <button class="nav-item" data-page="Team engagement" aria-haspopup="true"
+          style="display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;height:40px;border-radius:8px;padding:0 16px;outline:none;">
+          <span style="display:flex;align-items:center;gap:10px;">
+            <i class="fa-solid fa-people-group" style="width:20px;font-size:16px;color:#1e1033;flex-shrink:0;"></i>
+            <span class="s-label" style="color:#1e1033;font-size:14px;letter-spacing:-0.14px;white-space:nowrap;">Team engagement</span>
+          </span>
+          <svg class="s-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4b405c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+
+        <!-- Mobile app -->
+        <button class="nav-item" data-page="Mobile app" aria-haspopup="true"
+          style="display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;height:40px;border-radius:8px;padding:0 16px;outline:none;">
+          <span style="display:flex;align-items:center;gap:10px;">
+            <i class="fa-solid fa-mobile-screen" style="width:20px;font-size:16px;color:#1e1033;flex-shrink:0;"></i>
+            <span class="s-label" style="color:#1e1033;font-size:14px;letter-spacing:-0.14px;white-space:nowrap;">Mobile app</span>
+          </span>
+          <svg class="s-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4b405c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+
+        <!-- Website -->
+        <button class="nav-item" data-page="Website"
+          style="display:flex;align-items:center;gap:10px;width:100%;height:40px;border-radius:8px;padding:0 16px;outline:none;">
+          <i class="fa-solid fa-globe" style="width:20px;font-size:16px;color:#1e1033;flex-shrink:0;"></i>
+          <span class="s-label" style="color:#1e1033;font-size:14px;letter-spacing:-0.14px;white-space:nowrap;flex:1;text-align:left;">Website</span>
+        </button>
+
+        <!-- Apps -->
+        <button class="nav-item" data-page="Apps"
+          style="display:flex;align-items:center;gap:10px;width:100%;height:40px;border-radius:8px;padding:0 16px;outline:none;">
+          <i class="fa-solid fa-th-large" style="width:20px;font-size:16px;color:#1e1033;flex-shrink:0;"></i>
+          <span class="s-label" style="color:#1e1033;font-size:14px;letter-spacing:-0.14px;white-space:nowrap;flex:1;text-align:left;">Apps</span>
+        </button>
+
+      </nav>
+    </div>
+
+    <!-- SIDEBAR: Settings (pinned bottom) -->
+    <div style="flex-shrink:0;border-top:1px solid #e8e7eb;padding:12px 16px 24px;">
+      <button style="display:flex;align-items:center;gap:10px;width:100%;padding:6px 4px;border-radius:8px;transition:background 150ms;outline:none;"
+              onmouseover="this.style.background='rgba(236,233,239,.55)'" onmouseout="this.style.background='transparent'">
+        <i class="fa-solid fa-gear" style="width:20px;font-size:16px;color:#1e1033;flex-shrink:0;"></i>
+        <span class="settings-label" style="color:#1e1033;font-size:14px;letter-spacing:-0.14px;white-space:nowrap;">Settings</span>
+      </button>
+    </div>
+
+  </aside>
+  <!-- /SIDEBAR -->
+
+  <!-- =============================================
+       MAIN COLUMN
+  ============================================= -->
+  <div id="main-col">
+
+    <!-- =============================================
+         NAVBAR
+    ============================================= -->
+    <header style="display:flex;align-items:center;justify-content:space-between;height:56px;padding:0 16px;background:#fff;border-bottom:1px solid #e8e7eb;flex-shrink:0;min-width:0;">
+
+      <!-- NAVBAR: Left -->
+      <div style="display:flex;align-items:center;gap:12px;min-width:0;">
+        <!-- Mobile hamburger -->
+        <button id="hamburger" aria-label="Open navigation" aria-expanded="false" aria-controls="sidebar"
+          style="display:none;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;transition:background 150ms;outline:none;"
+          onmouseover="this.style.background='#ece9ef'" onmouseout="this.style.background='transparent'">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4b405c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+          </svg>
+        </button>
+        <!-- Talento AI analyst pill -->
+        <button style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:999px;border:1px solid #ba8aff;color:#7c3aed;font-size:13px;white-space:nowrap;transition:background 150ms;outline:none;"
+                onmouseover="this.style.background='#f5f0ff'" onmouseout="this.style.background='transparent'">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Talento AI analyst
+        </button>
+      </div>
+
+      <!-- NAVBAR: Right icons -->
+      <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
+
+        <!-- Calendar icon -->
+        <button style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;transition:background 150ms;outline:none;"
+                onmouseover="this.style.background='#ece9ef'" onmouseout="this.style.background='transparent'" aria-label="Calendar">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4b405c" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+          </svg>
+        </button>
+
+        <!-- Chat icon -->
+        <button style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;transition:background 150ms;outline:none;"
+                onmouseover="this.style.background='#ece9ef'" onmouseout="this.style.background='transparent'" aria-label="Messages">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4b405c" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+          </svg>
+        </button>
+
+        <!-- Bell icon with RED dot -->
+        <button style="position:relative;display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;transition:background 150ms;outline:none;"
+                onmouseover="this.style.background='#ece9ef'" onmouseout="this.style.background='transparent'" aria-label="Notifications">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4b405c" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+          </svg>
+          <!-- RED notification dot -->
+          <span style="position:absolute;top:8px;right:8px;width:7px;height:7px;border-radius:50%;background:#ef4444;border:1.5px solid #fff;" aria-hidden="true"></span>
+        </button>
+
+        <!-- Divider -->
+        <div style="width:1px;height:24px;background:#e8e7eb;margin:0 2px;"></div>
+
+        <!-- User profile -->
+        <button style="display:flex;align-items:center;gap:8px;padding:4px 6px;border-radius:8px;transition:background 150ms;outline:none;"
+                onmouseover="this.style.background='rgba(236,233,239,.55)'" onmouseout="this.style.background='transparent'" aria-label="User profile">
+          <!-- Avatar -->
+          <div style="width:32px;height:32px;border-radius:50%;background:#c4b0d8;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5b3a7a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="8" r="4" fill="#5b3a7a" stroke="none"/>
+              <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="#5b3a7a" stroke="none"/>
+            </svg>
+          </div>
+          <!-- Name & email (hidden on small) -->
+          <div id="user-info" style="flex-direction:column;align-items:flex-start;line-height:1.2;display:flex;">
+            <span style="color:#1e1033;font-size:12px;font-weight:500;letter-spacing:-0.12px;white-space:nowrap;">Huda AlQahtani</span>
+            <span style="color:#787085;font-size:10px;letter-spacing:-0.1px;white-space:nowrap;">alqahtani@gmail.com</span>
+          </div>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4b405c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="user-chevron">
+            <polyline points="6 9 12 15 18 9"/>
+          </svg>
+        </button>
+
+      </div>
+    </header>
+    <!-- /NAVBAR -->
+
+    <!-- =============================================
+         MAIN CONTENT
+    ============================================= -->
+    <div id="main-scroll" style="background:#f5f3fb;">
+      <div style="max-width:1400px;margin:0 auto;padding:20px 16px 40px;">
+
+        <!-- CONTENT: Date + Greeting + Search -->
+        <div style="display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px 0 24px;text-align:center;">
+          <p style="color:#787085;font-size:13px;letter-spacing:-0.13px;">Tuesday, 23 July</p>
+          <h1 style="color:#1e1033;font-size:22px;font-weight:500;letter-spacing:-0.22px;">Welcome back, Huda</h1>
+          <div style="display:flex;align-items:center;gap:8px;width:100%;max-width:340px;background:#fff;border:1px solid #e8e7eb;border-radius:999px;padding:8px 16px;margin-top:4px;">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#787085" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;">
+              <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            <input type="search" placeholder="Search" style="color:#787085;font-size:13px;font-family:'Alexandria',Helvetica,sans-serif;" aria-label="Search" />
+          </div>
+        </div>
+
+        <!-- CONTENT: Two-column dashboard grid -->
+        <div class="dashboard-grid">
+
+          <!-- ── LEFT COLUMN ── -->
+          <div style="display:flex;flex-direction:column;gap:16px;min-width:0;">
+
+            <!-- ================================
+                 CARD: Team attendance
+            ================================ -->
+            <div class="card" style="padding:20px;">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+                <h2 style="color:#1e1033;font-size:16px;font-weight:500;letter-spacing:-0.16px;">Team attendance</h2>
+                <button class="view-more-btn">View more
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#787085" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                </button>
+              </div>
+
+              <!-- Stat boxes row -->
+              <div style="display:flex;gap:10px;margin-bottom:24px;flex-wrap:wrap;">
+                <!-- On time -->
+                <div class="stat-box">
+                  <span style="color:#787085;font-size:12px;letter-spacing:-0.12px;">On time</span>
+                  <div class="stat-box-row">
+                    <span style="color:#1e1033;font-size:28px;font-weight:600;letter-spacing:-0.28px;line-height:1;">120</span>
+                    <div class="avatar-stack">
+                      <img class="avatar-chip" style="margin-left:0;" src="https://randomuser.me/api/portraits/men/32.jpg" alt="avatar"/>
+                      <img class="avatar-chip" src="https://randomuser.me/api/portraits/men/45.jpg" alt="avatar"/>
+                      <img class="avatar-chip" src="https://randomuser.me/api/portraits/men/67.jpg" alt="avatar"/>
+                    </div>
+                  </div>
+                </div>
+                <!-- Late in -->
+                <div class="stat-box">
+                  <span style="color:#787085;font-size:12px;letter-spacing:-0.12px;">Late in</span>
+                  <div class="stat-box-row">
+                    <span style="color:#1e1033;font-size:28px;font-weight:600;letter-spacing:-0.28px;line-height:1;">02</span>
+                    <div class="avatar-stack">
+                      <img class="avatar-chip" style="margin-left:0;" src="https://randomuser.me/api/portraits/men/22.jpg" alt="avatar"/>
+                      <img class="avatar-chip" src="https://randomuser.me/api/portraits/men/36.jpg" alt="avatar"/>
+                    </div>
+                  </div>
+                </div>
+                <!-- On leave -->
+                <div class="stat-box">
+                  <span style="color:#787085;font-size:12px;letter-spacing:-0.12px;">On leave</span>
+                  <div class="stat-box-row">
+                    <span style="color:#1e1033;font-size:28px;font-weight:600;letter-spacing:-0.28px;line-height:1;">01</span>
+                    <div class="avatar-stack">
+                      <img class="avatar-chip" style="margin-left:0;" src="https://randomuser.me/api/portraits/men/55.jpg" alt="avatar"/>
+                    </div>
+                  </div>
+                </div>
+                <!-- Absent -->
+                <div class="stat-box">
+                  <span style="color:#787085;font-size:12px;letter-spacing:-0.12px;">Absent</span>
+                  <div class="stat-box-row">
+                    <span style="color:#1e1033;font-size:28px;font-weight:600;letter-spacing:-0.28px;line-height:1;">00</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Bottom section: 93% stats + Weekly chart side by side -->
+              <div class="attendance-bottom">
+                <!-- Left: 93% stats -->
+                <div class="attendance-stats">
+                  <span class="attendance-percent">~93%</span>
+                  <p style="font-family:'Alexandria',sans-serif;color:#787085;font-size:13px;letter-spacing:-0.13px;line-height:1.5;margin:10px 0 0 0;">
+                    This week's <strong style="color:#1e1033;font-weight:600;">team attendance</strong><br/>is higher than last week's
+                  </p>
+                </div>
+
+                <!-- Right: Modern weekly progress chart -->
+                <div class="weekly-chart-container">
+                  <div class="weekly-chart">
+                    <!-- Sun -->
+                    <div class="week-day">
+                      <div class="week-label-bg">
+                        <div class="week-line" style="height: 55px;"></div>
+                        <div class="week-dot" style="bottom: calc(100% + 55px - 4px);"></div>
+                        <span class="week-label">Sun</span>
+                      </div>
+                    </div>
+                    <!-- Mon -->
+                    <div class="week-day">
+                      <div class="week-label-bg">
+                        <div class="week-line" style="height: 42px;"></div>
+                        <div class="week-dot" style="bottom: calc(100% + 42px - 4px);"></div>
+                        <span class="week-label">Mon</span>
+                      </div>
+                    </div>
+                    <!-- Tue -->
+                    <div class="week-day">
+                      <div class="week-label-bg">
+                        <div class="week-line" style="height: 60px;"></div>
+                        <div class="week-dot" style="bottom: calc(100% + 60px - 4px);"></div>
+                        <span class="week-label">Tue</span>
+                      </div>
+                    </div>
+                    <!-- Wed (active - highlighted) -->
+                    <div class="week-day active">
+                      <span class="week-percent" style="bottom: calc(100% + 80px);">95%</span>
+                      <div class="week-label-bg">
+                        <div class="week-line" style="height: 65px;"></div>
+                        <div class="week-dot" style="bottom: calc(100% + 65px - 5px);"></div>
+                        <span class="week-label">Wed</span>
+                      </div>
+                    </div>
+                    <!-- Thu (future - double dots) -->
+                    <div class="week-day future">
+                      <div class="week-label-bg">
+                        <div class="week-dots-container" style="position:absolute;bottom:100%;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:6px;padding-bottom:12px;">
+                          <div class="week-dot-future" style="width:6px;height:6px;border-radius:50%;background:#c9c5cf;"></div>
+                          <div class="week-dot-future" style="width:6px;height:6px;border-radius:50%;background:#c9c5cf;"></div>
+                        </div>
+                        <span class="week-label">Thu</span>
+                      </div>
+                    </div>
+                    <!-- Fri (future - double dots) -->
+                    <div class="week-day future">
+                      <div class="week-label-bg">
+                        <div class="week-dots-container" style="position:absolute;bottom:100%;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:6px;padding-bottom:12px;">
+                          <div class="week-dot-future" style="width:6px;height:6px;border-radius:50%;background:#c9c5cf;"></div>
+                          <div class="week-dot-future" style="width:6px;height:6px;border-radius:50%;background:#c9c5cf;"></div>
+                        </div>
+                        <span class="week-label">Fri</span>
+                      </div>
+                    </div>
+                    <!-- Sat (future - double dots) -->
+                    <div class="week-day future">
+                      <div class="week-label-bg">
+                        <div class="week-dots-container" style="position:absolute;bottom:100%;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:6px;padding-bottom:12px;">
+                          <div class="week-dot-future" style="width:6px;height:6px;border-radius:50%;background:#c9c5cf;"></div>
+                          <div class="week-dot-future" style="width:6px;height:6px;border-radius:50%;background:#c9c5cf;"></div>
+                        </div>
+                        <span class="week-label">Sat</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- /CARD: Team attendance -->
+
+            <!-- ================================
+                 CARD: Upcoming Events
+            ================================ -->
+            <div class="card" style="padding:20px;">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+                <h2 style="color:#1e1033;font-size:16px;font-weight:500;letter-spacing:-0.16px;">Upcoming Events</h2>
+                <button class="view-more-btn">View more
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#787085" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                </button>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:0;">
+
+                <!-- Event 1 -->
+                <div style="padding:12px 0;border-bottom:1px solid #f0eef6;">
+                  <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:6px;">
+                    <div style="display:flex;align-items:center;gap:10px;">
+                      <div style="width:32px;height:32px;border-radius:50%;background:#f0eef8;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                        <!-- Gear/Cog icon for System update -->
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#787085" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                      </div>
+                      <div>
+                        <p style="color:#1e1033;font-size:13px;font-weight:500;">Talento team</p>
+                        <p style="color:#787085;font-size:11px;">System update</p>
+                      </div>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
+                      <span style="color:#787085;font-size:11px;white-space:nowrap;">30 min ago</span>
+                      <span style="padding:2px 8px;border-radius:999px;background:#f3f4f6;color:#6b7280;font-size:10px;">New</span>
+                    </div>
+                  </div>
+                  <p style="color:#4b405c;font-size:11px;line-height:1.5;padding-left:42px;">New update available! Check out the improved dashboard and faster loading times. Find out w...</p>
+                </div>
+
+                <!-- Event 2 -->
+                <div style="padding:12px 0;border-bottom:1px solid #f0eef6;">
+                  <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:6px;">
+                    <div style="display:flex;align-items:center;gap:10px;">
+                      <div style="width:32px;height:32px;border-radius:50%;background:#f0eef8;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                        <!-- Bell icon for Reminder -->
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#787085" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                      </div>
+                      <div>
+                        <p style="color:#1e1033;font-size:13px;font-weight:500;">Annual report</p>
+                        <p style="color:#787085;font-size:11px;">Reminder</p>
+                      </div>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
+                      <span style="color:#787085;font-size:11px;white-space:nowrap;">1 hr ago</span>
+                      <span style="padding:2px 8px;border-radius:999px;background:#f3f4f6;color:#6b7280;font-size:10px;">New</span>
+                    </div>
+                  </div>
+                  <p style="color:#4b405c;font-size:11px;line-height:1.5;padding-left:42px;">Your annual report form must be submitted by October 25.</p>
+                </div>
+
+                <!-- Event 3 -->
+                <div style="padding:12px 0;">
+                  <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:6px;">
+                    <div style="display:flex;align-items:center;gap:10px;">
+                      <div style="width:32px;height:32px;border-radius:50%;background:#f0eef8;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                        <!-- Gift icon for Birthday/Celebration -->
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#787085" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
+                      </div>
+                      <div>
+                        <p style="color:#1e1033;font-size:13px;font-weight:500;">Mishari AlSubaie's Birthday</p>
+                        <p style="color:#787085;font-size:11px;">Celebration</p>
+                      </div>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
+                      <span style="color:#787085;font-size:11px;white-space:nowrap;">2 hrs ago</span>
+                      <span style="padding:2px 8px;border-radius:999px;background:#f3f4f6;color:#6b7280;font-size:10px;">New</span>
+                    </div>
+                  </div>
+                  <p style="color:#4b405c;font-size:11px;line-height:1.5;padding-left:42px;display:flex;align-items:center;flex-wrap:wrap;gap:4px;margin:0;">December 19, 2025 – Happy Birthday to <img src="https://randomuser.me/api/portraits/men/42.jpg" alt="Mishari" style="width:18px;height:18px;border-radius:50%;object-fit:cover;"/> Mishari AlSubaie</p>
+                </div>
+
+              </div>
+            </div>
+            <!-- /CARD: Upcoming Events -->
+
+            <!-- ================================
+                 CARD: Hiring this week
+            ================================ -->
+            <div class="card" style="padding:20px;">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+                <h2 style="color:#1e1033;font-size:16px;letter-spacing:-0.16px;">Hiring <span style="font-weight:500;">this week</span></h2>
+                <button class="view-more-btn">View more
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#787085" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                </button>
+              </div>
+
+              <div style="display:flex;gap:16px;align-items:center;flex-wrap:wrap;">
+                <!-- Photo card with background image -->
+                <div style="position:relative;width:180px;height:160px;border-radius:14px;overflow:hidden;flex-shrink:0;">
+                  <img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=400&h=300&fit=crop" alt="Office desk" style="width:100%;height:100%;object-fit:cover;"/>
+                  <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(30,16,51,0.85) 0%,rgba(30,16,51,0.3) 100%);"></div>
+                  <div style="position:absolute;bottom:16px;left:16px;">
+                    <p style="color:rgba(255,255,255,.75);font-size:11px;letter-spacing:-0.1px;margin-bottom:4px;">Average hiring time</p>
+                    <p style="color:#fff;font-size:28px;font-weight:600;letter-spacing:-0.28px;">2 weeks</p>
+                  </div>
+                </div>
+
+                <!-- Donut chart -->
+                <div class="hiring-donut-wrap">
+                  <div class="hiring-donut" aria-label="Hiring breakdown donut chart">
+                    <svg viewBox="0 0 172 172" class="donut-svg" role="img" aria-hidden="true">
+                      <!-- Track ring for clean gaps between segments -->
+                      <circle cx="86" cy="86" r="56" fill="none" stroke="#ffffff" stroke-width="30"/>
+                      <!-- Circumference with r=56 is ~351.86 -->
+                      <circle class="donut-seg-teal" cx="86" cy="86" r="56" stroke-dasharray="248 352" stroke-dashoffset="3"/>
+                      <circle class="donut-seg-yellow" cx="86" cy="86" r="56" stroke-dasharray="48 352" stroke-dashoffset="-252"/>
+                      <circle class="donut-seg-purple" cx="86" cy="86" r="56" stroke-dasharray="34 352" stroke-dashoffset="-309"/>
+                    </svg>
+
+                    <span class="donut-chip" style="top:21px;left:54px;">05</span>
+                    <span class="donut-chip donut-chip-yellow" style="top:42px;right:16px;">07</span>
+                    <span class="donut-chip donut-chip-teal" style="top:120px;left:20px;">32</span>
+                  </div>
+
+                  <div class="hiring-stats" aria-label="Hiring breakdown values">
+                    <div class="hiring-stat" style="border-left-color:#f59e0b;">
+                      <p class="hiring-stat-label">New applications</p>
+                      <p class="hiring-stat-value">07</p>
+                    </div>
+                    <div class="hiring-stat" style="border-left-color:#bca8ee;">
+                      <p class="hiring-stat-label">Active jobs</p>
+                      <p class="hiring-stat-value">05</p>
+                    </div>
+                    <div class="hiring-stat" style="border-left-color:#1099a6;">
+                      <p class="hiring-stat-label">All candidates</p>
+                      <p class="hiring-stat-value">32</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- /CARD: Hiring this week -->
+
+            <!-- ================================
+                 CARD: Shared documents
+            ================================ -->
+            <div class="card" style="padding:20px;">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;">
+                <h2 style="color:#1e1033;font-size:16px;font-weight:500;letter-spacing:-0.16px;">Shared documents</h2>
+                <button class="view-more-btn">View more
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#787085" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                </button>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:0;">
+
+                <!-- Doc 1 -->
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid #f0eef6;">
+                  <div style="display:flex;align-items:center;gap:12px;min-width:0;flex:1;">
+                    <!-- PDF icon -->
+                    <div style="width:36px;height:44px;border-radius:6px;background:#fff;border:1px solid #f0eef6;display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;position:relative;">
+                      <svg width="22" height="28" viewBox="0 0 22 28" fill="none">
+                        <rect x="1" y="1" width="20" height="26" rx="3" stroke="#e8e7eb" stroke-width="1"/>
+                        <path d="M1 1h14l6 6v20a2 2 0 01-2 2H3a2 2 0 01-2-2V3a2 2 0 012-2z" fill="#fff" stroke="#e0dde8" stroke-width="1"/>
+                        <path d="M15 1v6h6" fill="none" stroke="#e0dde8" stroke-width="1"/>
+                      </svg>
+                      <span style="position:absolute;bottom:2px;font-size:7px;font-weight:700;color:#ef4444;letter-spacing:0.3px;">PDF</span>
+                    </div>
+                    <div style="min-width:0;">
+                      <p style="color:#1e1033;font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Document name</p>
+                      <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+                        <span style="color:#787085;font-size:11px;">Expires <strong style="color:#1e1033;">23 December</strong></span>
+                        <span style="color:#d1d5db;">•</span>
+                        <span style="color:#787085;font-size:11px;">Trial period <strong style="color:#1e1033;">30 days</strong></span>
+                        <span style="color:#d1d5db;">•</span>
+                        <!-- Profile avatar inline -->
+                        <div style="display:flex;align-items:center;gap:4px;">
+                          <div style="width:18px;height:18px;border-radius:50%;background:#d4b896;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                            <svg width="11" height="11" viewBox="0 0 24 24" fill="#8b5e25"><circle cx="12" cy="8" r="5"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+                          </div>
+                          <span style="color:#1e1033;font-size:11px;white-space:nowrap;">Mishari AlSubaie</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
+                    <button style="padding:4px 12px;font-size:12px;color:#1e1033;border:1px solid #e8e7eb;border-radius:8px;transition:background 150ms;font-family:'Alexandria',Helvetica,sans-serif;"
+                            onmouseover="this.style.background='#f5f3fb'" onmouseout="this.style.background='transparent'">View</button>
+                    <button style="color:#787085;padding:4px;" aria-label="More options">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Doc 2 -->
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;">
+                  <div style="display:flex;align-items:center;gap:12px;min-width:0;flex:1;">
+                    <!-- DOC icon -->
+                    <div style="width:36px;height:44px;border-radius:6px;background:#fff;border:1px solid #f0eef6;display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;position:relative;">
+                      <svg width="22" height="28" viewBox="0 0 22 28" fill="none">
+                        <path d="M1 1h14l6 6v20a2 2 0 01-2 2H3a2 2 0 01-2-2V3a2 2 0 012-2z" fill="#fff" stroke="#e0dde8" stroke-width="1"/>
+                        <path d="M15 1v6h6" fill="none" stroke="#e0dde8" stroke-width="1"/>
+                      </svg>
+                      <span style="position:absolute;bottom:2px;font-size:7px;font-weight:700;color:#1d4ed8;letter-spacing:0.3px;">DOC</span>
+                    </div>
+                    <div style="min-width:0;">
+                      <p style="color:#1e1033;font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Document name</p>
+                      <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+                        <span style="color:#787085;font-size:11px;">Expires <strong style="color:#1e1033;">23 December</strong></span>
+                        <span style="color:#d1d5db;">•</span>
+                        <span style="color:#787085;font-size:11px;">Trial period <strong style="color:#1e1033;">30 days</strong></span>
+                        <span style="color:#d1d5db;">•</span>
+                        <div style="display:flex;align-items:center;gap:4px;">
+                          <div style="width:18px;height:18px;border-radius:50%;background:#c9b8d8;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                            <svg width="11" height="11" viewBox="0 0 24 24" fill="#5b3a7a"><circle cx="12" cy="8" r="5"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+                          </div>
+                          <span style="color:#1e1033;font-size:11px;white-space:nowrap;">Mishari AlSubaie</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
+                    <button style="padding:4px 12px;font-size:12px;color:#1e1033;border:1px solid #e8e7eb;border-radius:8px;transition:background 150ms;font-family:'Alexandria',Helvetica,sans-serif;"
+                            onmouseover="this.style.background='#f5f3fb'" onmouseout="this.style.background='transparent'">View</button>
+                    <button style="color:#787085;padding:4px;" aria-label="More options">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="12" cy="19" r="1.5"/></svg>
+                    </button>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+            <!-- /CARD: Shared documents -->
+
+            <!-- ================================
+                 CARD: Org chart / Supervisors
+            ================================ -->
+            <div class="card" style="padding:20px;">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;">
+                <h2 style="color:#1e1033;font-size:16px;font-weight:500;letter-spacing:-0.16px;">Org chart / Supervisors</h2>
+                <button style="display:inline-flex;align-items:center;gap:6px;padding:5px 14px;border-radius:8px;border:1px solid #ba8aff;color:#7c3aed;font-size:12px;font-family:'Alexandria',Helvetica,sans-serif;transition:background 150ms;outline:none;"
+                        onmouseover="this.style.background='#f5f0ff'" onmouseout="this.style.background='transparent'">
+                  Expand
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+                </button>
+              </div>
+
+              <!-- Org tree -->
+              <div style="display:flex;flex-direction:column;align-items:center;padding:8px;overflow-x:auto;">
+                <!-- Root -->
+                <div class="org-card" style="width:130px;">
+                  <div class="org-avatar" style="background:#e8d5b0;">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="#8b6b45"><circle cx="12" cy="8" r="5"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+                  </div>
+                  <p style="color:#1e1033;font-size:12px;font-weight:600;text-align:center;line-height:1.3;">Turki Alsubaie</p>
+                  <p style="color:#787085;font-size:11px;text-align:center;">CEO</p>
+                  <span class="org-badge">3</span>
+                </div>
+
+                <!-- Vertical line down -->
+                <div class="org-v-line" style="height:32px;width:1px;"></div>
+
+                <!-- Children wrapper with horizontal line -->
+                <div style="position:relative;display:flex;gap:16px;align-items:flex-start;justify-content:center;">
+                  <!-- Horizontal line spanning children -->
+                  <div class="org-h-line" style="position:absolute;top:0;left:65px;right:65px;"></div>
+
+                  <!-- Child 1 -->
+                  <div style="display:flex;flex-direction:column;align-items:center;">
+                    <div class="org-v-line" style="height:24px;"></div>
+                    <div class="org-card" style="width:120px;">
+                      <div class="org-avatar" style="background:#d4c5b0;">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="#6b4c2a"><circle cx="12" cy="8" r="5"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+                      </div>
+                      <p style="color:#1e1033;font-size:11px;font-weight:600;text-align:center;line-height:1.3;">Muhammad Arafah</p>
+                      <p style="color:#787085;font-size:10px;text-align:center;">VP of Engineering</p>
+                      <span class="org-badge">8</span>
+                    </div>
+                  </div>
+
+                  <!-- Child 2 -->
+                  <div style="display:flex;flex-direction:column;align-items:center;">
+                    <div class="org-v-line" style="height:24px;"></div>
+                    <div class="org-card" style="width:120px;">
+                      <div class="org-avatar" style="background:#c9b8d8;">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="#5b3a7a"><circle cx="12" cy="8" r="5"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+                      </div>
+                      <p style="color:#1e1033;font-size:11px;font-weight:600;text-align:center;line-height:1.3;">Huda AlQahtani</p>
+                      <p style="color:#787085;font-size:10px;text-align:center;">HR specialist</p>
+                      <span class="org-badge">7</span>
+                    </div>
+                  </div>
+
+                  <!-- Child 3 -->
+                  <div style="display:flex;flex-direction:column;align-items:center;">
+                    <div class="org-v-line" style="height:24px;"></div>
+                    <div class="org-card" style="width:120px;">
+                      <div class="org-avatar" style="background:#c5b8a8;">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="#6b5642"><circle cx="12" cy="8" r="5"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+                      </div>
+                      <p style="color:#1e1033;font-size:11px;font-weight:600;text-align:center;line-height:1.3;">Omar AlJuhani</p>
+                      <p style="color:#787085;font-size:10px;text-align:center;">Head of product</p>
+                      <span class="org-badge">12</span>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+            <!-- /CARD: Org chart -->
+
+          </div>
+          <!-- /LEFT COLUMN -->
+
+          <!-- ── RIGHT COLUMN ── -->
+          <div style="display:flex;flex-direction:column;gap:16px;min-width:0;">
+
+            <!-- ================================
+                 CARD: Muhammad Arafah + Team requests
+            ================================ -->
+            <div style="background:#ede8fb;border-radius:16px;padding:16px;">
+              <!-- Person row -->
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;gap:10px;">
+                <div style="display:flex;align-items:center;gap:10px;">
+                  <div style="width:40px;height:40px;border-radius:50%;background:#d4b896;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:2px solid #fff;">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="#8b5e25"><circle cx="12" cy="8" r="5"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+                  </div>
+                  <div>
+                    <p style="color:#1e1033;font-size:13px;font-weight:600;letter-spacing:-0.13px;">Muhammad Arafah</p>
+                    <p style="color:#787085;font-size:11px;">Product developer</p>
+                  </div>
+                </div>
+                <div style="display:flex;align-items:center;gap:5px;flex-shrink:0;">
+                  <span style="color:#787085;font-size:11px;white-space:nowrap;">5 hrs ago</span>
+                  <span style="width:7px;height:7px;border-radius:50%;background:#2cf7b3;display:inline-block;"></span>
+                </div>
+              </div>
+              <!-- Team requests sub-card -->
+              <div style="background:#fff;border-radius:12px;padding:14px;display:flex;align-items:center;justify-content:space-between;gap:10px;">
+                <div>
+                  <p style="color:#787085;font-size:11px;letter-spacing:-0.11px;">Team requests</p>
+                  <p style="color:#1e1033;font-size:14px;font-weight:600;letter-spacing:-0.14px;margin-top:2px;">5 new requests</p>
+                </div>
+                <button class="view-more-btn">View more
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#787085" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                </button>
+              </div>
+            </div>
+            <!-- /CARD: Muhammad Arafah -->
+
+            <!-- ================================
+                 CARD: My attendance
+            ================================ -->
+            <div class="card" style="padding:16px;">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+                <h2 style="color:#1e1033;font-size:14px;font-weight:500;letter-spacing:-0.14px;">My attendance</h2>
+                <button class="view-more-btn">View more
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#787085" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                </button>
+              </div>
+              <!-- Inner attendance card -->
+              <div style="background:#f5f3fb;border-radius:12px;padding:14px;display:flex;align-items:center;gap:10px;">
+                <!-- Check mark circle -->
+                <div style="width:36px;height:36px;border-radius:50%;background:#1e1033;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                </div>
+                <!-- Check in -->
+                <div style="flex:1;min-width:0;">
+                  <div style="display:flex;align-items:center;gap:4px;margin-bottom:2px;">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#787085" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    <span style="color:#787085;font-size:10px;">Check In</span>
+                  </div>
+                  <p style="color:#1e1033;font-size:16px;font-weight:600;letter-spacing:-0.16px;">7:45 AM</p>
+                </div>
+                <!-- Fire emoji -->
+                <div style="font-size:20px;flex-shrink:0;">🔥</div>
+                <!-- Check out -->
+                <div style="flex:1;min-width:0;text-align:right;">
+                  <div style="display:flex;align-items:center;justify-content:flex-end;gap:4px;margin-bottom:2px;">
+                    <span style="color:#787085;font-size:10px;">Check Out</span>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#787085" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  </div>
+                  <p style="color:#787085;font-size:14px;letter-spacing:-0.14px;">Need to add</p>
+                </div>
+                <!-- Empty circle (right side indicator) -->
+                <div style="width:28px;height:28px;border-radius:50%;border:2px solid #e8e7eb;flex-shrink:0;"></div>
+              </div>
+            </div>
+            <!-- /CARD: My attendance -->
+
+            <!-- ================================
+                 CARD: My requests
+            ================================ -->
+            <div class="card" style="padding:16px;">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+                <h2 style="color:#1e1033;font-size:14px;font-weight:500;letter-spacing:-0.14px;">My requests</h2>
+                <button class="view-more-btn">View more
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#787085" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                </button>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:0;">
+
+                <!-- Vacation Request -->
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid #f0eef6;">
+                  <div style="display:flex;align-items:center;gap:10px;min-width:0;">
+                    <div style="width:28px;height:28px;border-radius:50%;background:#f0eef8;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                    </div>
+                    <div>
+                      <p style="color:#1e1033;font-size:12px;font-weight:500;">Vacation Request</p>
+                      <p style="color:#787085;font-size:10px;">2 Feb – 4 Feb</p>
+                    </div>
+                  </div>
+                  <span style="padding:3px 10px;border-radius:999px;background:#dcfce7;color:#16a34a;font-size:10px;font-weight:500;white-space:nowrap;flex-shrink:0;">Approved</span>
+                </div>
+
+                <!-- Salary Request 1 -->
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid #f0eef6;">
+                  <div style="display:flex;align-items:center;gap:10px;min-width:0;">
+                    <div style="width:28px;height:28px;border-radius:50%;background:#f0eef8;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                    </div>
+                    <div>
+                      <p style="color:#1e1033;font-size:12px;font-weight:500;">Salary Request</p>
+                      <p style="color:#787085;font-size:10px;">Reason for request</p>
+                    </div>
+                  </div>
+                  <span style="padding:3px 10px;border-radius:999px;background:#f3f4f6;color:#6b7280;font-size:10px;white-space:nowrap;flex-shrink:0;">In progress</span>
+                </div>
+
+                <!-- Salary Request 2 -->
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0;">
+                  <div style="display:flex;align-items:center;gap:10px;min-width:0;">
+                    <div style="width:28px;height:28px;border-radius:50%;background:#f0eef8;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                    </div>
+                    <div>
+                      <p style="color:#1e1033;font-size:12px;font-weight:500;">Salary Request</p>
+                      <p style="color:#787085;font-size:10px;">Reason for request</p>
+                    </div>
+                  </div>
+                  <span style="padding:3px 10px;border-radius:999px;background:#f3f4f6;color:#6b7280;font-size:10px;white-space:nowrap;flex-shrink:0;">In progress</span>
+                </div>
+
+              </div>
+            </div>
+            <!-- /CARD: My requests -->
+
+            <!-- ================================
+                 CARD: My leave balance
+            ================================ -->
+            <div class="card" style="padding:16px;">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+                <h2 style="color:#1e1033;font-size:14px;font-weight:500;letter-spacing:-0.14px;">My leave balance</h2>
+                <button class="view-more-btn">View more
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#787085" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                </button>
+              </div>
+              <p style="color:#787085;font-size:11px;margin-bottom:10px;">21 days for month</p>
+              <p style="color:#1e1033;font-size:20px;font-weight:600;letter-spacing:-0.2px;margin-bottom:3px;">16 days available</p>
+              <p style="color:#787085;font-size:11px;margin-bottom:12px;">Vacation days left till 28 May, 2025</p>
+              <div class="progress-track">
+                <div class="progress-fill" style="width:76%;"></div>
+              </div>
+            </div>
+            <!-- /CARD: My leave balance -->
+
+            <!-- ================================
+                 CARD: Marketing channels
+            ================================ -->
+            <div class="card" style="padding:16px;">
+              <h2 style="color:#1e1033;font-size:14px;font-weight:500;letter-spacing:-0.14px;margin-bottom:12px;">Marketing channels</h2>
+              <div style="display:flex;flex-direction:column;">
+
+                <!-- Company website -->
+                <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f0eef6;">
+                  <div style="display:flex;align-items:center;gap:10px;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#787085" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                    <span style="color:#1e1033;font-size:12px;">Company website</span>
+                  </div>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#787085" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                </div>
+
+                <!-- Instagram -->
+                <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f0eef6;">
+                  <div style="display:flex;align-items:center;gap:10px;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#787085" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+                    <span style="color:#1e1033;font-size:12px;">Instagram</span>
+                  </div>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#787085" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                </div>
+
+                <!-- Twitter X -->
+                <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f0eef6;">
+                  <div style="display:flex;align-items:center;gap:10px;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="#787085"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.744l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                    <span style="color:#1e1033;font-size:12px;">Twitter (X)</span>
+                  </div>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#787085" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                </div>
+
+                <!-- LinkedIn -->
+                <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f0eef6;">
+                  <div style="display:flex;align-items:center;gap:10px;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="#787085"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                    <span style="color:#1e1033;font-size:12px;">LinkedIn</span>
+                  </div>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#787085" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                </div>
+
+                <!-- YouTube -->
+                <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f0eef6;">
+                  <div style="display:flex;align-items:center;gap:10px;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#787085" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 0 0 1.46 6.42 29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="#787085" stroke="none"/></svg>
+                    <span style="color:#1e1033;font-size:12px;">YouTube</span>
+                  </div>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#787085" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                </div>
+
+                <!-- Facebook -->
+                <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid #f0eef6;">
+                  <div style="display:flex;align-items:center;gap:10px;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#787085" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+                    <span style="color:#1e1033;font-size:12px;">Facebook</span>
+                  </div>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#787085" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                </div>
+
+                <!-- New features -->
+                <div style="padding:10px 0 2px;">
+                  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;">
+                    <div style="display:flex;align-items:center;gap:10px;">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#787085" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+                      <span style="color:#1e1033;font-size:12px;">New features</span>
+                    </div>
+                    <span style="padding:2px 8px;border-radius:999px;background:#f3f4f6;color:#6b7280;font-size:10px;">New</span>
+                  </div>
+                  <p style="color:#787085;font-size:10px;line-height:1.5;padding-left:26px;">New update available! Check out the improved das...</p>
+                </div>
+
+              </div>
+            </div>
+            <!-- /CARD: Marketing channels -->
+
+          </div>
+          <!-- /RIGHT COLUMN -->
+
+        </div>
+        <!-- /dashboard grid -->
+
+      </div>
+    </div>
+    <!-- /MAIN CONTENT -->
+
+  </div>
+  <!-- /MAIN COLUMN -->
+
+</div><!-- /app -->
+
+<!-- =============================================
+     JAVASCRIPT
+============================================= -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  'use strict';
+
+  /* ── Element references ── */
+  var sidebar     = document.getElementById('sidebar');
+  var overlay     = document.getElementById('overlay');
+  var hamburger   = document.getElementById('hamburger');
+  var collapseBtn = document.getElementById('collapse-btn');
+  var collapseIcon= document.getElementById('collapse-icon');
+  var navItems    = document.querySelectorAll('.nav-item');
+  var userInfo    = document.getElementById('user-info');
+  var userChevron = document.getElementById('user-chevron');
+
+  var isOpen      = false;
+  var isCollapsed = false;
+
+  /* ── Show / hide collapse button based on screen size ── */
+  function updateLayout() {
+    var desktop = window.innerWidth >= 1024;
+    hamburger.style.display   = desktop ? 'none' : 'flex';
+    collapseBtn.style.display = desktop ? 'flex' : 'none';
+    /* hide user info text on narrow viewports */
+    if (window.innerWidth < 640) {
+      userInfo.style.display    = 'none';
+      userChevron.style.display = 'none';
+    } else {
+      userInfo.style.display    = 'flex';
+      userChevron.style.display = 'block';
+    }
+  }
+  updateLayout();
+  window.addEventListener('resize', function () { updateLayout(); if (window.innerWidth >= 1024 && isOpen) closeMobile(); });
+
+  /* ── MOBILE: open / close drawer ── */
+  function openMobile() {
+    isOpen = true;
+    sidebar.classList.add('open');
+    overlay.classList.add('show');
+    hamburger.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeMobile() {
+    isOpen = false;
+    sidebar.classList.remove('open');
+    overlay.classList.remove('show');
+    hamburger.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+  }
+
+  hamburger.addEventListener('click', function () { isOpen ? closeMobile() : openMobile(); });
+  overlay.addEventListener('click', closeMobile);
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && isOpen) { closeMobile(); hamburger.focus(); } });
+
+  /* ── DESKTOP: collapse / expand ── */
+  collapseBtn.addEventListener('click', function () {
+    isCollapsed = !isCollapsed;
+    sidebar.classList.toggle('collapsed', isCollapsed);
+    collapseBtn.setAttribute('aria-label', isCollapsed ? 'Expand sidebar' : 'Collapse sidebar');
+    /* Flip the icon when collapsed */
+    if (isCollapsed) {
+      collapseIcon.innerHTML = '<rect x="3" y="3" width="18" height="18" rx="2"/><line x1="15" y1="3" x2="15" y2="21"/>';
+    } else {
+      collapseIcon.innerHTML = '<rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/>';
+    }
+  });
+
+  /* ── NAV ACTIVE STATE ── */
+  navItems.forEach(function (item) {
+    item.addEventListener('click', function () {
+      navItems.forEach(function (n) { n.classList.remove('active'); n.removeAttribute('aria-current'); });
+      item.classList.add('active');
+      item.setAttribute('aria-current', 'page');
+      if (isOpen) closeMobile();
+    });
+  });
+
+});
+</script>
+
+</body>
+</html>
