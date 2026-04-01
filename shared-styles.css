@@ -1,0 +1,105 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   TALENTO – SHARED STYLES
+   Common styles for sidebar, navbar, overlay, and base layout
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ─────────────────────────────────────────
+   GLOBAL RESET
+───────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+* { font-family: 'Alexandria', Helvetica, sans-serif; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; background: #fff; }
+
+/* ─────────────────────────────────────────
+   LAYOUT
+───────────────────────────────────────── */
+#app { display: flex; height: 100vh; overflow: hidden; }
+#main-col { display: flex; flex-direction: column; flex: 1; min-width: 0; overflow: hidden; }
+
+/* ─────────────────────────────────────────
+   SIDEBAR
+───────────────────────────────────────── */
+#sidebar {
+  position: fixed;
+  top: 0; left: 0;
+  z-index: 40;
+  height: 100%;
+  width: 240px;
+  display: flex;
+  flex-direction: column;
+  background: #f6f5f7;
+  border-right: 1px solid #e8e7eb;
+  transform: translateX(-100%);
+  transition: transform 300ms ease, width 300ms ease;
+  flex-shrink: 0;
+}
+#sidebar.open { transform: translateX(0); }
+
+@media (min-width: 1024px) {
+  #sidebar {
+    position: relative;
+    transform: translateX(0);
+    height: 100vh;
+    z-index: auto;
+  }
+  #sidebar.collapsed { width: 68px; }
+}
+
+/* Collapsed: hide labels / arrows */
+#sidebar.collapsed .s-label,
+#sidebar.collapsed .s-arrow,
+#sidebar.collapsed .logo-full,
+#sidebar.collapsed .settings-label,
+#sidebar.collapsed #attendance-submenu { display: none !important; }
+#sidebar:not(.collapsed) .logo-icon-only { display: none !important; }
+#sidebar.collapsed .logo-icon-only { display: flex !important; }
+
+/* Nav item states */
+.nav-item { cursor: pointer; transition: background 150ms ease; }
+.nav-item.active { background: #ece9ef; box-shadow: inset -3px -4px 4px #e6e4e9; }
+.nav-item:not(.active):hover { background: rgba(236,233,239,.55); }
+
+/* Nav sub-item states */
+.nav-sub-item { cursor: pointer; transition: background 150ms ease; border-radius: 8px; }
+.nav-sub-item.active { background: #ece9ef; box-shadow: inset -3px -4px 4px #e6e4e9; }
+.nav-sub-item:not(.active):hover { background: rgba(236,233,239,.55); }
+
+/* Sidebar scroll */
+#sb-scroll { overflow-y: auto; overflow-x: hidden; flex: 1; }
+#sb-scroll::-webkit-scrollbar { width: 4px; }
+#sb-scroll::-webkit-scrollbar-thumb { background: #d2cfd6; border-radius: 4px; }
+
+/* ─────────────────────────────────────────
+   OVERLAY (mobile backdrop)
+───────────────────────────────────────── */
+#overlay {
+  display: none;
+  position: fixed; inset: 0; z-index: 30;
+  background: rgba(0,0,0,.35);
+}
+#overlay.show { display: block; }
+
+/* ─────────────────────────────────────────
+   MAIN CONTENT SCROLL
+───────────────────────────────────────── */
+#main-scroll { overflow-y: auto; overflow-x: hidden; flex: 1; }
+#main-scroll::-webkit-scrollbar { width: 6px; }
+#main-scroll::-webkit-scrollbar-thumb { background: #d2cfd6; border-radius: 4px; }
+
+/* ─────────────────────────────────────────
+   COMMON UTILITIES
+───────────────────────────────────────── */
+button { background: none; border: none; cursor: pointer; }
+input { outline: none; border: none; background: transparent; width: 100%; }
+.card { background: #fff; border-radius: 16px; border: 1px solid #e8e7eb; }
+
+/* ─────────────────────────────────────────
+   NAVBAR: responsive user info
+───────────────────────────────────────── */
+#user-info { display: flex; }
+#user-chevron { display: block; }
+@media (max-width: 639px) {
+  #user-info { display: none !important; }
+  #user-chevron { display: none !important; }
+  .hide-on-mobile { display: none !important; }
+}

@@ -10,79 +10,14 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <!-- Shared layout styles -->
+  <link rel="stylesheet" href="shared-styles.css" />
   <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 
   <style>
-    /* ─────────────────────────────────────────
-       GLOBAL
-    ───────────────────────────────────────── */
-    *, *::before, *::after { box-sizing: border-box; }
-    * { font-family: 'Alexandria', Helvetica, sans-serif; margin: 0; padding: 0; }
-    html, body { height: 100%; overflow: hidden; background: #fff; }
-
-    /* ─────────────────────────────────────────
-       SIDEBAR
-    ───────────────────────────────────────── */
-    #sidebar {
-      position: fixed;
-      top: 0; left: 0;
-      z-index: 40;
-      height: 100%;
-      width: 240px;
-      display: flex;
-      flex-direction: column;
-      background: #f6f5f7;
-      border-right: 1px solid #e8e7eb;
-      transform: translateX(-100%);
-      transition: transform 300ms ease, width 300ms ease;
-      flex-shrink: 0;
-    }
-    #sidebar.open { transform: translateX(0); }
-
-    @media (min-width: 1024px) {
-      #sidebar {
-        position: relative;
-        transform: translateX(0);
-        height: 100vh;
-        z-index: auto;
-      }
-      #sidebar.collapsed { width: 68px; }
-    }
-
-    /* collapsed: hide labels / arrows */
-    #sidebar.collapsed .s-label,
-    #sidebar.collapsed .s-arrow,
-    #sidebar.collapsed .logo-full,
-    #sidebar.collapsed .settings-label { display: none !important; }
-    #sidebar:not(.collapsed) .logo-icon-only { display: none !important; }
-    #sidebar.collapsed .logo-icon-only { display: flex !important; }
-
-    /* nav active */
-    .nav-item { cursor: pointer; transition: background 150ms ease; }
-    .nav-item.active { background: #ece9ef; box-shadow: inset -3px -4px 4px #e6e4e9; }
-    .nav-item:not(.active):hover { background: rgba(236,233,239,.55); }
-
-    /* sidebar scroll */
-    #sb-scroll { overflow-y: auto; overflow-x: hidden; flex: 1; }
-    #sb-scroll::-webkit-scrollbar { width: 4px; }
-    #sb-scroll::-webkit-scrollbar-thumb { background: #d2cfd6; border-radius: 4px; }
-
-    /* ─────────────────────────────────────────
-       OVERLAY
-    ───────────────────────────────────────── */
-    #overlay {
-      display: none;
-      position: fixed; inset: 0; z-index: 30;
-      background: rgba(0,0,0,.35);
-    }
-    #overlay.show { display: block; }
-
-    /* ─────────────────────────────────────────
-       MAIN CONTENT SCROLL
-    ───────────────────────────────────────── */
-    #main-scroll { overflow-y: auto; overflow-x: hidden; flex: 1; }
-    #main-scroll::-webkit-scrollbar { width: 6px; }
-    #main-scroll::-webkit-scrollbar-thumb { background: #d2cfd6; border-radius: 4px; }
+    /* ═══════════════════════════════════════════════════════════════════════════
+       DASHBOARD-SPECIFIC STYLES
+       ═══════════════════════════════════════════════════════════════════════════ */
 
     /* ─────────────────────────────────────────
        ATTENDANCE WEEKLY CHART
@@ -360,18 +295,8 @@
       transition: opacity 150ms;
     }
     .view-more-btn:hover { opacity: .7; }
-    .card { background: #fff; border-radius: 16px; border: 1px solid #e8e7eb; }
 
-    /* hiring stats left border */
-    .stat-border-yellow { border-left: 3px solid #f59e0b; padding-left: 8px; }
-    .stat-border-purple { border-left: 3px solid #7c3aed; padding-left: 8px; }
-    .stat-border-teal   { border-left: 3px solid #0d9488; padding-left: 8px; }
-
-    /* ─────────────────────────────────────────
-       RESPONSIVENESS HELPERS
-    ───────────────────────────────────────── */
-    #app { display: flex; height: 100vh; overflow: hidden; }
-    #main-col { display: flex; flex-direction: column; flex: 1; min-width: 0; overflow: hidden; }
+    /* Dashboard grid layout */
     .dashboard-grid { display: grid; grid-template-columns: 1fr 280px; gap: 16px; }
     @media (max-width: 1023px) {
       .dashboard-grid { grid-template-columns: 1fr; }
@@ -384,16 +309,8 @@
       .stat-box { min-width: calc(50% - 8px); flex: none; }
       .chart-grid-mobile { overflow-x: auto; min-width: 300px; }
       .hiring-inner { flex-direction: column; }
-      .hiring-donut-wrap {
-        justify-content: center;
-      }
-      .hiring-stats {
-        min-width: 0;
-      }
-    }
-    @media (max-width: 639px) {
-      #user-info, #user-chevron { display: none !important; }
-      .hide-on-mobile { display: none !important; }
+      .hiring-donut-wrap { justify-content: center; }
+      .hiring-stats { min-width: 0; }
     }
   </style>
 </head>
@@ -401,268 +318,19 @@
 <body>
 <div id="app">
 
-  <!-- =============================================
-       OVERLAY (mobile backdrop)
-  ============================================= -->
+  <!-- OVERLAY (mobile backdrop) -->
   <div id="overlay" aria-hidden="true"></div>
 
-  <!-- =============================================
-       SIDEBAR
-  ============================================= -->
-  <aside id="sidebar" aria-label="Main navigation">
+  <!-- SIDEBAR (injected by layout.js) -->
+  <aside id="sidebar" aria-label="Main navigation"></aside>
 
-    <!-- SIDEBAR: Logo + Collapse Toggle -->
-    <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 12px 10px;flex-shrink:0;">
-      <!-- Full logo -->
-      <span class="logo-full" style="font-size:24px;font-weight:700;color:#1e1033;">Talento</span>
-      <!-- Collapsed: icon only -->
-      <div class="logo-icon-only" style="display:none;align-items:center;justify-content:center;width:100%;">
-        <i class="fa-solid fa-house" style="font-size:20px;color:#1e1033;"></i>
-      </div>
-      <!-- Collapse toggle (desktop) -->
-      <button id="collapse-btn" aria-label="Collapse sidebar"
-              style="display:none;align-items:center;justify-content:center;width:28px;height:28px;border-radius:6px;flex-shrink:0;transition:background 150ms;"
-              onmouseover="this.style.background='#ece9ef'" onmouseout="this.style.background='transparent'">
-        <!-- sidebar panel icon -->
-        <svg id="collapse-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4b405c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <rect x="3" y="3" width="18" height="18" rx="2"/>
-          <line x1="9" y1="3" x2="9" y2="21"/>
-        </svg>
-      </button>
-    </div>
-
-    <!-- SIDEBAR: Navigation (scrollable) -->
-    <div id="sb-scroll">
-      <nav style="display:flex;flex-direction:column;padding:4px 0;">
-
-        <!-- Dashboard -->
-        <button class="nav-item active" data-page="Dashboard" aria-current="page"
-          style="display:flex;align-items:center;gap:10px;width:calc(100% - 16px);height:40px;border-radius:8px;padding:0 8px;margin:0 8px;text-align:left;outline:none;">
-          <i class="fa-solid fa-house" style="width:20px;font-size:16px;color:#1e1033;flex-shrink:0;"></i>
-          <span class="s-label" style="color:#1e1033;font-size:14px;letter-spacing:-0.14px;line-height:1;white-space:nowrap;">Dashboard</span>
-        </button>
-
-        <!-- Requests -->
-        <button class="nav-item" data-page="Requests"
-          style="display:flex;align-items:center;gap:10px;width:100%;height:40px;border-radius:8px;padding:0 16px;text-align:left;outline:none;">
-          <i class="fa-solid fa-clipboard-list" style="width:20px;font-size:16px;color:#1e1033;flex-shrink:0;"></i>
-          <span class="s-label" style="color:#1e1033;font-size:14px;letter-spacing:-0.14px;line-height:1;white-space:nowrap;flex:1;">Requests</span>
-        </button>
-
-        <!-- Attendance & leave (dropdown) -->
-        <button class="nav-item" id="attendance-toggle" data-page="Attendance & leave" aria-haspopup="true" aria-expanded="false"
-          style="display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;height:40px;border-radius:8px;padding:0 16px;outline:none;">
-          <span style="display:flex;align-items:center;gap:10px;">
-            <i class="fa-solid fa-calendar-check" style="width:20px;font-size:16px;color:#1e1033;flex-shrink:0;"></i>
-            <span class="s-label" style="color:#1e1033;font-size:14px;letter-spacing:-0.14px;line-height:1;white-space:nowrap;">Attendance &amp; leave</span>
-          </span>
-          <svg class="s-arrow" id="attendance-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4b405c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;transition:transform 200ms;"><polyline points="6 9 12 15 18 9"/></svg>
-        </button>
-
-        <!-- Attendance sub-items (hidden by default) -->
-        <div id="attendance-submenu" style="display:none;flex-direction:column;">
-          <!-- Attendance sub-link -->
-          <button style="display:flex;align-items:center;gap:10px;width:calc(100% - 32px);height:36px;border-radius:8px;padding:0 8px;margin:1px 8px 1px 24px;text-align:left;outline:none;cursor:pointer;transition:background 150ms;" 
-                  onmouseover="this.style.background='rgba(236,233,239,.55)'" onmouseout="this.style.background='transparent'">
-            <i class="fa-regular fa-clock" style="width:16px;font-size:13px;color:#787085;flex-shrink:0;"></i>
-            <span class="s-label" style="color:#787085;font-size:13px;letter-spacing:-0.13px;line-height:1;white-space:nowrap;">Attendance</span>
-          </button>
-          <!-- Leave sub-link -->
-          <a href="leave.html" style="text-decoration:none;">
-            <button style="display:flex;align-items:center;gap:10px;width:calc(100% - 32px);height:36px;border-radius:8px;padding:0 8px;margin:1px 8px 1px 24px;text-align:left;outline:none;cursor:pointer;transition:background 150ms;"
-                    onmouseover="this.style.background='rgba(236,233,239,.55)'" onmouseout="this.style.background='transparent'">
-              <i class="fa-regular fa-calendar-minus" style="width:16px;font-size:14px;color:#1e1033;flex-shrink:0;"></i>
-              <span class="s-label" style="color:#1e1033;font-size:13px;letter-spacing:-0.13px;line-height:1;white-space:nowrap;">Leave (Time off)</span>
-            </button>
-          </a>
-        </div>
-
-        <!-- Employees -->
-        <button class="nav-item" data-page="Employees" aria-haspopup="true"
-          style="display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;height:40px;border-radius:8px;padding:0 16px;outline:none;">
-          <span style="display:flex;align-items:center;gap:10px;">
-            <i class="fa-solid fa-users" style="width:20px;font-size:16px;color:#1e1033;flex-shrink:0;"></i>
-            <span class="s-label" style="color:#1e1033;font-size:14px;letter-spacing:-0.14px;white-space:nowrap;">Employees</span>
-          </span>
-          <svg class="s-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4b405c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><polyline points="6 9 12 15 18 9"/></svg>
-        </button>
-
-        <!-- Finance -->
-        <button class="nav-item" data-page="Finance" aria-haspopup="true"
-          style="display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;height:40px;border-radius:8px;padding:0 16px;outline:none;">
-          <span style="display:flex;align-items:center;gap:10px;">
-            <i class="fa-solid fa-wallet" style="width:20px;font-size:16px;color:#1e1033;flex-shrink:0;"></i>
-            <span class="s-label" style="color:#1e1033;font-size:14px;letter-spacing:-0.14px;white-space:nowrap;">Finance</span>
-          </span>
-          <svg class="s-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4b405c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><polyline points="6 9 12 15 18 9"/></svg>
-        </button>
-
-        <!-- Business missions -->
-        <button class="nav-item" data-page="Business missions" aria-haspopup="true"
-          style="display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;height:40px;border-radius:8px;padding:0 16px;outline:none;">
-          <span style="display:flex;align-items:center;gap:10px;">
-            <i class="fa-solid fa-briefcase" style="width:20px;font-size:16px;color:#1e1033;flex-shrink:0;"></i>
-            <span class="s-label" style="color:#1e1033;font-size:14px;letter-spacing:-0.14px;white-space:nowrap;">Business missions</span>
-          </span>
-          <svg class="s-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4b405c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><polyline points="6 9 12 15 18 9"/></svg>
-        </button>
-
-        <!-- Hiring -->
-        <button class="nav-item" data-page="Hiring" aria-haspopup="true"
-          style="display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;height:40px;border-radius:8px;padding:0 16px;outline:none;">
-          <span style="display:flex;align-items:center;gap:10px;">
-            <i class="fa-solid fa-user-plus" style="width:20px;font-size:16px;color:#1e1033;flex-shrink:0;"></i>
-            <span class="s-label" style="color:#1e1033;font-size:14px;letter-spacing:-0.14px;white-space:nowrap;">Hiring</span>
-          </span>
-          <svg class="s-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4b405c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><polyline points="6 9 12 15 18 9"/></svg>
-        </button>
-
-        <!-- Documents -->
-        <button class="nav-item" data-page="Documents" aria-haspopup="true"
-          style="display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;height:40px;border-radius:8px;padding:0 16px;outline:none;">
-          <span style="display:flex;align-items:center;gap:10px;">
-            <i class="fa-solid fa-folder-open" style="width:20px;font-size:16px;color:#1e1033;flex-shrink:0;"></i>
-            <span class="s-label" style="color:#1e1033;font-size:14px;letter-spacing:-0.14px;white-space:nowrap;">Documents</span>
-          </span>
-          <svg class="s-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4b405c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><polyline points="6 9 12 15 18 9"/></svg>
-        </button>
-
-        <!-- Team engagement -->
-        <button class="nav-item" data-page="Team engagement" aria-haspopup="true"
-          style="display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;height:40px;border-radius:8px;padding:0 16px;outline:none;">
-          <span style="display:flex;align-items:center;gap:10px;">
-            <i class="fa-solid fa-people-group" style="width:20px;font-size:16px;color:#1e1033;flex-shrink:0;"></i>
-            <span class="s-label" style="color:#1e1033;font-size:14px;letter-spacing:-0.14px;white-space:nowrap;">Team engagement</span>
-          </span>
-          <svg class="s-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4b405c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><polyline points="6 9 12 15 18 9"/></svg>
-        </button>
-
-        <!-- Mobile app -->
-        <button class="nav-item" data-page="Mobile app" aria-haspopup="true"
-          style="display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;height:40px;border-radius:8px;padding:0 16px;outline:none;">
-          <span style="display:flex;align-items:center;gap:10px;">
-            <i class="fa-solid fa-mobile-screen" style="width:20px;font-size:16px;color:#1e1033;flex-shrink:0;"></i>
-            <span class="s-label" style="color:#1e1033;font-size:14px;letter-spacing:-0.14px;white-space:nowrap;">Mobile app</span>
-          </span>
-          <svg class="s-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4b405c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><polyline points="6 9 12 15 18 9"/></svg>
-        </button>
-
-        <!-- Website -->
-        <button class="nav-item" data-page="Website"
-          style="display:flex;align-items:center;gap:10px;width:100%;height:40px;border-radius:8px;padding:0 16px;outline:none;">
-          <i class="fa-solid fa-globe" style="width:20px;font-size:16px;color:#1e1033;flex-shrink:0;"></i>
-          <span class="s-label" style="color:#1e1033;font-size:14px;letter-spacing:-0.14px;white-space:nowrap;flex:1;text-align:left;">Website</span>
-        </button>
-
-        <!-- Apps -->
-        <button class="nav-item" data-page="Apps"
-          style="display:flex;align-items:center;gap:10px;width:100%;height:40px;border-radius:8px;padding:0 16px;outline:none;">
-          <i class="fa-solid fa-th-large" style="width:20px;font-size:16px;color:#1e1033;flex-shrink:0;"></i>
-          <span class="s-label" style="color:#1e1033;font-size:14px;letter-spacing:-0.14px;white-space:nowrap;flex:1;text-align:left;">Apps</span>
-        </button>
-
-      </nav>
-    </div>
-
-    <!-- SIDEBAR: Settings (pinned bottom) -->
-    <div style="flex-shrink:0;border-top:1px solid #e8e7eb;padding:12px 16px 24px;">
-      <button style="display:flex;align-items:center;gap:10px;width:100%;padding:6px 4px;border-radius:8px;transition:background 150ms;outline:none;"
-              onmouseover="this.style.background='rgba(236,233,239,.55)'" onmouseout="this.style.background='transparent'">
-        <i class="fa-solid fa-gear" style="width:20px;font-size:16px;color:#1e1033;flex-shrink:0;"></i>
-        <span class="settings-label" style="color:#1e1033;font-size:14px;letter-spacing:-0.14px;white-space:nowrap;">Settings</span>
-      </button>
-    </div>
-
-  </aside>
-  <!-- /SIDEBAR -->
-
-  <!-- =============================================
-       MAIN COLUMN
-  ============================================= -->
+  <!-- MAIN COLUMN -->
   <div id="main-col">
 
-    <!-- =============================================
-         NAVBAR
-    ============================================= -->
-    <header style="display:flex;align-items:center;justify-content:space-between;height:56px;padding:0 16px;background:#fff;border-bottom:1px solid #e8e7eb;flex-shrink:0;min-width:0;">
+    <!-- NAVBAR (injected by layout.js) -->
+    <header id="navbar" style="display:flex;align-items:center;justify-content:space-between;height:56px;padding:0 16px;background:#fff;border-bottom:1px solid #e8e7eb;flex-shrink:0;min-width:0;"></header>
 
-      <!-- NAVBAR: Left -->
-      <div style="display:flex;align-items:center;gap:12px;min-width:0;">
-        <!-- Mobile hamburger -->
-        <button id="hamburger" aria-label="Open navigation" aria-expanded="false" aria-controls="sidebar"
-          style="display:none;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;transition:background 150ms;outline:none;"
-          onmouseover="this.style.background='#ece9ef'" onmouseout="this.style.background='transparent'">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4b405c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
-          </svg>
-        </button>
-        <!-- Talento AI analyst pill -->
-        <button style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:999px;border:1px solid #ba8aff;color:#7c3aed;font-size:13px;white-space:nowrap;transition:background 150ms;outline:none;"
-                onmouseover="this.style.background='#f5f0ff'" onmouseout="this.style.background='transparent'">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-          <span class="hide-on-mobile">Talento AI analyst</span>
-        </button>
-      </div>
-
-      <!-- NAVBAR: Right icons -->
-      <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
-
-        <!-- Calendar icon -->
-        <button style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;transition:background 150ms;outline:none;"
-                onmouseover="this.style.background='#ece9ef'" onmouseout="this.style.background='transparent'" aria-label="Calendar">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4b405c" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
-          </svg>
-        </button>
-
-        <!-- Chat icon -->
-        <button style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;transition:background 150ms;outline:none;"
-                onmouseover="this.style.background='#ece9ef'" onmouseout="this.style.background='transparent'" aria-label="Messages">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4b405c" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-          </svg>
-        </button>
-
-        <!-- Bell icon with RED dot -->
-        <button style="position:relative;display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:8px;transition:background 150ms;outline:none;"
-                onmouseover="this.style.background='#ece9ef'" onmouseout="this.style.background='transparent'" aria-label="Notifications">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4b405c" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>
-          </svg>
-          <!-- RED notification dot -->
-          <span style="position:absolute;top:8px;right:8px;width:7px;height:7px;border-radius:50%;background:#ef4444;border:1.5px solid #fff;" aria-hidden="true"></span>
-        </button>
-
-        <!-- Divider -->
-        <div style="width:1px;height:24px;background:#e8e7eb;margin:0 2px;"></div>
-
-        <!-- User profile -->
-        <button style="display:flex;align-items:center;gap:8px;padding:4px 6px;border-radius:8px;transition:background 150ms;outline:none;"
-                onmouseover="this.style.background='rgba(236,233,239,.55)'" onmouseout="this.style.background='transparent'" aria-label="User profile">
-          <!-- Avatar -->
-          <div style="width:32px;height:32px;border-radius:50%;background:#c4b0d8;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5b3a7a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="8" r="4" fill="#5b3a7a" stroke="none"/>
-              <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="#5b3a7a" stroke="none"/>
-            </svg>
-          </div>
-          <!-- Name & email (hidden on small) -->
-          <div id="user-info" style="flex-direction:column;align-items:flex-start;line-height:1.2;display:flex;">
-            <span style="color:#1e1033;font-size:12px;font-weight:500;letter-spacing:-0.12px;white-space:nowrap;">Huda AlQahtani</span>
-            <span style="color:#787085;font-size:10px;letter-spacing:-0.1px;white-space:nowrap;">alqahtani@gmail.com</span>
-          </div>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4b405c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="user-chevron">
-            <polyline points="6 9 12 15 18 9"/>
-          </svg>
-        </button>
-
-      </div>
-    </header>
-    <!-- /NAVBAR -->
-
-    <!-- =============================================
-         MAIN CONTENT
-    ============================================= -->
+    <!-- MAIN CONTENT -->
     <div id="main-scroll" style="background:#f5f3fb;">
       <div style="max-width:1400px;margin:0 auto;padding:20px 16px 40px;">
 
@@ -1373,106 +1041,8 @@
 
 </div><!-- /app -->
 
-<!-- =============================================
-     JAVASCRIPT
-============================================= -->
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-  'use strict';
-
-  /* ── Element references ── */
-  var sidebar     = document.getElementById('sidebar');
-  var overlay     = document.getElementById('overlay');
-  var hamburger   = document.getElementById('hamburger');
-  var collapseBtn = document.getElementById('collapse-btn');
-  var collapseIcon= document.getElementById('collapse-icon');
-  var navItems    = document.querySelectorAll('.nav-item');
-  var userInfo    = document.getElementById('user-info');
-  var userChevron = document.getElementById('user-chevron');
-
-  var isOpen      = false;
-  var isCollapsed = false;
-
-  /* ── Show / hide collapse button based on screen size ── */
-  function updateLayout() {
-    var desktop = window.innerWidth >= 1024;
-    hamburger.style.display   = desktop ? 'none' : 'flex';
-    collapseBtn.style.display = desktop ? 'flex' : 'none';
-    /* hide user info text on narrow viewports */
-    if (window.innerWidth < 640) {
-      userInfo.style.display    = 'none';
-      userChevron.style.display = 'none';
-    } else {
-      userInfo.style.display    = 'flex';
-      userChevron.style.display = 'block';
-    }
-  }
-  updateLayout();
-  window.addEventListener('resize', function () { updateLayout(); if (window.innerWidth >= 1024 && isOpen) closeMobile(); });
-
-  /* ── MOBILE: open / close drawer ── */
-  function openMobile() {
-    isOpen = true;
-    sidebar.classList.add('open');
-    overlay.classList.add('show');
-    hamburger.setAttribute('aria-expanded', 'true');
-    document.body.style.overflow = 'hidden';
-  }
-  function closeMobile() {
-    isOpen = false;
-    sidebar.classList.remove('open');
-    overlay.classList.remove('show');
-    hamburger.setAttribute('aria-expanded', 'false');
-    document.body.style.overflow = '';
-  }
-
-  hamburger.addEventListener('click', function () { isOpen ? closeMobile() : openMobile(); });
-  overlay.addEventListener('click', closeMobile);
-  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && isOpen) { closeMobile(); hamburger.focus(); } });
-
-  /* ── DESKTOP: collapse / expand ── */
-  collapseBtn.addEventListener('click', function () {
-    isCollapsed = !isCollapsed;
-    sidebar.classList.toggle('collapsed', isCollapsed);
-    collapseBtn.setAttribute('aria-label', isCollapsed ? 'Expand sidebar' : 'Collapse sidebar');
-    /* Flip the icon when collapsed */
-    if (isCollapsed) {
-      collapseIcon.innerHTML = '<rect x="3" y="3" width="18" height="18" rx="2"/><line x1="15" y1="3" x2="15" y2="21"/>';
-    } else {
-      collapseIcon.innerHTML = '<rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/>';
-    }
-  });
-
-  /* ── ATTENDANCE SUBMENU TOGGLE ── */
-  var attendanceToggle = document.getElementById('attendance-toggle');
-  var attendanceSubmenu = document.getElementById('attendance-submenu');
-  var attendanceArrow = document.getElementById('attendance-arrow');
-  var attendanceOpen = false;
-
-  if (attendanceToggle && attendanceSubmenu) {
-    attendanceToggle.addEventListener('click', function () {
-      attendanceOpen = !attendanceOpen;
-      attendanceSubmenu.style.display = attendanceOpen ? 'flex' : 'none';
-      if (attendanceArrow) {
-        attendanceArrow.style.transform = attendanceOpen ? 'rotate(180deg)' : 'rotate(0deg)';
-      }
-      attendanceToggle.setAttribute('aria-expanded', attendanceOpen ? 'true' : 'false');
-    });
-  }
-
-  /* ── NAV ACTIVE STATE ── */
-  navItems.forEach(function (item) {
-    item.addEventListener('click', function () {
-      if (item.id === 'attendance-toggle') return;
-      navItems.forEach(function (n) { n.classList.remove('active'); n.removeAttribute('aria-current'); });
-      item.classList.add('active');
-      item.setAttribute('aria-current', 'page');
-      if (isOpen) closeMobile();
-    });
-  });
-
-});
-</script>
+<!-- Shared Layout Script -->
+<script src="layout.js"></script>
 
 </body>
 </html>
