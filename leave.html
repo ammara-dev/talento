@@ -434,8 +434,12 @@ function renderDynamicTabContent(tabId, subTabId = null) {
     html += LeaveComponents.Toolbar(effectiveConfig.toolbar);
   }
 
+  // Visual Analytics (if configured)
+  if (effectiveConfig.visualAnalytics) {
+    html += LeaveComponents.VisualAnalytics(effectiveConfig.visualAnalytics);
+  }
   // Empty state (if configured)
-  if (effectiveConfig.emptyState) {
+  else if (effectiveConfig.emptyState) {
     html += LeaveComponents.EmptyState(effectiveConfig.emptyState);
   }
   // Data table (if columns and data configured)

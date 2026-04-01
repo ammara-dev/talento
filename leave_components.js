@@ -629,6 +629,200 @@ const LeaveComponents = (function() {
   }
 
   // ═══════════════════════════════════════════════════════════════════════════
+  // VISUAL ANALYTICS - Legend Component
+  // ═══════════════════════════════════════════════════════════════════════════
+  const LeaveTypeColors = {
+    'annual': { gradient: ['#E4D4FF', '#D3BCF8'], dot: '#D3BCF8' },
+    'unpaid': { gradient: ['#FFDD75', '#FECC36'], dot: '#FECC36' },
+    'sick': { gradient: ['#E0DDE5', '#D2CFD6'], dot: '#D2CFD6' },
+    'other': { gradient: ['#C3E2F9', '#BBDEF7'], dot: '#BBDEF7' }
+  };
+
+  function LeaveLegend(config) {
+    const { items = ['annual', 'unpaid', 'sick', 'other'] } = config;
+    
+    const labels = {
+      'annual': 'Annual leave',
+      'unpaid': 'Unpaid leave',
+      'sick': 'Sick leave',
+      'other': 'Other'
+    };
+
+    const legendItems = items.map(type => {
+      const color = LeaveTypeColors[type]?.dot || '#ccc';
+      return `
+        <div style="display:flex;align-items:center;gap:6px;">
+          <span style="width:8px;height:8px;border-radius:50%;background:${color};flex-shrink:0;"></span>
+          <span style="font-size:12px;color:#4b405c;">${labels[type] || type}</span>
+        </div>
+      `;
+    }).join('');
+
+    return `
+      <div style="display:flex;align-items:center;gap:16px;margin-bottom:16px;">
+        ${legendItems}
+      </div>
+    `;
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // VISUAL ANALYTICS - Gantt Chart Component
+  // ═══════════════════════════════════════════════════════════════════════════
+  function LeaveGanttChart(config) {
+    const { 
+      employees = [], 
+      totalPeople = 123, 
+      totalInOrg = 1402,
+      scaleMax = 200 
+    } = config;
+
+    // Generate scale markers
+    const scaleMarkers = [];
+    for (let i = 0; i <= scaleMax; i += 20) {
+      scaleMarkers.push(i === 0 ? '00' : i.toFixed(2));
+    }
+
+    const scaleHTML = scaleMarkers.map((marker, idx) => `
+      <span style="font-size:10px;color:#a09aab;white-space:nowrap;">${marker}</span>
+    `).join('');
+
+    // Generate employee rows
+    const rowsHTML = employees.map(emp => {
+      // Generate leave bars
+      const barsHTML = (emp.leaves || []).map(leave => {
+        const colors = LeaveTypeColors[leave.type] || LeaveTypeColors.other;
+        const leftPercent = (leave.start / scaleMax) * 100;
+        const widthPercent = ((leave.end - leave.start) / scaleMax) * 100;
+        
+        return `
+          <div style="
+            position:absolute;
+            left:${leftPercent}%;
+            width:${widthPercent}%;
+            height:20px;
+            border-radius:8px;
+            background:linear-gradient(90deg, ${colors.gradient[0]} 0%, ${colors.gradient[1]} 100%);
+            top:50%;
+            transform:translateY(-50%);
+          "></div>
+        `;
+      }).join('');
+
+      return `
+        <div style="display:flex;align-items:center;border-bottom:1px solid #f0eef6;min-height:52px;">
+          <!-- Employee info -->
+          <div style="width:180px;flex-shrink:0;padding:8px 12px;display:flex;align-items:center;gap:10px;">
+            <img src="${emp.avatar}" alt="${emp.name}" style="width:32px;height:32px;border-radius:50%;object-fit:cover;flex-shrink:0;" />
+            <div style="min-width:0;">
+              <div style="font-size:13px;color:#1e1033;font-weight:400;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${emp.name}</div>
+              <div style="font-size:11px;color:#787085;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${emp.role}</div>
+            </div>
+          </div>
+          <!-- Timeline bars -->
+          <div style="flex:1;position:relative;height:40px;min-width:0;">
+            ${barsHTML}
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    return `
+      <div style="border:1px solid #e8e7eb;border-radius:12px;overflow:hidden;background:#fff;">
+        <!-- Header with scale -->
+        <div style="display:flex;align-items:stretch;border-bottom:1px solid #e8e7eb;background:#faf9fc;">
+          <!-- People count header -->
+          <div style="width:180px;flex-shrink:0;padding:12px;border-right:1px solid #e8e7eb;">
+            <div style="font-size:13px;font-weight:500;color:#1e1033;">${totalPeople} people</div>
+            <div style="font-size:11px;color:#787085;">out of ${totalInOrg} in your org</div>
+          </div>
+          <!-- Scale -->
+          <div style="flex:1;display:flex;align-items:center;justify-content:space-between;padding:12px 16px;min-width:0;">
+            ${scaleHTML}
+          </div>
+        </div>
+        <!-- Employee rows -->
+        <div style="max-height:480px;overflow-y:auto;">
+          ${rowsHTML}
+        </div>
+      </div>
+    `;
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // VISUAL ANALYTICS - Combined Toolbar with Legend
+  // ═══════════════════════════════════════════════════════════════════════════
+  function VisualAnalyticsToolbar(config) {
+    const { 
+      legendItems = ['annual', 'unpaid', 'sick', 'other'],
+      showFilters = true,
+      filterCount = 2,
+      showExport = true,
+      exportText = 'Export all'
+    } = config;
+
+    const legendHTML = LeaveLegend({ items: legendItems });
+
+    const filtersHTML = showFilters ? `
+      <button class="filter-btn">
+        ${Icons.filter}
+        Filters
+        ${filterCount > 0 ? `<span style="color:#787085;">${filterCount}</span>` : ''}
+      </button>
+    ` : '';
+
+    const exportHTML = showExport ? `
+      <button class="toolbar-btn">
+        ${exportText}
+        ${Icons.download}
+      </button>
+    ` : '';
+
+    return `
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:16px;">
+        ${legendHTML}
+        <div style="display:flex;align-items:center;gap:8px;">
+          ${filtersHTML}
+          ${exportHTML}
+        </div>
+      </div>
+    `;
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // VISUAL ANALYTICS - Full Component
+  // ═══════════════════════════════════════════════════════════════════════════
+  function VisualAnalytics(config) {
+    const { 
+      employees = [],
+      totalPeople = 123,
+      totalInOrg = 1402,
+      scaleMax = 200,
+      legendItems = ['annual', 'unpaid', 'sick', 'other'],
+      showFilters = true,
+      filterCount = 2,
+      showExport = true,
+      exportText = 'Export all'
+    } = config;
+
+    const toolbarHTML = VisualAnalyticsToolbar({
+      legendItems,
+      showFilters,
+      filterCount,
+      showExport,
+      exportText
+    });
+
+    const chartHTML = LeaveGanttChart({
+      employees,
+      totalPeople,
+      totalInOrg,
+      scaleMax
+    });
+
+    return toolbarHTML + chartHTML;
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
   // EVENT HANDLERS
   // ═══════════════════════════════════════════════════════════════════════════
   
@@ -1039,27 +1233,115 @@ const LeaveComponents = (function() {
           ]
         },
         'visual-analytics': {
-          toolbar: {
-            showSearch: false,
-            showDateNav: false,
-            showDateRange: true,
-            dateRangeStart: '25 June 2025',
-            dateRangeEnd: '10 July 2025',
-            showFilters: true,
-            filterCount: 2,
-            showViewToggle: false,
-            showExport: true,
-            exportText: 'Export all',
-            showEditColumns: false,
-            showCreateNew: false
-          },
+          toolbar: null, // Uses custom VisualAnalyticsToolbar
           showPagination: false,
           showCheckbox: false,
           columns: [],
           sampleData: [],
-          emptyState: {
-            title: 'Visual Analytics',
-            description: 'Charts and analytics will be displayed here.'
+          // Visual Analytics specific config
+          visualAnalytics: {
+            legendItems: ['annual', 'unpaid', 'sick', 'other'],
+            showFilters: true,
+            filterCount: 2,
+            showExport: true,
+            exportText: 'Export all',
+            totalPeople: 123,
+            totalInOrg: 1402,
+            scaleMax: 200,
+            employees: [
+              {
+                name: 'Fahad AlShahrani',
+                role: 'Marketing lead',
+                avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
+                leaves: [
+                  { type: 'annual', start: 20, end: 50 },
+                  { type: 'unpaid', start: 55, end: 80 },
+                  { type: 'sick', start: 85, end: 120 }
+                ]
+              },
+              {
+                name: 'Khalid AlAnazi',
+                role: 'People & culture lead',
+                avatar: 'https://randomuser.me/api/portraits/men/45.jpg',
+                leaves: [
+                  { type: 'annual', start: 15, end: 35 },
+                  { type: 'unpaid', start: 45, end: 70 },
+                  { type: 'sick', start: 90, end: 130 }
+                ]
+              },
+              {
+                name: 'Fahad AlShahrani',
+                role: 'Marketing lead',
+                avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
+                leaves: [
+                  { type: 'annual', start: 10, end: 30 },
+                  { type: 'other', start: 140, end: 180 }
+                ]
+              },
+              {
+                name: 'Khalid AlAnazi',
+                role: 'People & culture lead',
+                avatar: 'https://randomuser.me/api/portraits/men/45.jpg',
+                leaves: [
+                  { type: 'sick', start: 60, end: 90 }
+                ]
+              },
+              {
+                name: 'Fahad AlShahrani',
+                role: 'Marketing lead',
+                avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
+                leaves: [
+                  { type: 'unpaid', start: 30, end: 45 },
+                  { type: 'annual', start: 100, end: 140 }
+                ]
+              },
+              {
+                name: 'Khalid AlAnazi',
+                role: 'People & culture lead',
+                avatar: 'https://randomuser.me/api/portraits/men/45.jpg',
+                leaves: [
+                  { type: 'annual', start: 40, end: 70 },
+                  { type: 'unpaid', start: 80, end: 110 },
+                  { type: 'other', start: 150, end: 185 }
+                ]
+              },
+              {
+                name: 'Fahad AlShahrani',
+                role: 'Marketing lead',
+                avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
+                leaves: [
+                  { type: 'sick', start: 50, end: 80 },
+                  { type: 'annual', start: 120, end: 160 }
+                ]
+              },
+              {
+                name: 'Fahad AlShahrani',
+                role: 'Marketing lead',
+                avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
+                leaves: [
+                  { type: 'unpaid', start: 70, end: 100 },
+                  { type: 'other', start: 160, end: 190 }
+                ]
+              },
+              {
+                name: 'Fahad AlShahrani',
+                role: 'Marketing lead',
+                avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
+                leaves: [
+                  { type: 'annual', start: 25, end: 55 },
+                  { type: 'unpaid', start: 90, end: 130 }
+                ]
+              },
+              {
+                name: 'Fahad AlShahrani',
+                role: 'Marketing lead',
+                avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
+                leaves: [
+                  { type: 'sick', start: 40, end: 65 },
+                  { type: 'other', start: 130, end: 165 }
+                ]
+              }
+            ]
           }
         }
       },
@@ -1312,6 +1594,13 @@ const LeaveComponents = (function() {
     DateRangePicker,
     SearchInput,
     EmptyState,
+
+    // Visual Analytics Components
+    LeaveLegend,
+    LeaveGanttChart,
+    VisualAnalyticsToolbar,
+    VisualAnalytics,
+    LeaveTypeColors,
 
     // Tab Management
     TabConfigs,
