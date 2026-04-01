@@ -226,6 +226,28 @@ input { outline: none; border: none; background: transparent; width: 100%; }
   background: #eef2ff;
 }
 
+/* Plain text badges (no background) */
+.badge-plain-approved {
+  color: #15803d;
+  font-size: 13px;
+  font-weight: 400;
+}
+.badge-plain-review {
+  color: #b45309;
+  font-size: 13px;
+  font-weight: 400;
+}
+.badge-plain-pending {
+  color: #6b7280;
+  font-size: 13px;
+  font-weight: 400;
+}
+.badge-plain-rejected {
+  color: #dc2626;
+  font-size: 13px;
+  font-weight: 400;
+}
+
 /* Reconciliation type badge - reusable for Balance Liquidation, Request reconciliation, Both */
 .badge-type {
   display: inline-flex;

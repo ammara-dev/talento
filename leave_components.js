@@ -299,6 +299,13 @@ const LeaveComponents = (function() {
           cellContent = Avatar({ src: row.avatar, name: value, subtitle: row.jobTitle || row.subtitle || '' });
         } else if (col.type === 'badge') {
           cellContent = Badge({ text: value, variant: row.statusVariant || row[col.variantKey] || 'default' });
+        } else if (col.type === 'plain-badge') {
+          // Plain badges use variant prefix "plain-"
+          const plainVariant = 'plain-' + (row.statusVariant || row[col.variantKey] || 'pending');
+          cellContent = Badge({ text: value, variant: plainVariant });
+        } else if (col.type === 'status-text') {
+          // Status with badge-type styling like department
+          cellContent = `<span class="badge-type">${value}</span>`;
         } else if (col.type === 'reconciliation-type') {
           cellContent = Badge({ text: value, variant: 'reconciliation-type' });
         } else if (col.type === 'duration') {
@@ -424,6 +431,10 @@ const LeaveComponents = (function() {
       review: 'badge-review',
       pending: 'badge-pending',
       rejected: 'badge-rejected',
+      'plain-approved': 'badge-plain-approved',
+      'plain-review': 'badge-plain-review',
+      'plain-pending': 'badge-plain-pending',
+      'plain-rejected': 'badge-plain-rejected',
       type: 'badge-type',
       'reconciliation-type': 'badge-type',
       default: 'badge-default'
@@ -846,13 +857,14 @@ const LeaveComponents = (function() {
       showPagination: true,
       showCheckbox: true,
       columns: [
+        { key: 'code', label: 'Code', sortable: true, width: '120px' },
         { key: 'employee', label: 'Employee', type: 'avatar-no-subtitle', sortable: true, width: '200px' },
         { key: 'jobTitle', label: 'Job title', sortable: true, width: '180px' },
         { key: 'department', label: 'Department', type: 'department-badge', sortable: true, width: '180px' },
         { key: 'startingWorkAt', label: 'Starting work at', sortable: true, width: '140px' },
         { key: 'effectiveNoticeType', label: 'Effective notice type', sortable: true, width: '180px' },
         { key: 'createdBy', label: 'Created by', type: 'avatar-no-subtitle', sortable: true, width: '200px' },
-        { key: 'status', label: 'Status', type: 'badge', sortable: true, width: '120px' }
+        { key: 'status', label: 'Status', type: 'status-text', sortable: true, width: '120px' }
       ],
       sampleData: [
         {
@@ -1085,6 +1097,9 @@ const LeaveComponents = (function() {
           cellContent = Badge({ text: row.type, variant: 'reconciliation-type' });
         } else if (col.type === 'badge') {
           cellContent = Badge({ text: value, variant: row.statusVariant || row[col.variantKey] || 'default' });
+        } else if (col.type === 'status-text') {
+          // Status with badge-type styling like department
+          cellContent = `<span class="badge-type">${value}</span>`;
         } else if (col.type === 'duration') {
           cellContent = `<span class="duration-pill">${value}</span>`;
         } else if (col.type === 'currency') {
