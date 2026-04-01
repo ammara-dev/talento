@@ -27,7 +27,8 @@ const LeaveComponents = (function() {
     search: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>`,
     plus: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>`,
     table: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/></svg>`,
-    chart: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>`
+    chart: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>`,
+    chevronDown: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>`
   };
 
   // ═══════════════════════════════════════════════════════════════════════════
@@ -383,11 +384,67 @@ const LeaveComponents = (function() {
       pending: 'badge-pending',
       rejected: 'badge-rejected',
       type: 'tag-badge',
+      'balance-liquidation': 'badge-balance-liquidation',
+      'request-reconciliation': 'badge-request-reconciliation',
+      'both': 'badge-both',
       default: 'badge-default'
     };
 
     const className = variants[variant] || variants.default;
     return `<span class="${className}">${text}</span>`;
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
+  // SECTION HEADER
+  // Renders: Section title (left) + Search + Action buttons (right)
+  // ═══════════════════════════════════════════════════════════════════════════
+  function SectionHeader(config) {
+    const {
+      title = '',
+      showSearch = false,
+      searchPlaceholder = 'Search',
+      showExport = false,
+      exportText = 'Export all',
+      showCreateNew = false,
+      createNewText = 'Create new',
+      onCreateNew = ''
+    } = config;
+
+    const titleHTML = title ? `<h2 class="section-title">${title}</h2>` : '';
+
+    const searchHTML = showSearch ? `
+      <div class="search-box">
+        ${Icons.search}
+        <input type="text" placeholder="${searchPlaceholder}" />
+      </div>
+    ` : '';
+
+    const exportHTML = showExport ? `
+      <button class="toolbar-btn">
+        ${exportText}
+        ${Icons.download}
+      </button>
+    ` : '';
+
+    const createNewHTML = showCreateNew ? `
+      <button class="create-new-btn" ${onCreateNew ? `onclick="${onCreateNew}"` : ''}>
+        ${createNewText}
+        ${Icons.chevronDown}
+      </button>
+    ` : '';
+
+    return `
+      <div class="section-header">
+        <div class="section-header-left">
+          ${titleHTML}
+          ${searchHTML}
+        </div>
+        <div class="section-header-right">
+          ${exportHTML}
+          ${createNewHTML}
+        </div>
+      </div>
+    `;
   }
 
   // ═══════════════════════════════════════════════════════════════════════════
@@ -601,6 +658,229 @@ const LeaveComponents = (function() {
   }
 
   // ═══════════════════════════════════════════════════════════════════════════
+  // TAB CONTENT MANAGER
+  // Manages dynamic content switching for tab-based navigation
+  // ═══════════════════════════════════════════════════════════════════════════
+  const TabConfigs = {
+    'summary': {
+      sectionHeader: null, // Summary has its own unique layout
+      toolbar: {
+        showSearch: false,
+        showDateNav: true,
+        dateText: 'Today',
+        dateSubText: 'Tuesday, 16 Dec',
+        showFilters: true,
+        filterCount: 2,
+        showViewToggle: true,
+        activeView: 'list',
+        showExport: true,
+        showEditColumns: true,
+        showCreateNew: false
+      }
+    },
+    'leave-reconciliations': {
+      sectionHeader: {
+        title: 'Leave reconciliations',
+        showSearch: true,
+        searchPlaceholder: 'Search',
+        showExport: true,
+        exportText: 'Export all',
+        showCreateNew: true,
+        createNewText: 'Create new'
+      },
+      toolbar: null,
+      columns: [
+        { key: 'code', label: 'Code', sortable: true, width: '100px' },
+        { key: 'employee', label: 'Employee', type: 'avatar', sortable: true },
+        { key: 'type', label: 'Type', type: 'reconciliation-type', sortable: true },
+        { key: 'createdDate', label: 'Created date', sortable: true },
+        { key: 'totalGross', label: 'Total gross (SAR)', type: 'currency', sortable: true },
+        { key: 'liquidationAmount', label: 'Liquidation amount', type: 'currency', sortable: true },
+        { key: 'airTicketsValue', label: 'Air tickets value', type: 'currency', sortable: true },
+        { key: 'totalNet', label: 'Total net', type: 'currency', sortable: true }
+      ],
+      sampleData: [
+        {
+          code: 'LR00080',
+          employee: 'Mishari AlSubaie',
+          avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
+          type: 'Balance Liquidation',
+          typeVariant: 'balance-liquidation',
+          createdDate: '12 Dec 2025',
+          createdTime: '00:33:41',
+          totalGross: '18,000.00',
+          liquidationAmount: '4,210.00',
+          airTicketsValue: '2,000.00',
+          totalNet: '2,000.00'
+        },
+        {
+          code: 'LR00080',
+          employee: 'Mishari AlSubaie',
+          avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
+          type: 'Request reconciliation',
+          typeVariant: 'request-reconciliation',
+          createdDate: '10 Dec 2025',
+          createdTime: '00:33:41',
+          totalGross: '10,000.00',
+          liquidationAmount: '14,000.00',
+          airTicketsValue: '3,000.00',
+          totalNet: '3,000.00'
+        },
+        {
+          code: 'LR00080',
+          employee: 'Mishari AlSubaie',
+          avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
+          type: 'Both',
+          typeVariant: 'both',
+          createdDate: '10 Dec 2025',
+          createdTime: '00:33:41',
+          totalGross: '0.00',
+          liquidationAmount: '0.00',
+          airTicketsValue: '3,000.00',
+          totalNet: '0.00'
+        }
+      ]
+    },
+    'return-from-leave': {
+      sectionHeader: {
+        title: 'Return from leave',
+        showSearch: true,
+        searchPlaceholder: 'Search',
+        showExport: true,
+        exportText: 'Export all',
+        showCreateNew: true,
+        createNewText: 'Create new'
+      },
+      toolbar: null,
+      columns: [
+        { key: 'code', label: 'Code', sortable: true, width: '100px' },
+        { key: 'employee', label: 'Employee', type: 'avatar', sortable: true },
+        { key: 'returnDate', label: 'Return date', sortable: true },
+        { key: 'leaveType', label: 'Leave type', sortable: true },
+        { key: 'status', label: 'Status', type: 'badge', sortable: true }
+      ],
+      sampleData: []
+    },
+    'reports': {
+      sectionHeader: {
+        title: 'Reports',
+        showSearch: true,
+        searchPlaceholder: 'Search reports',
+        showExport: false,
+        showCreateNew: false
+      },
+      toolbar: null,
+      columns: [],
+      sampleData: []
+    }
+  };
+
+  // Render tab content dynamically
+  function renderTabContent(tabId, containerSelector) {
+    const config = TabConfigs[tabId];
+    if (!config) return '';
+
+    const container = document.querySelector(containerSelector);
+    if (!container) return;
+
+    let html = '';
+
+    // Section header (if configured)
+    if (config.sectionHeader) {
+      html += SectionHeader(config.sectionHeader);
+    }
+
+    // Toolbar (if configured)
+    if (config.toolbar) {
+      html += Toolbar(config.toolbar);
+    }
+
+    // Data table (if columns configured)
+    if (config.columns && config.columns.length > 0) {
+      html += renderReconciliationTable(config);
+    }
+
+    // Pagination
+    html += Pagination({ currentPage: 1, totalPages: 30 });
+
+    container.innerHTML = html;
+  }
+
+  // Specialized table renderer for Leave Reconciliations
+  function renderReconciliationTable(config) {
+    const { columns, sampleData } = config;
+
+    // Header row
+    const headerCells = columns.map((col, idx) => {
+      const checkboxHTML = (idx === 0) ? 
+        `<input type="checkbox" class="table-checkbox" onclick="LeaveComponents.toggleAllCheckboxes(this)" />` : '';
+      
+      return `
+        <th${col.width ? ` style="width:${col.width}"` : ''}>
+          <div style="display:flex;align-items:center;gap:8px;">
+            ${checkboxHTML}
+            ${col.label}
+            ${col.sortable !== false ? Icons.sort : ''}
+          </div>
+        </th>
+      `;
+    }).join('');
+
+    // Body rows
+    const bodyRows = sampleData.map(row => {
+      const cells = columns.map((col, idx) => {
+        let cellContent = '';
+
+        if (idx === 0) {
+          // First column with checkbox
+          cellContent = `
+            <div style="display:flex;align-items:center;gap:10px;">
+              <input type="checkbox" class="table-checkbox" />
+              <span style="color:#1e1033;">${row[col.key]}</span>
+            </div>
+          `;
+        } else if (col.type === 'avatar') {
+          cellContent = Avatar({ src: row.avatar, name: row[col.key] });
+        } else if (col.type === 'reconciliation-type') {
+          cellContent = Badge({ text: row.type, variant: row.typeVariant });
+        } else if (col.type === 'badge') {
+          cellContent = Badge({ text: row[col.key], variant: row[col.variantKey] || 'default' });
+        } else if (col.type === 'currency') {
+          const value = row[col.key] || '0.00';
+          const displayValue = value === '0.00' ? '<span style="color:#a09aab;">0.00</span>' : value;
+          cellContent = displayValue;
+        } else if (col.key === 'createdDate') {
+          const time = row.createdTime ? `<span style="color:#a09aab;margin-left:4px;">${row.createdTime}</span>` : '';
+          cellContent = `<span style="color:#4b405c;">${row[col.key]}</span>${time}`;
+        } else {
+          cellContent = row[col.key] || '';
+        }
+
+        return `<td>${cellContent}</td>`;
+      }).join('');
+
+      return `<tr>${cells}<td class="col-actions">
+        <button style="color:#787085;padding:6px;" aria-label="More actions">
+          ${Icons.moreVertical}
+        </button>
+      </td></tr>`;
+    }).join('');
+
+    return `
+      <div class="table-scroll-wrap" style="border: 1px solid #f0eef6; border-radius: 12px; overflow-x: auto; overflow-y: hidden;">
+        <table class="leave-table">
+          <thead>
+            <tr>${headerCells}<th class="col-actions"></th></tr>
+          </thead>
+          <tbody>
+            ${bodyRows}
+          </tbody>
+        </table>
+      </div>
+    `;
+  }
+
+  // ═══════════════════════════════════════════════════════════════════════════
   // PUBLIC API
   // ═══════════════════════════════════════════════════════════════════════════
   return {
@@ -612,11 +892,17 @@ const LeaveComponents = (function() {
     Pagination,
     Avatar,
     Badge,
+    SectionHeader,
     Breadcrumb,
     ReportHeader,
     DateRangePicker,
     SearchInput,
     EmptyState,
+
+    // Tab Management
+    TabConfigs,
+    renderTabContent,
+    renderReconciliationTable,
 
     // Icons
     Icons,

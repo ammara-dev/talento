@@ -266,58 +266,34 @@
         <!-- MAIN CONTENT CARD -->
         <div style="background:#fff;border-radius:20px;padding:20px 20px 24px;display:flex;flex-direction:column;gap:0;">
 
-          <!-- PAGE HEADER (title + tabs + config) -->
+          <!-- PAGE HEADER (title + tabs + config) - Shared across all tabs -->
           <div class="page-header-row" style="margin-bottom:12px;">
-
-            <!-- Title -->
             <h1 style="color:#1e1033;font-size:22px;font-weight:400;letter-spacing:-0.22px;line-height:1.4;flex-shrink:0;">Leave (Time off)</h1>
-
-            <!-- Tabs + Config -->
             <div class="tabs-config-wrap">
-              <!-- Tab group -->
-              <div style="display:flex;align-items:center;background:#f6f5f7;border:1.5px solid rgba(30,16,51,0.1);border-radius:8px;padding:2px;gap:0;flex-wrap:wrap;justify-content:flex-start;max-width:100%;">
-                <button class="leave-tab active" onclick="switchTab(this)">
-                  <!-- Sparkle / auto_awesome icon -->
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M19 9l1.25-2.75L23 5l-2.75-1.25L19 1l-1.25 2.75L15 5l2.75 1.25L19 9zm-7.5.5L9 4 6.5 9.5 1 12l5.5 2.5L9 20l2.5-5.5L17 12l-5.5-2.5zM19 15l-1.25 2.75L15 19l2.75 1.25L19 23l1.25-2.75L23 19l-2.75-1.25L19 15z"/></svg>
-                  Summary
-                </button>
-                <button class="leave-tab" onclick="switchTab(this)">
-                  <!-- Calendar icon -->
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-                  Leave reconciliations
-                </button>
-                <button class="leave-tab" onclick="switchTab(this)">
-                  <!-- Return / undo arrow icon -->
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 14 4 9 9 4"/><path d="M20 20v-7a4 4 0 0 0-4-4H4"/></svg>
-                  Return from leave
-                </button>
-                <button class="leave-tab" onclick="switchTab(this)">
-                  <!-- Document / file icon -->
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-                  Reports
-                </button>
-              </div>
-
-              <!-- Configuration -->
+              <div id="main-tabs" style="display:flex;align-items:center;background:#f6f5f7;border:1.5px solid rgba(30,16,51,0.1);border-radius:8px;padding:2px;gap:0;flex-wrap:wrap;justify-content:flex-start;max-width:100%;"></div>
               <button class="toolbar-btn" style="gap:6px;border-radius:8px;">
                 Configuration
-                <!-- Gear / settings icon -->
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
               </button>
             </div>
           </div>
 
-          <!-- ── TOOLBAR: date nav (left) + filters/actions (right) ── -->
-          <div class="toolbar-row" style="margin-bottom:16px;">
+          <!-- DYNAMIC TAB CONTENT CONTAINER (hidden by default) -->
+          <div id="tab-content" style="display:none;">
+            <!-- Content is dynamically rendered based on active tab -->
+          </div>
 
-            <!-- Date navigator — bordered pill matching Figma -->
-            <div class="date-nav-pill">
-              <button aria-label="Previous">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-              </button>
-              <span style="font-size:13px;color:#4b405c;letter-spacing:-0.07px;">Today</span>
-              <span class="dot"></span>
-              <span style="font-size:13px;color:#4b405c;letter-spacing:-0.07px;">Tuesday, 16 Dec</span>
+          <!-- SUMMARY TAB CONTENT (default, initially visible) -->
+          <div id="summary-content">
+            <!-- ── TOOLBAR: date nav (left) + filters/actions (right) ── -->
+            <div class="toolbar-row" style="margin-bottom:16px;">
+              <div class="date-nav-pill">
+                <button aria-label="Previous">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+                </button>
+                <span style="font-size:13px;color:#4b405c;letter-spacing:-0.07px;">Today</span>
+                <span class="dot"></span>
+                <span style="font-size:13px;color:#4b405c;letter-spacing:-0.07px;">Tuesday, 16 Dec</span>
               <button aria-label="Next">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
               </button>
@@ -508,6 +484,8 @@
             </button>
 
           </div>
+          </div>
+          <!-- /SUMMARY CONTENT -->
 
         </div>
         <!-- /MAIN CARD -->
@@ -523,13 +501,113 @@
 
 <!-- Shared Layout Script -->
 <script src="layout.js"></script>
+<!-- Leave Components Library -->
+<script src="leave_components.js"></script>
 
 <!-- Page-specific scripts -->
 <script>
-/* Tab switching */
-function switchTab(el) {
-  document.querySelectorAll('.leave-tab').forEach(function (t) { t.classList.remove('active'); });
+// Tab definitions for Leave module
+const leaveTabs = [
+  { id: 'summary', label: 'Summary', icon: 'sparkle' },
+  { id: 'leave-reconciliations', label: 'Leave reconciliations', icon: 'table' },
+  { id: 'return-from-leave', label: 'Return from leave', icon: 'return' },
+  { id: 'reports', label: 'Reports', icon: 'document' }
+];
+
+let activeTabId = 'summary';
+
+// Initialize tabs on page load
+document.addEventListener('DOMContentLoaded', function() {
+  renderMainTabs();
+});
+
+// Render main navigation tabs
+function renderMainTabs() {
+  const tabsContainer = document.getElementById('main-tabs');
+  if (!tabsContainer) return;
+
+  const Icons = LeaveComponents.Icons;
+  const tabIcons = {
+    'summary': Icons.sparkle,
+    'leave-reconciliations': Icons.table,
+    'return-from-leave': Icons.return,
+    'reports': Icons.document
+  };
+
+  const tabsHTML = leaveTabs.map(tab => {
+    const isActive = tab.id === activeTabId;
+    const icon = tabIcons[tab.id] || '';
+    return `
+      <button class="leave-tab${isActive ? ' active' : ''}" 
+              data-tab-id="${tab.id}"
+              onclick="handleMainTabClick(this, '${tab.id}')">
+        ${icon}
+        ${tab.label}
+      </button>
+    `;
+  }).join('');
+
+  tabsContainer.innerHTML = tabsHTML;
+}
+
+// Handle main tab click
+function handleMainTabClick(el, tabId) {
+  // Update active state on tabs
+  document.querySelectorAll('#main-tabs .leave-tab').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
+  activeTabId = tabId;
+
+  // Show/hide appropriate content
+  const summaryContent = document.getElementById('summary-content');
+  const tabContent = document.getElementById('tab-content');
+
+  if (tabId === 'summary') {
+    // Show summary, hide dynamic content
+    summaryContent.style.display = 'block';
+    tabContent.style.display = 'none';
+  } else {
+    // Hide summary, render dynamic content
+    summaryContent.style.display = 'none';
+    tabContent.style.display = 'block';
+    renderDynamicTabContent(tabId);
+  }
+}
+
+// Render dynamic tab content based on tab ID
+function renderDynamicTabContent(tabId) {
+  const container = document.getElementById('tab-content');
+  if (!container) return;
+
+  const config = LeaveComponents.TabConfigs[tabId];
+  if (!config) {
+    container.innerHTML = LeaveComponents.EmptyState({
+      title: 'Coming soon',
+      description: 'This feature is under development.'
+    });
+    return;
+  }
+
+  let html = '';
+
+  // Section header (if configured)
+  if (config.sectionHeader) {
+    html += LeaveComponents.SectionHeader(config.sectionHeader);
+  }
+
+  // Toolbar (if configured)
+  if (config.toolbar) {
+    html += LeaveComponents.Toolbar(config.toolbar);
+  }
+
+  // Data table (if columns and data configured)
+  if (config.columns && config.columns.length > 0 && config.sampleData) {
+    html += LeaveComponents.renderReconciliationTable(config);
+  }
+
+  // Pagination
+  html += LeaveComponents.Pagination({ currentPage: 1, totalPages: 30 });
+
+  container.innerHTML = html;
 }
 
 /* View toggle */

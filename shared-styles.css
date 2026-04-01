@@ -226,6 +226,108 @@ input { outline: none; border: none; background: transparent; width: 100%; }
   background: #eef2ff;
 }
 
+/* Reconciliation type badges */
+.badge-balance-liquidation {
+  display: inline-flex;
+  align-items: center;
+  height: 22px;
+  padding: 0 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 500;
+  color: #7c3aed;
+  background: #f3e8ff;
+}
+.badge-request-reconciliation {
+  display: inline-flex;
+  align-items: center;
+  height: 22px;
+  padding: 0 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 500;
+  color: #7c3aed;
+  background: #ede9fe;
+}
+.badge-both {
+  display: inline-flex;
+  align-items: center;
+  height: 22px;
+  padding: 0 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 500;
+  color: #6b7280;
+  background: #f3f4f6;
+}
+
+/* ─────────────────────────────────────────
+   SECTION HEADER
+───────────────────────────────────────── */
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.section-header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.section-header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.section-title {
+  font-size: 15px;
+  font-weight: 500;
+  color: #1e1033;
+  white-space: nowrap;
+}
+.search-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff;
+  border: 1px solid #e8e7eb;
+  border-radius: 8px;
+  padding: 0 12px;
+  height: 36px;
+  min-width: 180px;
+}
+.search-box input {
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 13px;
+  color: #4b405c;
+  width: 100%;
+}
+.search-box input::placeholder {
+  color: #a09aab;
+}
+
+@media (max-width: 640px) {
+  .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .section-header-left,
+  .section-header-right {
+    width: 100%;
+  }
+  .search-box {
+    flex: 1;
+    min-width: unset;
+  }
+}
+
 /* Duration pill */
 .duration-pill {
   display: inline-flex;
