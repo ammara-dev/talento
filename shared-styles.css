@@ -166,7 +166,7 @@ input { outline: none; border: none; background: transparent; width: 100%; }
   font-size: 11px;
   font-weight: 500;
   color: #15803d;
-  background: #dcfce7;
+  background: #D7FFE7;
 }
 .badge-review {
   display: inline-flex;
@@ -306,17 +306,17 @@ input { outline: none; border: none; background: transparent; width: 100%; }
   }
 }
 
-/* Duration pill */
+/* Duration pill - using reusable badge styling */
 .duration-pill {
   display: inline-flex;
   align-items: center;
   height: 22px;
-  padding: 0 8px;
-  border-radius: 6px;
+  padding: 0 10px;
+  border-radius: 100px;
   font-size: 11px;
-  font-weight: 500;
-  color: #4b405c;
-  background: #f6f5f7;
+  font-weight: 400;
+  color: #4B405C;
+  background: #E8E7EB;
 }
 
 /* ─────────────────────────────────────────

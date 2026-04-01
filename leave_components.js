@@ -267,7 +267,7 @@ const LeaveComponents = (function() {
             cellContent = `
               <div style="display:flex;align-items:center;gap:10px;">
                 <input type="checkbox" class="table-checkbox" />
-                ${Avatar({ src: row.avatar, name: value, subtitle: row.subtitle })}
+                ${Avatar({ src: row.avatar, name: value, subtitle: row.jobTitle || row.subtitle || '' })}
               </div>
             `;
           } else {
@@ -279,19 +279,33 @@ const LeaveComponents = (function() {
             `;
           }
         } else if (col.type === 'avatar') {
-          cellContent = Avatar({ src: row.avatar, name: value, subtitle: row.subtitle });
+          cellContent = Avatar({ src: row.avatar, name: value, subtitle: row.jobTitle || row.subtitle || '' });
         } else if (col.type === 'badge') {
-          cellContent = Badge({ text: value, variant: row[col.variantKey] || 'default' });
+          cellContent = Badge({ text: value, variant: row.statusVariant || row[col.variantKey] || 'default' });
+        } else if (col.type === 'reconciliation-type') {
+          cellContent = Badge({ text: value, variant: 'reconciliation-type' });
         } else if (col.type === 'duration') {
           cellContent = `<span class="duration-pill">${value}</span>`;
+        } else if (col.type === 'currency') {
+          const color = value === '0.00' ? '#a09aab' : '#1e1033';
+          cellContent = `<span style="color:${color}">${value}</span>`;
         } else if (col.type === 'tag') {
           cellContent = `<span class="tag-badge">${value}</span>`;
         } else {
           cellContent = value || '';
         }
 
-        const style = col.style || '';
-        return `<td${style ? ` style="${style}"` : ''}>${cellContent}</td>`;
+        // Handle special styling for certain cells
+        let cellStyle = col.style || '';
+        if (col.key === 'remainingBalance' && row.remainingBalanceColor) {
+          cellStyle += `color:${row.remainingBalanceColor};`;
+        } else if (col.key === 'leaveType') {
+          cellStyle += 'color:#1e1033;';
+        } else if (col.key === 'startDate' || col.key === 'endDate') {
+          cellStyle += 'color:#4b405c;';
+        }
+
+        return `<td${cellStyle ? ` style="${cellStyle}"` : ''}>${cellContent}</td>`;
       }).join('');
 
       const actionsCell = showActions ? `
@@ -675,86 +689,70 @@ const LeaveComponents = (function() {
   const TabConfigs = {
     'summary': {
       sectionHeader: null, // Summary has its own unique layout
-      subTabs: [
-        { id: 'analysis-view', label: 'Analysis View' },
-        { id: 'monthly-summary', label: 'Monthly Summary' },
-        { id: 'visual-analytics', label: 'Visual Analytics' }
-      ],
-      activeSubTab: 'analysis-view',
       toolbar: {
         showSearch: false,
-        showDateNav: false,
-        showDateRange: true,
-        dateRangeStart: '25 June 2025',
-        dateRangeEnd: '10 July 2025',
+        showDateNav: true,
+        dateText: 'Today',
+        dateSubText: 'Tuesday, 16 Dec',
         showFilters: true,
         filterCount: 2,
         showViewToggle: true,
         activeView: 'list',
         showExport: true,
         exportText: 'Export all',
-        showEditColumns: false,
+        showEditColumns: true,
         showCreateNew: false
       },
-      showPagination: false,
+      showPagination: true,
+      showCheckbox: true,
       columns: [
-        { key: 'reportName', label: 'Report name', sortable: true, width: '200px' },
-        { key: 'type', label: 'Type', type: 'reconciliation-type', sortable: true, width: '120px' },
-        { key: 'createdDate', label: 'Created date', sortable: true, width: '140px' },
-        { key: 'lastEdited', label: 'Last edited', sortable: true, width: '140px' },
-        { key: 'createdBy', label: 'Created by', type: 'avatar', sortable: true, width: '180px' },
-        { key: 'totalDays', label: 'Total number of days', sortable: true, width: '160px' }
+        { key: 'employee', label: 'Employee name', type: 'avatar', sortable: true },
+        { key: 'leaveType', label: 'Leave type', sortable: true },
+        { key: 'status', label: 'Status', type: 'badge', sortable: true },
+        { key: 'startDate', label: 'Start date', sortable: true },
+        { key: 'endDate', label: 'End date', sortable: true },
+        { key: 'durations', label: 'Durations', type: 'duration', sortable: true },
+        { key: 'remainingBalance', label: 'Remaining leave bala...', sortable: true }
       ],
       sampleData: [
         {
-          reportName: 'Report Name',
-          type: 'Type',
-          typeVariant: 'reconciliation-type',
-          createdDate: '12 Dec 2025',
-          lastEdited: '3 hrs ago',
-          createdBy: 'Mishari AlSubaie',
+          employee: 'Fahad AlShahrani',
+          jobTitle: 'Marketing lead',
           avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
-          totalDays: '-3,047.41 days'
+          leaveType: 'Annual leave',
+          status: 'Approved',
+          statusVariant: 'approved',
+          startDate: '12 Dec 2025',
+          endDate: '15 Dec 2025',
+          durations: '3 days',
+          remainingBalance: '0 days',
+          remainingBalanceColor: '#A59FAD'
         },
         {
-          reportName: 'Report Name',
-          type: 'Type',
-          typeVariant: 'reconciliation-type',
-          createdDate: '10 Dec 2025',
-          lastEdited: '12 Dec 2025',
-          createdBy: 'Mishari AlSubaie',
-          avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
-          totalDays: '1,047.41 days'
+          employee: 'Khalid AlAnazi',
+          jobTitle: 'People & culture lead',
+          avatar: 'https://randomuser.me/api/portraits/men/45.jpg',
+          leaveType: 'Unpaid leave',
+          status: 'On review',
+          statusVariant: 'review',
+          startDate: '7 Dec 2025',
+          endDate: '13 Dec 2025',
+          durations: '6 days',
+          remainingBalance: '12 days',
+          remainingBalanceColor: '#4b405c'
         },
         {
-          reportName: 'Report Name',
-          type: 'Type',
-          typeVariant: 'reconciliation-type',
-          createdDate: '10 Dec 2025',
-          lastEdited: '12 Dec 2025',
-          createdBy: 'Mishari AlSubaie',
-          avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
-          totalDays: '-14 days'
-        },
-        {
-          reportName: 'Report Name',
-          type: 'Type',
-          typeVariant: 'reconciliation-type',
-          createdDate: '10 Dec 2025',
-          lastEdited: '12 Dec 2025',
-          createdBy: 'Mishari AlSubaie',
-          avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
-          totalDays: '12 Dec 2025'
-        },
-        {
-          reportName: 'Report Name',
-          type: 'Type',
-          typeVariant: 'reconciliation-type',
-          createdDate: '10 Dec 2025',
-          lastEdited: '12 Dec 2025',
-          createdBy: 'Mishari AlSubaie',
-          avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
-          totalDays: '12 Dec 2025'
+          employee: 'Khalid AlAnazi',
+          jobTitle: 'People & culture lead',
+          avatar: 'https://randomuser.me/api/portraits/men/45.jpg',
+          leaveType: 'Sick leave',
+          status: 'On review',
+          statusVariant: 'review',
+          startDate: '7 Dec 2025',
+          endDate: '13 Dec 2025',
+          durations: '6 days',
+          remainingBalance: '12 days',
+          remainingBalanceColor: '#4b405c'
         }
       ]
     },
@@ -823,24 +821,90 @@ const LeaveComponents = (function() {
       ]
     },
     'return-from-leave': {
-      sectionHeader: {
-        title: 'Return from leave',
-        showSearch: true,
-        searchPlaceholder: 'Search',
+      sectionHeader: null, // Has sub-tabs like Summary
+      subTabs: [
+        { id: 'analysis-view', label: 'Analysis View' },
+        { id: 'monthly-summary', label: 'Monthly Summary' },
+        { id: 'visual-analytics', label: 'Visual Analytics' }
+      ],
+      activeSubTab: 'analysis-view',
+      toolbar: {
+        showSearch: false,
+        showDateNav: false,
+        showDateRange: true,
+        dateRangeStart: '25 June 2025',
+        dateRangeEnd: '10 July 2025',
+        showFilters: true,
+        filterCount: 2,
+        showViewToggle: true,
+        activeView: 'list',
         showExport: true,
         exportText: 'Export all',
-        showCreateNew: true,
-        createNewText: 'Create new'
+        showEditColumns: false,
+        showCreateNew: false
       },
-      toolbar: null,
+      showPagination: false,
+      showCheckbox: true,
       columns: [
-        { key: 'code', label: 'Code', sortable: true, width: '100px' },
-        { key: 'employee', label: 'Employee', type: 'avatar', sortable: true },
-        { key: 'returnDate', label: 'Return date', sortable: true },
-        { key: 'leaveType', label: 'Leave type', sortable: true },
-        { key: 'status', label: 'Status', type: 'badge', sortable: true }
+        { key: 'reportName', label: 'Report name', sortable: true, width: '200px' },
+        { key: 'type', label: 'Type', type: 'reconciliation-type', sortable: true, width: '120px' },
+        { key: 'createdDate', label: 'Created date', sortable: true, width: '140px' },
+        { key: 'lastEdited', label: 'Last edited', sortable: true, width: '140px' },
+        { key: 'createdBy', label: 'Created by', type: 'avatar', sortable: true, width: '180px' },
+        { key: 'totalDays', label: 'Total number of days', sortable: true, width: '160px' }
       ],
-      sampleData: []
+      sampleData: [
+        {
+          reportName: 'Report Name',
+          type: 'Type',
+          typeVariant: 'reconciliation-type',
+          createdDate: '12 Dec 2025',
+          lastEdited: '3 hrs ago',
+          createdBy: 'Mishari AlSubaie',
+          avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
+          totalDays: '-3,047.41 days'
+        },
+        {
+          reportName: 'Report Name',
+          type: 'Type',
+          typeVariant: 'reconciliation-type',
+          createdDate: '10 Dec 2025',
+          lastEdited: '12 Dec 2025',
+          createdBy: 'Mishari AlSubaie',
+          avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
+          totalDays: '1,047.41 days'
+        },
+        {
+          reportName: 'Report Name',
+          type: 'Type',
+          typeVariant: 'reconciliation-type',
+          createdDate: '10 Dec 2025',
+          lastEdited: '12 Dec 2025',
+          createdBy: 'Mishari AlSubaie',
+          avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
+          totalDays: '-14 days'
+        },
+        {
+          reportName: 'Report Name',
+          type: 'Type',
+          typeVariant: 'reconciliation-type',
+          createdDate: '10 Dec 2025',
+          lastEdited: '12 Dec 2025',
+          createdBy: 'Mishari AlSubaie',
+          avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
+          totalDays: '12 Dec 2025'
+        },
+        {
+          reportName: 'Report Name',
+          type: 'Type',
+          typeVariant: 'reconciliation-type',
+          createdDate: '10 Dec 2025',
+          lastEdited: '12 Dec 2025',
+          createdBy: 'Mishari AlSubaie',
+          avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
+          totalDays: '12 Dec 2025'
+        }
+      ]
     },
     'reports': {
       sectionHeader: {
@@ -889,11 +953,11 @@ const LeaveComponents = (function() {
 
   // Specialized table renderer for Leave Reconciliations
   function renderReconciliationTable(config) {
-    const { columns, sampleData } = config;
+    const { columns, sampleData, showCheckbox = true } = config;
 
     // Header row
     const headerCells = columns.map((col, idx) => {
-      const checkboxHTML = (idx === 0) ? 
+      const checkboxHTML = (idx === 0 && showCheckbox) ? 
         `<input type="checkbox" class="table-checkbox" onclick="LeaveComponents.toggleAllCheckboxes(this)" />` : '';
       
       return `
@@ -911,33 +975,55 @@ const LeaveComponents = (function() {
     const bodyRows = sampleData.map(row => {
       const cells = columns.map((col, idx) => {
         let cellContent = '';
+        const value = row[col.key];
 
-        if (idx === 0) {
-          // First column with checkbox
-          cellContent = `
-            <div style="display:flex;align-items:center;gap:10px;">
-              <input type="checkbox" class="table-checkbox" />
-              <span style="color:#1e1033;">${row[col.key]}</span>
-            </div>
-          `;
+        // First column with checkbox
+        if (idx === 0 && showCheckbox) {
+          if (col.type === 'avatar') {
+            cellContent = `
+              <div style="display:flex;align-items:center;gap:10px;">
+                <input type="checkbox" class="table-checkbox" />
+                ${Avatar({ src: row.avatar, name: value, subtitle: row.jobTitle || row.subtitle || '' })}
+              </div>
+            `;
+          } else {
+            cellContent = `
+              <div style="display:flex;align-items:center;gap:10px;">
+                <input type="checkbox" class="table-checkbox" />
+                <span style="color:#1e1033;">${value}</span>
+              </div>
+            `;
+          }
         } else if (col.type === 'avatar') {
-          cellContent = Avatar({ src: row.avatar, name: row[col.key] });
+          cellContent = Avatar({ src: row.avatar, name: value, subtitle: row.jobTitle || row.subtitle || '' });
         } else if (col.type === 'reconciliation-type') {
-          cellContent = Badge({ text: row.type, variant: row.typeVariant });
+          cellContent = Badge({ text: row.type, variant: 'reconciliation-type' });
         } else if (col.type === 'badge') {
-          cellContent = Badge({ text: row[col.key], variant: row[col.variantKey] || 'default' });
+          cellContent = Badge({ text: value, variant: row.statusVariant || row[col.variantKey] || 'default' });
+        } else if (col.type === 'duration') {
+          cellContent = `<span class="duration-pill">${value}</span>`;
         } else if (col.type === 'currency') {
-          const value = row[col.key] || '0.00';
-          const displayValue = value === '0.00' ? '<span style="color:#a09aab;">0.00</span>' : value;
-          cellContent = displayValue;
-        } else if (col.key === 'createdDate') {
-          const time = row.createdTime ? `<span style="color:#a09aab;margin-left:4px;">${row.createdTime}</span>` : '';
-          cellContent = `<span style="color:#4b405c;">${row[col.key]}</span>${time}`;
+          const displayValue = value || '0.00';
+          const color = displayValue === '0.00' ? '#a09aab' : '#1e1033';
+          cellContent = `<span style="color:${color}">${displayValue}</span>`;
+        } else if (col.key === 'createdDate' && row.createdTime) {
+          const time = `<span style="color:#a09aab;margin-left:4px;">${row.createdTime}</span>`;
+          cellContent = `<span style="color:#4b405c;">${value}</span>${time}`;
         } else {
-          cellContent = row[col.key] || '';
+          cellContent = value || '';
         }
 
-        return `<td>${cellContent}</td>`;
+        // Handle special styling for certain cells
+        let cellStyle = '';
+        if (col.key === 'remainingBalance' && row.remainingBalanceColor) {
+          cellStyle += `color:${row.remainingBalanceColor};`;
+        } else if (col.key === 'leaveType') {
+          cellStyle += 'color:#1e1033;';
+        } else if (col.key === 'startDate' || col.key === 'endDate') {
+          cellStyle += 'color:#4b405c;';
+        }
+
+        return `<td${cellStyle ? ` style="${cellStyle}"` : ''}>${cellContent}</td>`;
       }).join('');
 
       return `<tr>${cells}<td class="col-actions">
