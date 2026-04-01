@@ -130,6 +130,7 @@ const LeaveComponents = (function() {
       filterCount = 0,
       showViewToggle = true,
       activeView = 'list',
+      viewToggleType = 'full', // 'full' (3 buttons) or 'simple' (2 buttons)
       showExport = true,
       exportText = 'Export all',
       showEditColumns = false,
@@ -173,20 +174,36 @@ const LeaveComponents = (function() {
       </button>
     ` : '';
 
-    // View toggle
-    const viewToggleHTML = showViewToggle ? `
-      <div class="view-wrap">
-        <button class="view-btn${activeView === 'grid' ? ' active' : ''}" onclick="LeaveComponents.switchView(this, 'grid')" title="Grid view">
-          ${Icons.grid}
-        </button>
-        <button class="view-btn${activeView === 'list' ? ' active' : ''}" onclick="LeaveComponents.switchView(this, 'list')" title="List view">
-          ${Icons.list}
-        </button>
-        <button class="view-btn${activeView === 'calendar' ? ' active' : ''}" onclick="LeaveComponents.switchView(this, 'calendar')" title="Calendar view">
-          ${Icons.calendar}
-        </button>
-      </div>
-    ` : '';
+    // View toggle - simple (2 buttons) or full (3 buttons)
+    let viewToggleHTML = '';
+    if (showViewToggle) {
+      if (viewToggleType === 'simple') {
+        viewToggleHTML = `
+          <div class="view-wrap">
+            <button class="view-btn${activeView === 'grid' ? ' active' : ''}" onclick="LeaveComponents.switchView(this, 'grid')" title="Grid view">
+              ${Icons.grid}
+            </button>
+            <button class="view-btn${activeView === 'list' ? ' active' : ''}" onclick="LeaveComponents.switchView(this, 'list')" title="List view">
+              ${Icons.list}
+            </button>
+          </div>
+        `;
+      } else {
+        viewToggleHTML = `
+          <div class="view-wrap">
+            <button class="view-btn${activeView === 'grid' ? ' active' : ''}" onclick="LeaveComponents.switchView(this, 'grid')" title="Grid view">
+              ${Icons.grid}
+            </button>
+            <button class="view-btn${activeView === 'list' ? ' active' : ''}" onclick="LeaveComponents.switchView(this, 'list')" title="List view">
+              ${Icons.list}
+            </button>
+            <button class="view-btn${activeView === 'calendar' ? ' active' : ''}" onclick="LeaveComponents.switchView(this, 'calendar')" title="Calendar view">
+              ${Icons.calendar}
+            </button>
+          </div>
+        `;
+      }
+    }
 
     // Export button
     const exportHTML = showExport ? `
@@ -454,7 +471,7 @@ const LeaveComponents = (function() {
     const createNewHTML = showCreateNew ? `
       <button class="create-new-btn" ${onCreateNew ? `onclick="${onCreateNew}"` : ''}>
         ${createNewText}
-        ${Icons.chevronDown}
+        ${Icons.plus}
       </button>
     ` : '';
 
@@ -821,7 +838,67 @@ const LeaveComponents = (function() {
       ]
     },
     'return-from-leave': {
-      sectionHeader: null, // Has sub-tabs like Summary
+      sectionHeader: {
+        title: 'Return from leave',
+        showSearch: true,
+        searchPlaceholder: 'Search',
+        showExport: true,
+        showCreateNew: true
+      },
+      toolbar: null,
+      showPagination: true,
+      showCheckbox: false,
+      columns: [
+        { key: 'code', label: 'Code', sortable: true, width: '100px' },
+        { key: 'employee', label: 'Employee', type: 'avatar', sortable: true, width: '180px' },
+        { key: 'jobTitle', label: 'Job title', sortable: true, width: '160px' },
+        { key: 'department', label: 'Department', sortable: true, width: '160px' },
+        { key: 'startingWorkAt', label: 'Starting work at', sortable: true, width: '140px' },
+        { key: 'effectiveNoticeType', label: 'Effective notice type', sortable: true, width: '180px' },
+        { key: 'createdBy', label: 'Created by', type: 'avatar', sortable: true, width: '160px' },
+        { key: 'status', label: 'Status', type: 'badge', sortable: true, width: '120px' }
+      ],
+      sampleData: [
+        {
+          code: 'LR00080',
+          employee: 'Mishari AlSubaie',
+          avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
+          jobTitle: 'Sale Support',
+          department: 'Top management / T...',
+          startingWorkAt: '12 Dec 2025',
+          effectiveNoticeType: 'Return From Leave',
+          createdBy: 'Mishari AlSubaie',
+          status: 'Approved',
+          statusVariant: 'approved'
+        },
+        {
+          code: 'LR00080',
+          employee: 'Mishari AlSubaie',
+          avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
+          jobTitle: 'Western Area Sales Manager',
+          department: 'Top management / T...',
+          startingWorkAt: '10 Dec 2025',
+          effectiveNoticeType: 'New Employee',
+          createdBy: 'Mishari AlSubaie',
+          status: 'On review',
+          statusVariant: 'review'
+        },
+        {
+          code: 'LR00080',
+          employee: 'Mishari AlSubaie',
+          avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
+          jobTitle: 'Sale Support',
+          department: 'Human Resources',
+          startingWorkAt: '10 Dec 2025',
+          effectiveNoticeType: 'Return From Leave',
+          createdBy: 'Mishari AlSubaie',
+          status: 'Need to pay',
+          statusVariant: 'pending'
+        }
+      ]
+    },
+    'reports': {
+      sectionHeader: null,
       subTabs: [
         { id: 'analysis-view', label: 'Analysis View' },
         { id: 'monthly-summary', label: 'Monthly Summary' },
@@ -838,6 +915,7 @@ const LeaveComponents = (function() {
         filterCount: 2,
         showViewToggle: true,
         activeView: 'list',
+        viewToggleType: 'simple', // grid and list only (2 buttons)
         showExport: true,
         exportText: 'Export all',
         showEditColumns: false,
@@ -905,18 +983,6 @@ const LeaveComponents = (function() {
           totalDays: '12 Dec 2025'
         }
       ]
-    },
-    'reports': {
-      sectionHeader: {
-        title: 'Reports',
-        showSearch: true,
-        searchPlaceholder: 'Search reports',
-        showExport: false,
-        showCreateNew: false
-      },
-      toolbar: null,
-      columns: [],
-      sampleData: []
     }
   };
 
@@ -945,8 +1011,10 @@ const LeaveComponents = (function() {
       html += renderReconciliationTable(config);
     }
 
-    // Pagination
-    html += Pagination({ currentPage: 1, totalPages: 30 });
+    // Pagination (conditional)
+    if (config.showPagination !== false) {
+      html += Pagination({ currentPage: 1, totalPages: 30 });
+    }
 
     container.innerHTML = html;
   }
