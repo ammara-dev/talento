@@ -719,7 +719,7 @@ const LeaveComponents = (function() {
             </div>
           </div>
           <!-- Timeline bars -->
-          <div style="flex:1;position:relative;height:40px;min-width:0;">
+          <div style="flex:1;position:relative;height:40px;min-width:0;margin:0 16px;">
             ${barsHTML}
           </div>
         </div>
@@ -736,7 +736,7 @@ const LeaveComponents = (function() {
             <div style="font-size:11px;color:#787085;">out of ${totalInOrg} in your org</div>
           </div>
           <!-- Scale -->
-          <div style="flex:1;display:flex;align-items:center;justify-content:space-between;padding:12px 16px;min-width:0;">
+          <div style="flex:1;display:flex;align-items:center;justify-content:space-between;padding:12px 0;margin:0 16px;min-width:0;">
             ${scaleHTML}
           </div>
         </div>
