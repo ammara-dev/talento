@@ -1255,7 +1255,7 @@ const LeaveComponents = (function() {
                 avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
                 leaves: [
                   { type: 'annual', start: 0, end: 40 },
-                  { type: 'unpaid', start: 45, end: 60 },
+                  { type: 'unpaid', start: 40, end: 55 },
                   { type: 'other', start: 80, end: 100 }
                 ]
               },
@@ -1265,7 +1265,7 @@ const LeaveComponents = (function() {
                 avatar: 'https://randomuser.me/api/portraits/men/45.jpg',
                 leaves: [
                   { type: 'annual', start: 0, end: 40 },
-                  { type: 'unpaid', start: 45, end: 65 },
+                  { type: 'unpaid', start: 40, end: 60 },
                   { type: 'other', start: 85, end: 115 }
                 ]
               },
@@ -1275,8 +1275,8 @@ const LeaveComponents = (function() {
                 avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
                 leaves: [
                   { type: 'annual', start: 0, end: 25 },
-                  { type: 'unpaid', start: 30, end: 40 },
-                  { type: 'other', start: 45, end: 55 }
+                  { type: 'unpaid', start: 25, end: 35 },
+                  { type: 'other', start: 35, end: 50 }
                 ]
               },
               {
@@ -1285,9 +1285,9 @@ const LeaveComponents = (function() {
                 avatar: 'https://randomuser.me/api/portraits/men/45.jpg',
                 leaves: [
                   { type: 'annual', start: 0, end: 55 },
-                  { type: 'unpaid', start: 60, end: 75 },
-                  { type: 'sick', start: 80, end: 90 },
-                  { type: 'other', start: 95, end: 115 }
+                  { type: 'unpaid', start: 55, end: 70 },
+                  { type: 'sick', start: 70, end: 85 },
+                  { type: 'other', start: 85, end: 110 }
                 ]
               },
               {
@@ -1305,8 +1305,8 @@ const LeaveComponents = (function() {
                 avatar: 'https://randomuser.me/api/portraits/men/45.jpg',
                 leaves: [
                   { type: 'annual', start: 0, end: 40 },
-                  { type: 'sick', start: 60, end: 80 },
-                  { type: 'other', start: 85, end: 100 }
+                  { type: 'sick', start: 55, end: 75 },
+                  { type: 'other', start: 75, end: 95 }
                 ]
               },
               {
@@ -1315,9 +1315,9 @@ const LeaveComponents = (function() {
                 avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
                 leaves: [
                   { type: 'annual', start: 0, end: 30 },
-                  { type: 'unpaid', start: 40, end: 55 },
-                  { type: 'sick', start: 65, end: 80 },
-                  { type: 'other', start: 85, end: 110 }
+                  { type: 'unpaid', start: 30, end: 45 },
+                  { type: 'sick', start: 45, end: 60 },
+                  { type: 'other', start: 60, end: 90 }
                 ]
               },
               {
@@ -1326,7 +1326,7 @@ const LeaveComponents = (function() {
                 avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
                 leaves: [
                   { type: 'annual', start: 55, end: 115 },
-                  { type: 'unpaid', start: 125, end: 145 },
+                  { type: 'unpaid', start: 115, end: 140 },
                   { type: 'other', start: 155, end: 190 }
                 ]
               },
@@ -1336,8 +1336,8 @@ const LeaveComponents = (function() {
                 avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
                 leaves: [
                   { type: 'annual', start: 0, end: 55 },
-                  { type: 'unpaid', start: 85, end: 110 },
-                  { type: 'sick', start: 115, end: 135 }
+                  { type: 'unpaid', start: 75, end: 100 },
+                  { type: 'sick', start: 100, end: 125 }
                 ]
               },
               {
@@ -1346,8 +1346,8 @@ const LeaveComponents = (function() {
                 avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
                 leaves: [
                   { type: 'annual', start: 0, end: 55 },
-                  { type: 'unpaid', start: 85, end: 110 },
-                  { type: 'other', start: 115, end: 145 }
+                  { type: 'unpaid', start: 75, end: 100 },
+                  { type: 'other', start: 100, end: 130 }
                 ]
               },
               {
@@ -1356,8 +1356,8 @@ const LeaveComponents = (function() {
                 avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
                 leaves: [
                   { type: 'annual', start: 0, end: 30 },
-                  { type: 'unpaid', start: 65, end: 85 },
-                  { type: 'other', start: 90, end: 110 }
+                  { type: 'unpaid', start: 55, end: 75 },
+                  { type: 'other', start: 75, end: 100 }
                 ]
               },
               {
@@ -1366,8 +1366,8 @@ const LeaveComponents = (function() {
                 avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
                 leaves: [
                   { type: 'annual', start: 0, end: 95 },
-                  { type: 'unpaid', start: 105, end: 130 },
-                  { type: 'other', start: 145, end: 185 }
+                  { type: 'unpaid', start: 95, end: 125 },
+                  { type: 'other', start: 140, end: 185 }
                 ]
               }
             ]
