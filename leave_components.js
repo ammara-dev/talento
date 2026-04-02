@@ -106,7 +106,7 @@ const LeaveComponents = (function() {
     }).join('');
 
     return `
-      <div class="sub-tabs-wrap" style="display:flex;align-items:center;gap:4px;margin-bottom:16px;">
+      <div class="sub-tabs-wrap" style="display:flex;align-items:center;gap:4px;margin-bottom:16px;flex-wrap:wrap;min-width:0;">
         ${tabsHTML}
       </div>
     `;
@@ -231,8 +231,8 @@ const LeaveComponents = (function() {
     ` : '';
 
     return `
-      <div class="toolbar-row" style="margin-bottom:16px;">
-        <div style="display:flex;align-items:center;gap:12px;">
+      <div class="toolbar-row" style="margin-bottom:16px;min-width:0;">
+        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;min-width:0;">
           ${searchHTML}
           ${dateNavHTML}
           ${dateRangeHTML}
@@ -651,15 +651,15 @@ const LeaveComponents = (function() {
     const legendItems = items.map(type => {
       const color = LeaveTypeColors[type]?.dot || '#ccc';
       return `
-        <div style="display:flex;align-items:center;gap:6px;">
-          <span style="width:8px;height:8px;border-radius:50%;background:${color};flex-shrink:0;"></span>
-          <span style="font-size:12px;color:#4b405c;">${labels[type] || type}</span>
+        <div class="legend-item" style="display:flex;align-items:center;gap:6px;">
+          <span class="legend-dot" style="width:8px;height:8px;border-radius:50%;background:${color};flex-shrink:0;"></span>
+          <span class="legend-label" style="font-size:12px;color:#4b405c;">${labels[type] || type}</span>
         </div>
       `;
     }).join('');
 
     return `
-      <div style="display:flex;align-items:center;gap:16px;margin-bottom:16px;">
+      <div class="leave-legend" style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
         ${legendItems}
       </div>
     `;

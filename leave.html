@@ -218,8 +218,9 @@
     .toolbar-row {
       display: flex; align-items: center;
       justify-content: space-between; flex-wrap: wrap; gap: 8px;
+      min-width: 0;
     }
-    .toolbar-right { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; justify-content: flex-start; }
+    .toolbar-right { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; justify-content: flex-start; min-width: 0; }
     .toolbar-right > * { flex-shrink: 0; }
 
     /* pagination: stack on very small */
@@ -232,14 +233,23 @@
     /* shrink tab text a bit on tablets */
     @media (max-width: 900px) {
       .leave-tab { font-size: 11px; padding: 0 7px; }
+      .leave-legend { gap: 12px; }
+      .legend-label { font-size: 11px; }
     }
     @media (max-width: 680px) {
       .tabs-config-wrap { flex-direction: row; align-items: center; }
+      .leave-legend { gap: 10px; }
+      .legend-label { font-size: 10px; }
+      .legend-dot { width: 6px !important; height: 6px !important; }
     }
     @media (max-width: 480px) {
       .leave-tab { font-size: 10px; padding: 0 6px; height: 26px; gap: 4px; }
       .leave-tab svg { width: 11px; height: 11px; }
       .toolbar-btn { font-size: 11px; padding: 0 8px; height: 28px; }
+      .leave-legend { gap: 8px; }
+      .legend-item { gap: 4px !important; }
+      .legend-label { font-size: 9px; }
+      .legend-dot { width: 5px !important; height: 5px !important; }
     }
   </style>
 </head>
@@ -264,7 +274,7 @@
       <div style="padding:16px;background:#f6f5f7;min-height:calc(100vh - 56px);">
 
         <!-- MAIN CONTENT CARD -->
-        <div style="background:#fff;border-radius:20px;padding:20px 20px 24px;display:flex;flex-direction:column;gap:0;">
+        <div style="background:#fff;border-radius:20px;padding:20px 20px 24px;display:flex;flex-direction:column;gap:0;min-width:0;overflow:hidden;">
 
           <!-- PAGE HEADER (title + tabs + config) - Shared across all tabs -->
           <div class="page-header-row" style="margin-bottom:12px;">
@@ -279,12 +289,12 @@
           </div>
 
           <!-- DYNAMIC TAB CONTENT CONTAINER (hidden by default) -->
-          <div id="tab-content" style="display:none;">
+          <div id="tab-content" style="display:none;min-width:0;">
             <!-- Content is dynamically rendered based on active tab -->
           </div>
 
           <!-- SUMMARY TAB CONTENT (default, initially visible) -->
-          <div id="summary-content">
+          <div id="summary-content" style="min-width:0;">
             <!-- Content will be dynamically rendered -->
           </div>
           <!-- /SUMMARY CONTENT -->
