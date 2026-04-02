@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <title>Talento – Air tickets</title>
+  <meta name="description" content="Talento HR Platform – Air tickets Management" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <!-- Shared layout styles -->
+  <link rel="stylesheet" href="shared-styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+  <style>
+    /* ═══════════════════════════════════════════════════════════════════════════
+       AIR TICKETS PAGE-SPECIFIC STYLES
+       ═══════════════════════════════════════════════════════════════════════════ */
+
+    /* ─────────────────────────────────────────
+       DATE NAV PILL (bordered)
+    ───────────────────────────────────────── */
+    .date-nav-pill {
+      display: inline-flex; align-items: center; gap: 10px;
+      height: 34px; padding: 0 12px;
+      border: 1px solid #e8e7eb; border-radius: 999px;
+      background: #F6F5F7;
+      font-size: 13px; color: #4b405c;
+    }
+    .date-nav-pill button {
+      display: flex; align-items: center; justify-content: center;
+      width: 18px; height: 18px;
+      color: #4b405c; background: transparent; border: none;
+      cursor: pointer; padding: 0; flex-shrink: 0;
+    }
+    .date-nav-pill .dot {
+      width: 4px; height: 4px; border-radius: 50%;
+      background: #787085; flex-shrink: 0;
+    }
+
+    /* ─────────────────────────────────────────
+       TOOLBAR BUTTONS
+    ───────────────────────────────────────── */
+    .toolbar-btn {
+      display: inline-flex; align-items: center; gap: 5px;
+      height: 32px; padding: 0 10px;
+      border: 1px solid #e8e7eb; border-radius: 8px;
+      font-size: 13px; color: #1e1033; background: #fff;
+      cursor: pointer; white-space: nowrap;
+      box-shadow: 0 0.5px 1px rgba(30,16,51,.12);
+      font-family: 'Alexandria', Helvetica, sans-serif;
+      transition: background 150ms;
+    }
+    .toolbar-btn:hover { background: #f5f3fb; }
+
+    .filter-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      height: 32px; padding: 0 12px;
+      border: 1px solid #e8e7eb; border-radius: 999px;
+      font-size: 13px; color: #1e1033; background: #fff;
+      cursor: pointer; white-space: nowrap;
+      font-family: 'Alexandria', Helvetica, sans-serif;
+      transition: background 150ms;
+    }
+    .filter-btn:hover { background: #f5f3fb; }
+
+    /* ─────────────────────────────────────────
+       VIEW TOGGLE
+    ───────────────────────────────────────── */
+    .view-wrap {
+      display: flex; align-items: center;
+      background: #f6f5f7; border: 1px solid #e8e7eb;
+      border-radius: 999px; padding: 2px; height: 32px;
+    }
+    .view-btn {
+      display: flex; align-items: center; justify-content: center;
+      width: 26px; height: 26px; border-radius: 50%;
+      cursor: pointer; transition: background 150ms;
+      border: none; background: transparent; color: #787085;
+    }
+    .view-btn.active {
+      background: #fff; border: 1px solid #e8e7eb;
+      box-shadow: 0 0.5px 1px rgba(30,16,51,.15); color: #1e1033;
+    }
+    .view-btn:not(.active):hover { background: rgba(236,233,239,.55); }
+
+    /* ─────────────────────────────────────────
+       CREATE NEW BUTTON (Purple)
+    ───────────────────────────────────────── */
+    .create-new-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      height: 32px; padding: 0 14px;
+      border-radius: 8px;
+      font-size: 13px; font-weight: 500; color: #fff;
+      background: #1e1033;
+      cursor: pointer; white-space: nowrap;
+      font-family: 'Alexandria', Helvetica, sans-serif;
+      transition: background 150ms;
+      border: none;
+      box-shadow: 0 1px 2px rgba(30,16,51,.2);
+    }
+    .create-new-btn:hover { background: #2d1a4a; }
+
+    /* ─────────────────────────────────────────
+       TABLE
+    ───────────────────────────────────────── */
+    .air-tickets-table { width: 100%; border-collapse: collapse; min-width: 1200px; }
+
+    .air-tickets-table thead tr { border-bottom: 1px solid #f0eef6; background: #F6F5F7; }
+    .air-tickets-table th {
+      padding: 8px 10px; text-align: left;
+      font-size: 12px; font-weight: 400; color: #787085;
+      letter-spacing: -0.12px; white-space: nowrap;
+    }
+    .air-tickets-table th:first-child { padding-left: 14px; }
+    .air-tickets-table th.col-actions { width: 50px; }
+
+    .air-tickets-table tbody tr { border-bottom: 1px solid #f0eef6; transition: background 120ms; }
+    .air-tickets-table tbody tr:last-child { border-bottom: none; }
+    .air-tickets-table tbody tr:hover { background: #faf9fc; }
+
+    .air-tickets-table td {
+      padding: 8px 10px; font-size: 13px; color: #1e1033; white-space: nowrap;
+      vertical-align: middle;
+    }
+    .air-tickets-table td:first-child { padding-left: 14px; }
+    .air-tickets-table td.col-actions { padding: 0 8px; text-align: center; }
+
+    /* sort icon inline */
+    .sort-icon { display: inline-block; vertical-align: middle; margin-left: 3px; }
+
+    /* status badges */
+    .badge-done {
+      display: inline-flex; align-items: center;
+      padding: 3px 10px; border-radius: 999px;
+      font-size: 11px; font-weight: 500;
+      background: #D7FFE7; color: #16a34a;
+    }
+    .badge-need-to-pay {
+      display: inline-flex; align-items: center;
+      padding: 3px 10px; border-radius: 999px;
+      font-size: 11px; font-weight: 400;
+      background: #FEF3C7; color: #D97706;
+    }
+
+    /* request type badge */
+    .badge-leave {
+      display: inline-flex; align-items: center;
+      padding: 3px 10px; border-radius: 999px;
+      font-size: 11px; font-weight: 400;
+      background: #e0e7ff; color: #4f46e5;
+    }
+    .badge-business-mission {
+      display: inline-flex; align-items: center;
+      padding: 3px 10px; border-radius: 999px;
+      font-size: 11px; font-weight: 400;
+      background: #dbeafe; color: #2563eb;
+    }
+
+    /* employee avatar */
+    .employee-cell {
+      display: flex; align-items: center; gap: 8px;
+    }
+    .avatar {
+      width: 24px; height: 24px; border-radius: 50%;
+      object-fit: cover; flex-shrink: 0;
+    }
+
+    /* ─────────────────────────────────────────
+       PAGINATION
+    ───────────────────────────────────────── */
+    .pg-wrap {
+      display: flex; align-items: center; justify-content: flex-start;
+      flex-wrap: wrap; gap: 8px;
+      min-width: 0;
+    }
+    .pg-wrap > * { flex-shrink: 0; }
+    .pg-nav-btn {
+      display: inline-flex; align-items: center; gap: 4px;
+      height: 30px; padding: 0 10px;
+      border: 1px solid #e8e7eb; border-radius: 6px;
+      font-size: 12px; color: #4b405c; background: #F6F5F7;
+      cursor: pointer; font-family: 'Alexandria', Helvetica, sans-serif;
+      transition: background 150ms;
+    }
+    .pg-nav-btn:hover { background: #f5f3fb; }
+    .pg-pages-wrap {
+      display: flex; align-items: center; gap: 2px; flex-wrap: wrap; justify-content: flex-start;
+      background: #F6F5F7; border: 1px solid #e8e7eb; border-radius: 6px;
+      padding: 3px 6px;
+    }
+    .pg-page-btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      min-width: 24px; height: 24px; padding: 0 6px;
+      border: none; border-radius: 6px;
+      font-size: 12px; color: #4b405c; background: transparent;
+      cursor: pointer; font-family: 'Alexandria', Helvetica, sans-serif;
+      transition: background 150ms;
+    }
+    .pg-page-btn:hover:not(.pg-active) { background: #f5f3fb; }
+    .pg-page-btn.pg-active {
+      background: #fff; color: #1e1033; border: 1px solid #e8e7eb;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    }
+    .pg-dots { font-size: 12px; color: #787085; padding: 0 2px; }
+
+    /* ─────────────────────────────────────────
+       MOBILE / RESPONSIVE HELPERS
+    ───────────────────────────────────────── */
+
+    /* table wrapper: horizontal scroll on small screens */
+    .table-scroll-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .table-scroll-wrap::-webkit-scrollbar { height: 4px; }
+    .table-scroll-wrap::-webkit-scrollbar-thumb { background: #d2cfd6; border-radius: 4px; }
+
+    /* header: allow wrapping */
+    .page-header-row {
+      display: flex; align-items: flex-start;
+      justify-content: space-between; flex-wrap: wrap; gap: 10px;
+    }
+
+    /* toolbar: wraps on small screens */
+    .toolbar-row {
+      display: flex; align-items: center;
+      justify-content: space-between; flex-wrap: wrap; gap: 8px;
+      min-width: 0;
+    }
+    .toolbar-right { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; justify-content: flex-start; min-width: 0; }
+    .toolbar-right > * { flex-shrink: 0; }
+
+    /* pagination: stack on very small */
+    @media (max-width: 480px) {
+      .pg-wrap { justify-content: flex-start; gap: 4px; }
+      .pg-nav-btn { padding: 0 8px; font-size: 11px; height: 28px; }
+      .pg-page-btn { min-width: 22px; height: 22px; font-size: 11px; padding: 0 4px; }
+      .toolbar-btn { font-size: 11px; padding: 0 8px; height: 28px; }
+    }
+  </style>
+</head>
+
+<body>
+<div id="app">
+
+  <!-- OVERLAY (mobile) -->
+  <div id="overlay" aria-hidden="true"></div>
+
+  <!-- SIDEBAR (injected by layout.js) -->
+  <aside id="sidebar" aria-label="Main navigation"></aside>
+
+  <!-- MAIN COLUMN -->
+  <div id="main-col">
+
+    <!-- NAVBAR (injected by layout.js) -->
+    <header id="navbar" style="display:flex;align-items:center;justify-content:space-between;height:56px;padding:0 16px;background:#fff;border-bottom:1px solid #e8e7eb;flex-shrink:0;min-width:0;"></header>
+
+    <!-- SCROLL AREA -->
+    <div id="main-scroll">
+      <div style="padding:16px;background:#f6f5f7;min-height:calc(100vh - 56px);">
+
+        <!-- MAIN CONTENT CARD -->
+        <div style="background:#fff;border-radius:20px;padding:20px 20px 24px;display:flex;flex-direction:column;gap:0;min-width:0;overflow:hidden;">
+
+          <!-- PAGE HEADER -->
+          <div class="page-header-row" style="margin-bottom:12px;">
+            <h1 style="color:#1e1033;font-size:22px;font-weight:400;letter-spacing:-0.22px;line-height:1.4;flex-shrink:0;">Air tickets</h1>
+          </div>
+
+          <!-- TOOLBAR -->
+          <div class="toolbar-row" style="margin-bottom:16px;min-width:0;">
+            <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;min-width:0;">
+              <!-- Date Navigator -->
+              <div class="date-nav-pill">
+                <button aria-label="Previous" onclick="prevDate()">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+                </button>
+                <span id="current-date" style="font-size:13px;color:#4b405c;letter-spacing:-0.07px;">Today</span>
+                <span class="dot"></span>
+                <span id="actual-date" style="font-size:13px;color:#4b405c;letter-spacing:-0.07px;">Tuesday, 16 Dec</span>
+                <button aria-label="Next" onclick="nextDate()">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                </button>
+              </div>
+            </div>
+            <div class="toolbar-right">
+              <!-- Summary Button -->
+              <button class="toolbar-btn">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M19 9l1.25-2.75L23 5l-2.75-1.25L19 1l-1.25 2.75L15 5l2.75 1.25L19 9zm-7.5.5L9 4 6.5 9.5 1 12l5.5 2.5L9 20l2.5-5.5L17 12l-5.5-2.5zM19 15l-1.25 2.75L15 19l2.75 1.25L19 23l1.25-2.75L23 19l-2.75-1.25L19 15z"/></svg>
+                Summary
+              </button>
+              <!-- Reports Button -->
+              <button class="toolbar-btn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                Reports
+              </button>
+              <!-- Configuration Button -->
+              <button class="toolbar-btn">
+                Configuration
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+              </button>
+              <!-- Filters -->
+              <button class="filter-btn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg>
+                Filters
+                <span style="color:#787085;">2</span>
+              </button>
+              <!-- View Toggle -->
+              <div class="view-wrap">
+                <button class="view-btn" onclick="switchView(this)" title="Grid view">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+                </button>
+                <button class="view-btn active" onclick="switchView(this)" title="List view">
+                  <svg width="13" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+                </button>
+              </div>
+              <!-- Export all -->
+              <button class="toolbar-btn">
+                Export all
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              </button>
+              <!-- Edit columns -->
+              <button class="toolbar-btn">
+                Edit columns
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+              </button>
+              <!-- Create new -->
+              <button class="create-new-btn">
+                Create new
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- TABLE (scroll wrapper) -->
+          <div class="table-scroll-wrap">
+            <table class="air-tickets-table">
+              <thead>
+                <tr>
+                  <th>
+                    Created date
+                    <svg class="sort-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#787085" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 10 12 6 16 10"/><polyline points="8 14 12 18 16 14"/></svg>
+                  </th>
+                  <th>
+                    Code
+                    <svg class="sort-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#787085" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 10 12 6 16 10"/><polyline points="8 14 12 18 16 14"/></svg>
+                  </th>
+                  <th>
+                    Employee
+                    <svg class="sort-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#787085" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 10 12 6 16 10"/><polyline points="8 14 12 18 16 14"/></svg>
+                  </th>
+                  <th>
+                    Request type
+                    <svg class="sort-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#787085" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 10 12 6 16 10"/><polyline points="8 14 12 18 16 14"/></svg>
+                  </th>
+                  <th>
+                    Air ticket type
+                    <svg class="sort-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#787085" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 10 12 6 16 10"/><polyline points="8 14 12 18 16 14"/></svg>
+                  </th>
+                  <th>
+                    Travel date
+                    <svg class="sort-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#787085" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 10 12 6 16 10"/><polyline points="8 14 12 18 16 14"/></svg>
+                  </th>
+                  <th>
+                    Air ticket total price
+                    <svg class="sort-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#787085" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 10 12 6 16 10"/><polyline points="8 14 12 18 16 14"/></svg>
+                  </th>
+                  <th>
+                    Payment status
+                    <svg class="sort-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#787085" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 10 12 6 16 10"/><polyline points="8 14 12 18 16 14"/></svg>
+                  </th>
+                  <th class="col-actions"></th>
+                </tr>
+              </thead>
+              <tbody id="tickets-table-body">
+                <!-- Data rows will be rendered here -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- PAGINATION -->
+          <div style="padding:16px 0 4px;border-top:1px solid #f0eef6;">
+            <div class="pg-wrap">
+              <button class="pg-nav-btn" onclick="prevPage()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+                Back
+              </button>
+              <div class="pg-pages-wrap">
+                <button class="pg-page-btn" onclick="pgSelect(this)">01</button>
+                <button class="pg-page-btn pg-active" onclick="pgSelect(this)">02</button>
+                <button class="pg-page-btn" onclick="pgSelect(this)">03</button>
+                <button class="pg-page-btn" onclick="pgSelect(this)">04</button>
+                <button class="pg-page-btn" onclick="pgSelect(this)">05</button>
+                <button class="pg-page-btn" onclick="pgSelect(this)">06</button>
+                <span class="pg-dots">...</span>
+                <button class="pg-page-btn" onclick="pgSelect(this)">30</button>
+              </div>
+              <button class="pg-nav-btn" onclick="nextPage()">
+                Next
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+              </button>
+            </div>
+          </div>
+
+        </div>
+        <!-- /MAIN CARD -->
+
+      </div>
+    </div>
+    <!-- /SCROLL -->
+
+  </div>
+  <!-- /MAIN COL -->
+
+</div>
+
+<!-- Shared Layout Script -->
+<script src="layout.js"></script>
+<!-- Leave Components Library (reusing components) -->
+<script src="leave_components.js"></script>
+
+<!-- Page-specific scripts -->
+<script>
+// Sample data for air tickets
+const airTicketsData = [
+  {
+    createdDate: '12 Dec 2025',
+    code: 'ATROA96',
+    employee: 'Mishari AlSubaie',
+    employeeAvatar: 'https://i.pravatar.cc/150?img=12',
+    requestType: 'Leave',
+    airTicketType: 'SINGLE T2500',
+    travelDate: '19 Dec 2025',
+    totalPrice: 'SAR 2,000.00',
+    paymentStatus: 'Done'
+  },
+  {
+    createdDate: '12 Dec 2025',
+    code: 'ATROA96',
+    employee: 'Mishari AlSubaie',
+    employeeAvatar: 'https://i.pravatar.cc/150?img=12',
+    requestType: 'Business mission',
+    airTicketType: 'MADRID 2*3000',
+    travelDate: '19 Dec 2025',
+    totalPrice: 'SAR 2,000.00',
+    paymentStatus: 'Need to pay'
+  },
+  {
+    createdDate: '12 Dec 2025',
+    code: 'ATROA96',
+    employee: 'Mishari AlSubaie',
+    employeeAvatar: 'https://i.pravatar.cc/150?img=12',
+    requestType: 'Business mission',
+    airTicketType: 'SINGLE T2500',
+    travelDate: '19 Dec 2025',
+    totalPrice: 'SAR 2,000.00',
+    paymentStatus: 'Need to pay'
+  },
+  {
+    createdDate: '12 Dec 2025',
+    code: 'ATROA96',
+    employee: 'Mishari AlSubaie',
+    employeeAvatar: 'https://i.pravatar.cc/150?img=12',
+    requestType: 'Business mission',
+    airTicketType: 'MADRID 2*3000',
+    travelDate: '19 Dec 2025',
+    totalPrice: 'SAR 2,000.00',
+    paymentStatus: 'Need to pay'
+  },
+  {
+    createdDate: '12 Dec 2025',
+    code: 'ATROA96',
+    employee: 'Mishari AlSubaie',
+    employeeAvatar: 'https://i.pravatar.cc/150?img=12',
+    requestType: 'Business mission',
+    airTicketType: 'SINGLE T2500',
+    travelDate: '19 Dec 2025',
+    totalPrice: 'SAR 2,000.00',
+    paymentStatus: 'Need to pay'
+  },
+  {
+    createdDate: '12 Dec 2025',
+    code: 'ATROA96',
+    employee: 'Mishari AlSubaie',
+    employeeAvatar: 'https://i.pravatar.cc/150?img=12',
+    requestType: 'Business mission',
+    airTicketType: 'MADRID 2*3000',
+    travelDate: '19 Dec 2025',
+    totalPrice: 'SAR 2,000.00',
+    paymentStatus: 'Need to pay'
+  },
+  {
+    createdDate: '12 Dec 2025',
+    code: 'ATROA96',
+    employee: 'Mishari AlSubaie',
+    employeeAvatar: 'https://i.pravatar.cc/150?img=12',
+    requestType: 'Business mission',
+    airTicketType: 'SINGLE T2500',
+    travelDate: '19 Dec 2025',
+    totalPrice: 'SAR 2,000.00',
+    paymentStatus: 'Need to pay'
+  },
+  {
+    createdDate: '12 Dec 2025',
+    code: 'ATROA96',
+    employee: 'Mishari AlSubaie',
+    employeeAvatar: 'https://i.pravatar.cc/150?img=12',
+    requestType: 'Business mission',
+    airTicketType: 'MADRID 2*3000',
+    travelDate: '19 Dec 2025',
+    totalPrice: 'SAR 2,000.00',
+    paymentStatus: 'Need to pay'
+  },
+  {
+    createdDate: '12 Dec 2025',
+    code: 'ATROA96',
+    employee: 'Mishari AlSubaie',
+    employeeAvatar: 'https://i.pravatar.cc/150?img=12',
+    requestType: 'Business mission',
+    airTicketType: 'SINGLE T2500',
+    travelDate: '19 Dec 2025',
+    totalPrice: 'SAR 2,000.00',
+    paymentStatus: 'Need to pay'
+  },
+  {
+    createdDate: '12 Dec 2025',
+    code: 'ATROA96',
+    employee: 'Mishari AlSubaie',
+    employeeAvatar: 'https://i.pravatar.cc/150?img=12',
+    requestType: 'Business mission',
+    airTicketType: 'MADRID 2*3000',
+    travelDate: '19 Dec 2025',
+    totalPrice: 'SAR 2,000.00',
+    paymentStatus: 'Need to pay'
+  }
+];
+
+// Initialize table on page load
+document.addEventListener('DOMContentLoaded', function() {
+  renderTableRows();
+});
+
+// Render table rows
+function renderTableRows() {
+  const tbody = document.getElementById('tickets-table-body');
+  if (!tbody) return;
+
+  const rows = airTicketsData.map(ticket => {
+    // Determine request type badge class
+    const requestTypeBadgeClass = ticket.requestType === 'Leave' ? 'badge-leave' : 'badge-business-mission';
+    
+    // Determine payment status badge class
+    const paymentStatusBadgeClass = ticket.paymentStatus === 'Done' ? 'badge-done' : 'badge-need-to-pay';
+
+    return `
+      <tr>
+        <td>${ticket.createdDate}</td>
+        <td>${ticket.code}</td>
+        <td>
+          <div class="employee-cell">
+            <img src="${ticket.employeeAvatar}" alt="${ticket.employee}" class="avatar" />
+            <span>${ticket.employee}</span>
+          </div>
+        </td>
+        <td>
+          <span class="${requestTypeBadgeClass}">${ticket.requestType}</span>
+        </td>
+        <td>${ticket.airTicketType}</td>
+        <td>${ticket.travelDate}</td>
+        <td>${ticket.totalPrice}</td>
+        <td>
+          <span class="${paymentStatusBadgeClass}">${ticket.paymentStatus}</span>
+        </td>
+        <td class="col-actions">
+          <button style="background:transparent;border:none;cursor:pointer;color:#787085;display:flex;align-items:center;justify-content:center;width:100%;padding:0;" title="More actions">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="2.5"/><circle cx="12" cy="12" r="2.5"/><circle cx="12" cy="19" r="2.5"/></svg>
+          </button>
+        </td>
+      </tr>
+    `;
+  }).join('');
+
+  tbody.innerHTML = rows;
+}
+
+/* View toggle */
+function switchView(el) {
+  document.querySelectorAll('.view-btn').forEach(function (b) { b.classList.remove('active'); });
+  el.classList.add('active');
+}
+
+/* Pagination */
+function pgSelect(el) {
+  document.querySelectorAll('.pg-page-btn').forEach(function (b) { b.classList.remove('pg-active'); });
+  el.classList.add('pg-active');
+}
+
+function prevPage() {
+  console.log('Previous page');
+}
+
+function nextPage() {
+  console.log('Next page');
+}
+
+/* Date navigation */
+function prevDate() {
+  console.log('Previous date');
+}
+
+function nextDate() {
+  console.log('Next date');
+}
+</script>
+</body>
+</html>

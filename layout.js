@@ -11,7 +11,8 @@
   // Page configuration for active states
   const pageConfig = {
     'index.html': { navItem: 'dashboard', submenu: null },
-    'leave.html': { navItem: 'attendance-leave', submenu: 'leave' }
+    'leave.html': { navItem: 'attendance-leave', submenu: 'leave' },
+    'air-tickets.html': { navItem: 'business-missions', submenu: 'air-tickets' }
   };
 
   const config = pageConfig[currentPage] || pageConfig['index.html'];
@@ -23,6 +24,8 @@
     const isDashboardActive = config.navItem === 'dashboard';
     const isLeaveActive = config.submenu === 'leave';
     const isAttendanceExpanded = config.navItem === 'attendance-leave';
+    const isAirTicketsActive = config.submenu === 'air-tickets';
+    const isBusinessMissionsExpanded = config.navItem === 'business-missions';
 
     return `
     <!-- Logo + Collapse -->
@@ -109,14 +112,38 @@
         </button>
 
         <!-- Business missions -->
-        <button class="nav-item" data-page="Business missions" aria-haspopup="true"
+        <button class="nav-item" id="business-missions-toggle" data-page="Business missions" aria-haspopup="true" aria-expanded="${isBusinessMissionsExpanded}"
           style="display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;height:40px;border-radius:8px;padding:0 16px;outline:none;">
           <span style="display:flex;align-items:center;gap:10px;">
             <i class="fa-solid fa-briefcase" style="width:20px;font-size:16px;color:#1e1033;flex-shrink:0;"></i>
             <span class="s-label" style="color:#1e1033;font-size:14px;letter-spacing:-0.14px;white-space:nowrap;">Business missions</span>
           </span>
-          <svg class="s-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4b405c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><polyline points="6 9 12 15 18 9"/></svg>
+          <svg class="s-arrow" id="business-missions-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4b405c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;${isBusinessMissionsExpanded ? 'transform:rotate(180deg);' : ''}transition:transform 200ms;"><polyline points="6 9 12 15 18 9"/></svg>
         </button>
+
+        <!-- Business missions sub-items -->
+        <div id="business-missions-submenu" style="display:${isBusinessMissionsExpanded ? 'flex' : 'none'};flex-direction:column;">
+          <!-- Missions / Business Trip -->
+          <button class="nav-sub-item"
+            style="display:flex;align-items:center;gap:10px;width:calc(100% - 32px);height:36px;padding:0 8px;margin:1px 8px 1px 24px;text-align:left;outline:none;">
+            <i class="fa-solid fa-suitcase" style="width:16px;font-size:13px;color:#787085;flex-shrink:0;"></i>
+            <span class="s-label" style="color:#787085;font-size:13px;letter-spacing:-0.13px;line-height:1;white-space:nowrap;">Missions / Business Trip</span>
+          </button>
+          <!-- Exit and Re-entry -->
+          <button class="nav-sub-item"
+            style="display:flex;align-items:center;gap:10px;width:calc(100% - 32px);height:36px;padding:0 8px;margin:1px 8px 1px 24px;text-align:left;outline:none;">
+            <i class="fa-solid fa-right-from-bracket" style="width:16px;font-size:13px;color:#787085;flex-shrink:0;"></i>
+            <span class="s-label" style="color:#787085;font-size:13px;letter-spacing:-0.13px;line-height:1;white-space:nowrap;">Exit and Re-entry</span>
+          </button>
+          <!-- Air tickets -->
+          <a href="air-tickets.html" style="text-decoration:none;">
+            <button class="nav-sub-item${isAirTicketsActive ? ' active' : ''}"${isAirTicketsActive ? ' aria-current="page"' : ''}
+              style="display:flex;align-items:center;gap:10px;width:calc(100% - 32px);height:36px;padding:0 8px;margin:1px 8px 1px 24px;text-align:left;outline:none;">
+              <i class="fa-solid fa-plane" style="width:16px;font-size:13px;color:#1e1033;flex-shrink:0;"></i>
+              <span class="s-label" style="color:#1e1033;font-size:13px;${isAirTicketsActive ? 'font-weight:500;' : ''}letter-spacing:-0.13px;line-height:1;white-space:nowrap;">Air tickets</span>
+            </button>
+          </a>
+        </div>
 
         <!-- Hiring -->
         <button class="nav-item" data-page="Hiring" aria-haspopup="true"
@@ -356,6 +383,23 @@
           attArrow.style.transform = attOpen ? 'rotate(180deg)' : 'rotate(0deg)';
         }
         attToggle.setAttribute('aria-expanded', String(attOpen));
+      });
+    }
+
+    // Business missions submenu toggle
+    const bmToggle = document.getElementById('business-missions-toggle');
+    const bmSubmenu = document.getElementById('business-missions-submenu');
+    const bmArrow = document.getElementById('business-missions-arrow');
+    let bmOpen = config.navItem === 'business-missions';
+
+    if (bmToggle && bmSubmenu) {
+      bmToggle.addEventListener('click', function() {
+        bmOpen = !bmOpen;
+        bmSubmenu.style.display = bmOpen ? 'flex' : 'none';
+        if (bmArrow) {
+          bmArrow.style.transform = bmOpen ? 'rotate(180deg)' : 'rotate(0deg)';
+        }
+        bmToggle.setAttribute('aria-expanded', String(bmOpen));
       });
     }
   }
