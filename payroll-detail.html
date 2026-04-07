@@ -213,7 +213,7 @@
     }
 
     .stat-card-label {
-      font-size: 14px;
+      font-size: 13px;
       color: #787085;
       white-space: nowrap;
     }
@@ -360,8 +360,8 @@
       border-radius: 100px;
       font-size: 12px;
       font-weight: 400;
-      background: #f3f4f6;
-      color: #6b7280;
+      background: #D7FFE7;
+      color: #15803d;
     }
 
     .badge-active {
@@ -390,6 +390,12 @@
     .pagination-info span {
       display: inline-flex;
       align-items: center;
+    }
+
+    .pagination-arrow {
+      font-size: 18px;
+      font-weight: 300;
+      cursor: pointer;
     }
 
     .pagination-nav {
@@ -899,9 +905,11 @@
     const paginationHTML = `
       <div style="display:flex;justify-content:flex-end;margin-bottom:16px;">
         <div class="pagination-info">
-          <span style="cursor:pointer;">‹ Back</span>
+          <span class="pagination-arrow">‹</span>
+          <span>Back</span>
           <span style="color:#1e1033;font-weight:500;">1 of 12</span>
-          <span style="cursor:pointer;">Next ›</span>
+          <span>Next</span>
+          <span class="pagination-arrow">›</span>
         </div>
       </div>
     `;
