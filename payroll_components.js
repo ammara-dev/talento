@@ -226,7 +226,8 @@ const PayrollComponents = (function() {
       totalGross = 'SAR 24,226.00',
       paymentBreakdown = { paid: 20000, pending: 3000, unpaid: 1226 },
       showDownload = true,
-      showViewPayroll = true
+      showViewPayroll = true,
+      headerBg = '#f6f5f7' // Default header background color
     } = config;
 
     // Status badge
@@ -264,7 +265,7 @@ const PayrollComponents = (function() {
     return `
       <div class="payroll-card">
         <!-- Card Header -->
-        <div class="payroll-card-header">
+        <div class="payroll-card-header" style="background:${headerBg};">
           <div class="payroll-card-header-left">
             <div class="payroll-card-title-row">
               <h3 class="payroll-card-title">${name}</h3>
@@ -325,10 +326,17 @@ const PayrollComponents = (function() {
   // PAYROLL LIST
   // Renders a list of payroll cards
   // ═══════════════════════════════════════════════════════════════════════════
+  // Header background colors for alternating cards
+  const HeaderBgColors = ['#f6f5f7', '#F1F7F4', '#F8F3F6', '#F1F7F4'];
+
   function PayrollList(config) {
     const { payrolls = [] } = config;
 
-    const cardsHTML = payrolls.map(payroll => PayrollCard(payroll)).join('');
+    const cardsHTML = payrolls.map((payroll, index) => {
+      // Assign header background color based on index
+      const headerBg = HeaderBgColors[index % HeaderBgColors.length];
+      return PayrollCard({ ...payroll, headerBg });
+    }).join('');
 
     return `
       <div class="payroll-list">
