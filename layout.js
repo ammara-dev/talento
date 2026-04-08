@@ -16,7 +16,8 @@
     'air-tickets.html': { navItem: 'business-missions', submenu: 'air-tickets' },
     'air-ticket-request.html': { navItem: 'business-missions', submenu: 'air-tickets' },
     'payroll.html': { navItem: 'finance', submenu: 'payroll' },
-    'payroll-detail.html': { navItem: 'finance', submenu: 'payroll' }
+    'payroll-detail.html': { navItem: 'finance', submenu: 'payroll' },
+    'rescheduled-loans.html': { navItem: 'finance', submenu: 'loans' }
   };
 
   const config = pageConfig[currentPage] || pageConfig['index.html'];
@@ -32,6 +33,7 @@
     const isAirTicketsActive = config.submenu === 'air-tickets';
     const isBusinessMissionsExpanded = config.navItem === 'business-missions';
     const isPayrollActive = config.submenu === 'payroll';
+    const isLoansActive = config.submenu === 'loans';
     const isFinanceExpanded = config.navItem === 'finance';
 
     return `
@@ -129,11 +131,13 @@
             </button>
           </a>
           <!-- Loans -->
-          <button class="nav-sub-item"
-            style="display:flex;align-items:center;gap:10px;width:calc(100% - 32px);height:36px;padding:0 8px;margin:1px 8px 1px 24px;text-align:left;outline:none;">
-            <i class="fa-solid fa-hand-holding-dollar" style="width:16px;font-size:13px;color:#787085;flex-shrink:0;"></i>
-            <span class="s-label" style="color:#787085;font-size:13px;letter-spacing:-0.13px;line-height:1;white-space:nowrap;">Loans</span>
-          </button>
+          <a href="rescheduled-loans.html" style="text-decoration:none;">
+            <button class="nav-sub-item${isLoansActive ? ' active' : ''}"${isLoansActive ? ' aria-current="page"' : ''}
+              style="display:flex;align-items:center;gap:10px;width:calc(100% - 32px);height:36px;padding:0 8px;margin:1px 8px 1px 24px;text-align:left;outline:none;">
+              <i class="fa-solid fa-hand-holding-dollar" style="width:16px;font-size:13px;color:${isLoansActive ? '#1e1033' : '#787085'};flex-shrink:0;"></i>
+              <span class="s-label" style="color:${isLoansActive ? '#1e1033' : '#787085'};font-size:13px;${isLoansActive ? 'font-weight:500;' : ''}letter-spacing:-0.13px;line-height:1;white-space:nowrap;">Loans</span>
+            </button>
+          </a>
           <!-- Salary scale -->
           <button class="nav-sub-item"
             style="display:flex;align-items:center;gap:10px;width:calc(100% - 32px);height:36px;padding:0 8px;margin:1px 8px 1px 24px;text-align:left;outline:none;">
