@@ -35,25 +35,37 @@
       align-items: center;
       gap: 8px;
       flex-wrap: wrap;
+      background: #f6f5f7;
+      border: 1.5px solid rgba(30, 16, 51, 0.1);
+      border-radius: 10px;
+      padding: 2px;
     }
 
     .loans-action-btn {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      height: 30px;
-      padding: 0 10px;
+      height: 32px;
+      padding: 0 12px;
       border-radius: 8px;
-      border: 1px solid #e8e7eb;
+      border: 1px solid transparent;
       color: #4b405c;
-      font-size: 13px;
-      background: #fff;
+      font-size: 14px;
+      background: transparent;
       transition: background 150ms;
       white-space: nowrap;
     }
 
     .loans-action-btn:hover {
       background: #f6f5f7;
+    }
+
+    .loans-action-btn.is-active {
+      background: #fff;
+      color: #1e1033;
+      border-color: #e8e7eb;
+      box-shadow: 0 0.5px 1px rgba(30, 16, 51, 0.15);
+      font-weight: 500;
     }
 
     .overview-grid {
@@ -72,10 +84,16 @@
     }
 
     .overview-main {
-      display: grid;
-      grid-template-columns: 180px 1fr;
-      gap: 14px;
-      align-items: stretch;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      min-width: 0;
+      flex-wrap: nowrap;
+    }
+
+    .overview-main-left {
+      flex: 0 0 30%;
+      min-width: 250px;
     }
 
     .overview-title {
@@ -86,15 +104,16 @@
     }
 
     .overview-amount {
-      font-size: 34px;
+      font-size: 48px;
       line-height: 1.1;
       font-weight: 500;
       color: #1e1033;
-      letter-spacing: -0.34px;
+      letter-spacing: -0.48px;
       white-space: nowrap;
     }
 
     .overview-breakdown {
+      flex: 1;
       display: flex;
       gap: 10px;
       min-width: 0;
@@ -235,11 +254,22 @@
 
     .installments-table-scroll {
       overflow-x: auto;
+      overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .installments-table-scroll::-webkit-scrollbar {
+      height: 4px;
+    }
+
+    .installments-table-scroll::-webkit-scrollbar-thumb {
+      background: #d2cfd6;
+      border-radius: 4px;
     }
 
     .installments-table {
       width: 100%;
-      min-width: 980px;
+      min-width: 1120px;
       border-collapse: collapse;
     }
 
@@ -252,6 +282,12 @@
       padding: 10px 12px;
       border-bottom: 1px solid #ece9ef;
       white-space: nowrap;
+    }
+
+    .installments-table th:first-child,
+    .installments-table td:first-child {
+      width: 42px;
+      padding-left: 14px;
     }
 
     .installments-table td {
@@ -357,7 +393,12 @@
 
     @media (max-width: 800px) {
       .overview-main {
-        grid-template-columns: 1fr;
+        flex-wrap: wrap;
+      }
+
+      .overview-main-left {
+        min-width: 100%;
+        flex-basis: 100%;
       }
 
       .overview-breakdown {
@@ -497,6 +538,9 @@
     return `
       <tr>
         <td>
+          <input type="checkbox" class="table-checkbox" aria-label="Select row" />
+        </td>
+        <td>
           <div class="employee-cell">
             <img src="${row.employeeAvatar}" alt="${row.employeeName}" />
             <div class="employee-info">
@@ -578,6 +622,7 @@
           <table class="installments-table">
             <thead>
               <tr>
+                <th><input type="checkbox" class="table-checkbox" aria-label="Select all rows" /></th>
                 <th>Employee name</th>
                 <th>Status</th>
                 <th>Installment day</th>
@@ -597,6 +642,14 @@
     `;
 
     root.innerHTML = [pageHeader, topOverview, toolbar, table].join('');
+
+    const actionButtons = root.querySelectorAll('.loans-action-btn');
+    actionButtons.forEach(function(btn) {
+      const label = (btn.textContent || '').trim().toLowerCase();
+      if (label.indexOf('loan installments') !== -1) {
+        btn.classList.add('is-active');
+      }
+    });
   }
 
   if (document.readyState === 'loading') {
