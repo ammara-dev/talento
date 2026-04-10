@@ -18,6 +18,7 @@
     'payroll.html': { navItem: 'finance', submenu: 'payroll' },
     'payroll-detail.html': { navItem: 'finance', submenu: 'payroll' },
     'loans.html': { navItem: 'finance', submenu: 'loans' },
+    'loan-installments.html': { navItem: 'finance', submenu: 'loans' },
     'rescheduled-loans.html': { navItem: 'finance', submenu: 'loans' }
   };
 
@@ -132,7 +133,7 @@
             </button>
           </a>
           <!-- Loans -->
-          <a href="loans.html" style="text-decoration:none;">
+          <a href="loan-installments.html" style="text-decoration:none;">
             <button class="nav-sub-item${isLoansActive ? ' active' : ''}"${isLoansActive ? ' aria-current="page"' : ''}
               style="display:flex;align-items:center;gap:10px;width:calc(100% - 32px);height:36px;padding:0 8px;margin:1px 8px 1px 24px;text-align:left;outline:none;">
               <i class="fa-solid fa-hand-holding-dollar" style="width:16px;font-size:13px;color:${isLoansActive ? '#1e1033' : '#787085'};flex-shrink:0;"></i>

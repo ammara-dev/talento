@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <title>Talento – Loan Installments</title>
+  <meta name="description" content="Talento HR Platform – Loan Installments" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared-styles.css" />
+
+  <style>
+    .loans-page-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+
+    .loans-page-title {
+      font-size: 20px;
+      line-height: 1.3;
+      font-weight: 500;
+      color: #1e1033;
+      letter-spacing: -0.2px;
+    }
+
+    .loans-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .loans-action-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      height: 30px;
+      padding: 0 10px;
+      border-radius: 8px;
+      border: 1px solid #e8e7eb;
+      color: #4b405c;
+      font-size: 13px;
+      background: #fff;
+      transition: background 150ms;
+      white-space: nowrap;
+    }
+
+    .loans-action-btn:hover {
+      background: #f6f5f7;
+    }
+
+    .overview-grid {
+      display: grid;
+      grid-template-columns: minmax(420px, 1fr) minmax(260px, 0.48fr);
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .overview-card {
+      background: #fff;
+      border: 1px solid #e8e7eb;
+      border-radius: 12px;
+      padding: 12px 14px;
+      min-width: 0;
+    }
+
+    .overview-main {
+      display: grid;
+      grid-template-columns: 180px 1fr;
+      gap: 14px;
+      align-items: stretch;
+    }
+
+    .overview-title {
+      font-size: 14px;
+      color: #787085;
+      line-height: 1.4;
+      margin-bottom: 6px;
+    }
+
+    .overview-amount {
+      font-size: 34px;
+      line-height: 1.1;
+      font-weight: 500;
+      color: #1e1033;
+      letter-spacing: -0.34px;
+      white-space: nowrap;
+    }
+
+    .overview-breakdown {
+      display: flex;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .overview-break-item {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .overview-break-value {
+      font-size: 14px;
+      color: #1e1033;
+      line-height: 1.4;
+    }
+
+    .overview-break-label {
+      font-size: 12px;
+      color: #787085;
+      line-height: 1.3;
+    }
+
+    .overview-break-track {
+      width: 100%;
+      height: 5px;
+      border-radius: 100px;
+      background: #efedf3;
+      overflow: hidden;
+      margin-top: 2px;
+    }
+
+    .overview-break-fill {
+      height: 100%;
+      border-radius: 100px;
+    }
+
+    .overview-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+      color: #787085;
+      font-size: 14px;
+    }
+
+    .overview-link a {
+      display: inline-flex;
+      color: #787085;
+    }
+
+    .overview-link a:hover {
+      color: #1e1033;
+    }
+
+    .overview-link svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    .overview-small-value {
+      font-size: 34px;
+      line-height: 1.1;
+      font-weight: 500;
+      color: #1e1033;
+    }
+
+    .overview-small-label {
+      font-size: 30px;
+      line-height: 1.1;
+      color: #1e1033;
+      font-weight: 500;
+    }
+
+    .loans-search-filter-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    .loans-search-input-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      height: 36px;
+      min-width: 260px;
+      max-width: 360px;
+      width: 100%;
+      background: #fff;
+      border: 1px solid #e8e7eb;
+      border-radius: 100px;
+      padding: 0 14px;
+      flex: 1;
+    }
+
+    .loans-search-input-wrap input {
+      font-size: 14px;
+      color: #4b405c;
+    }
+
+    .loans-search-input-wrap svg {
+      color: #a09aab;
+      flex-shrink: 0;
+    }
+
+    .loans-filter-btn,
+    .loans-toolbar-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      height: 34px;
+      padding: 0 12px;
+      border-radius: 8px;
+      border: 1px solid #e8e7eb;
+      color: #4b405c;
+      background: #fff;
+      font-size: 14px;
+      transition: background 150ms;
+      white-space: nowrap;
+    }
+
+    .loans-filter-btn:hover,
+    .loans-toolbar-btn:hover {
+      background: #f6f5f7;
+    }
+
+    .installments-table-wrap {
+      border: 1px solid #e8e7eb;
+      border-radius: 12px;
+      background: #fff;
+      overflow: hidden;
+    }
+
+    .installments-table-scroll {
+      overflow-x: auto;
+    }
+
+    .installments-table {
+      width: 100%;
+      min-width: 980px;
+      border-collapse: collapse;
+    }
+
+    .installments-table th {
+      background: #f6f5f7;
+      color: #787085;
+      font-size: 12px;
+      font-weight: 400;
+      text-align: left;
+      padding: 10px 12px;
+      border-bottom: 1px solid #ece9ef;
+      white-space: nowrap;
+    }
+
+    .installments-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid #f1eff5;
+      font-size: 14px;
+      color: #4b405c;
+      vertical-align: middle;
+      line-height: 1.4;
+    }
+
+    .installments-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    .employee-cell {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 160px;
+    }
+
+    .employee-cell img {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+
+    .employee-info {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+
+    .employee-name {
+      font-size: 14px;
+      color: #1e1033;
+      line-height: 1.4;
+      font-weight: 400;
+    }
+
+    .employee-role {
+      font-size: 12px;
+      color: #787085;
+      line-height: 1.2;
+    }
+
+    .badge-status {
+      display: inline-flex;
+      align-items: center;
+      height: 22px;
+      padding: 0 10px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 1;
+    }
+
+    .paid-amount-cell {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #1e1033;
+      font-size: 14px;
+    }
+
+    .paid-ring {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 3px solid #e8e7eb;
+      border-top-color: var(--ring-color, #34d399);
+      border-right-color: var(--ring-color, #34d399);
+      transform: rotate(var(--ring-rotation, 0deg));
+      flex-shrink: 0;
+    }
+
+    .row-more {
+      border: none;
+      background: transparent;
+      color: #a09aab;
+      width: 26px;
+      height: 26px;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 150ms;
+    }
+
+    .row-more:hover {
+      background: #f6f5f7;
+      color: #4b405c;
+    }
+
+    @media (max-width: 1120px) {
+      .overview-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 800px) {
+      .overview-main {
+        grid-template-columns: 1fr;
+      }
+
+      .overview-breakdown {
+        flex-direction: column;
+      }
+
+      .loans-search-input-wrap {
+        min-width: unset;
+        max-width: unset;
+      }
+    }
+  </style>
+</head>
+
+<body>
+<div id="app">
+  <div id="overlay" aria-hidden="true"></div>
+  <aside id="sidebar" aria-label="Main navigation"></aside>
+
+  <div id="main-col">
+    <header id="navbar" style="display:flex;align-items:center;justify-content:space-between;height:56px;padding:0 16px;background:#fff;border-bottom:1px solid #e8e7eb;flex-shrink:0;min-width:0;"></header>
+
+    <div id="main-scroll">
+      <div style="padding:16px;background:#f6f5f7;min-height:calc(100vh - 56px);">
+        <div style="background:#fff;border-radius:20px;padding:16px;display:flex;flex-direction:column;gap:0;min-width:0;overflow:hidden;">
+          <section id="loan-installments-root" aria-label="Loan installments"></section>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="layout.js"></script>
+<script src="loans_components.js"></script>
+<script>
+(function() {
+  'use strict';
+
+  const installmentsSummary = {
+    expectedTotal: 'SAR 34,226.00',
+    breakdown: [
+      { value: '20,000', label: 'Paid', percent: 58, color: '#34A476' },
+      { value: '3,000', label: 'Pending', percent: 9, color: '#8B5CF6' },
+      { value: '1,226', label: 'Unpaid', percent: 4, color: '#EF4444' }
+    ],
+    rescheduledCount: '02',
+    rescheduledLabel: 'new'
+  };
+
+  const installmentsRows = [
+    {
+      employeeName: 'Fahad AlShahrani',
+      employeeRole: 'Marketing lead',
+      employeeAvatar: 'https://i.pravatar.cc/150?img=33',
+      status: 'pending',
+      installmentDay: '25 Dec 2025',
+      month: 'December',
+      installmentAmount: 'SAR 2,000',
+      paidAmount: 'SAR 2,000',
+      paidProgress: 100,
+      remainingAmount: '0,000'
+    },
+    {
+      employeeName: 'Fahad AlShahrani',
+      employeeRole: 'Marketing lead',
+      employeeAvatar: 'https://i.pravatar.cc/150?img=33',
+      status: 'paid',
+      installmentDay: '25 Dec 2025',
+      month: 'December',
+      installmentAmount: 'SAR 2,000',
+      paidAmount: 'SAR 2,000',
+      paidProgress: 100,
+      remainingAmount: '0,000'
+    },
+    {
+      employeeName: 'Fahad AlShahrani',
+      employeeRole: 'Marketing lead',
+      employeeAvatar: 'https://i.pravatar.cc/150?img=33',
+      status: 'unpaid',
+      installmentDay: '25 Dec 2025',
+      month: 'December',
+      installmentAmount: 'SAR 2,000',
+      paidAmount: '400',
+      paidProgress: 25,
+      remainingAmount: '0,000'
+    },
+    {
+      employeeName: 'Fahad AlShahrani',
+      employeeRole: 'Marketing lead',
+      employeeAvatar: 'https://i.pravatar.cc/150?img=33',
+      status: 'unpaid',
+      installmentDay: '25 Dec 2025',
+      month: 'December',
+      installmentAmount: 'SAR 2,000',
+      paidAmount: '0,000',
+      paidProgress: 0,
+      remainingAmount: '0,000'
+    }
+  ];
+
+  function InstallmentBreakItem(item) {
+    return `
+      <div class="overview-break-item">
+        <div style="display:flex;flex-direction:column;">
+          <span class="overview-break-value">${item.value}</span>
+          <span class="overview-break-label">${item.label}</span>
+        </div>
+        <div class="overview-break-track">
+          <div class="overview-break-fill" style="width:${item.percent}%;background:${item.color};"></div>
+        </div>
+      </div>
+    `;
+  }
+
+  function StatusBadge(status) {
+    const config = {
+      pending: { label: 'Pending', bg: '#E8E7EB', color: '#4B405C' },
+      paid: { label: 'Paid', bg: '#D7FFE7', color: '#15803D' },
+      unpaid: { label: 'Unpaid', bg: '#F9F1F3', color: '#DC2626' }
+    };
+    const ui = config[status] || config.pending;
+    return `<span class="badge-status" style="background:${ui.bg};color:${ui.color};">${ui.label}</span>`;
+  }
+
+  function PaidAmountCell(value, progress) {
+    const color = progress >= 100 ? '#34A476' : progress > 0 ? '#9CA3AF' : '#D1D5DB';
+    const rotation = Math.max(0, Math.min(360, Math.round((progress / 100) * 360)));
+    return `
+      <span class="paid-amount-cell">
+        <span class="paid-ring" style="--ring-color:${color};--ring-rotation:${rotation}deg;"></span>
+        <span>${value}</span>
+      </span>
+    `;
+  }
+
+  function InstallmentRow(row) {
+    return `
+      <tr>
+        <td>
+          <div class="employee-cell">
+            <img src="${row.employeeAvatar}" alt="${row.employeeName}" />
+            <div class="employee-info">
+              <span class="employee-name">${row.employeeName}</span>
+              <span class="employee-role">${row.employeeRole}</span>
+            </div>
+          </div>
+        </td>
+        <td>${StatusBadge(row.status)}</td>
+        <td style="color:#1e1033;">${row.installmentDay}</td>
+        <td style="color:#1e1033;">${row.month}</td>
+        <td style="color:#1e1033;">${row.installmentAmount}</td>
+        <td style="color:#1e1033;">${PaidAmountCell(row.paidAmount, row.paidProgress)}</td>
+        <td style="color:#1e1033;">${row.remainingAmount}</td>
+        <td style="text-align:right;">
+          <button class="row-more" aria-label="Row actions">
+            ${LoansComponents.Icons.moreVertical}
+          </button>
+        </td>
+      </tr>
+    `;
+  }
+
+  function renderScreen() {
+    const root = document.getElementById('loan-installments-root');
+    if (!root || typeof LoansComponents === 'undefined') return;
+
+    const pageHeader = LoansComponents.PageHeader({
+      title: 'Loans',
+      actions: [
+        { label: 'Loans summary', href: '#', icon: LoansComponents.Icons.wallet },
+        { label: 'Loan Installments', href: 'loan-installments.html', icon: LoansComponents.Icons.creditCard },
+        { label: 'Salary in Advance', href: '#', icon: LoansComponents.Icons.coins },
+        { label: 'Configuration', href: '#', icon: LoansComponents.Icons.gear }
+      ]
+    });
+
+    const topOverview = `
+      <div class="overview-grid">
+        <article class="overview-card">
+          <div class="overview-main">
+            <div>
+              <p class="overview-title">Expected total amount</p>
+              <p class="overview-amount">${installmentsSummary.expectedTotal}</p>
+            </div>
+            <div class="overview-breakdown">
+              ${installmentsSummary.breakdown.map(InstallmentBreakItem).join('')}
+            </div>
+          </div>
+        </article>
+
+        <article class="overview-card">
+          <div class="overview-link">
+            <span>Rescheduled loans</span>
+            <a href="rescheduled-loans.html" aria-label="Go to rescheduled loans">
+              ${LoansComponents.Icons.arrowRight}
+            </a>
+          </div>
+          <p style="display:flex;align-items:baseline;gap:5px;">
+            <span class="overview-small-value">${installmentsSummary.rescheduledCount}</span>
+            <span class="overview-small-label">${installmentsSummary.rescheduledLabel}</span>
+          </p>
+        </article>
+      </div>
+    `;
+
+    const toolbar = LoansComponents.SearchFilterBar({
+      searchPlaceholder: 'Search',
+      showFilters: true,
+      filterCount: 2,
+      showExport: true,
+      exportText: 'Export all',
+      showCreateNew: false
+    });
+
+    const table = `
+      <div class="installments-table-wrap">
+        <div class="installments-table-scroll">
+          <table class="installments-table">
+            <thead>
+              <tr>
+                <th>Employee name</th>
+                <th>Status</th>
+                <th>Installment day</th>
+                <th>Month</th>
+                <th>Installment amount</th>
+                <th>Paid amount</th>
+                <th>Remaining amount</th>
+                <th style="width:42px;"></th>
+              </tr>
+            </thead>
+            <tbody>
+              ${installmentsRows.map(InstallmentRow).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+
+    root.innerHTML = [pageHeader, topOverview, toolbar, table].join('');
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', renderScreen);
+  } else {
+    renderScreen();
+  }
+})();
+</script>
+</body>
+</html>
