@@ -104,11 +104,11 @@
     }
 
     .overview-amount {
-      font-size: 48px;
+      font-size: 24px;
       line-height: 1.1;
       font-weight: 500;
       color: #1e1033;
-      letter-spacing: -0.48px;
+      letter-spacing: -0.24px;
       white-space: nowrap;
     }
 
@@ -441,7 +441,7 @@
     expectedTotal: 'SAR 34,226.00',
     breakdown: [
       { value: '20,000', label: 'Paid', percent: 58, color: '#34A476' },
-      { value: '3,000', label: 'Pending', percent: 9, color: '#8B5CF6' },
+      { value: '3,000', label: 'Pending', percent: 9, color: '#D8D6DD' },
       { value: '1,226', label: 'Unpaid', percent: 4, color: '#EF4444' }
     ],
     rescheduledCount: '02',
@@ -507,7 +507,7 @@
           <span class="overview-break-label">${item.label}</span>
         </div>
         <div class="overview-break-track">
-          <div class="overview-break-fill" style="width:${item.percent}%;background:${item.color};"></div>
+          <div class="overview-break-fill" style="width:100%;background:${item.color};"></div>
         </div>
       </div>
     `;
