@@ -283,6 +283,15 @@
       font-size: 14px;
       line-height: 1.3;
       font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .sv-publish-audience-count {
+      color: #BA8AFF;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 1;
     }
     .sv-publish-audience-option-desc {
       color: #787085;
@@ -301,6 +310,216 @@
     .sv-publish-audience-option.active .sv-publish-audience-radio-indicator::after,
     .sv-publish-audience-radio-input:checked + .sv-publish-audience-radio-indicator::after {
       opacity: 1;
+    }
+
+    .sv-publish-selected-panel {
+      margin-top: 14px;
+      display: grid;
+      gap: 10px;
+    }
+    .sv-publish-selected-panel.is-hidden {
+      display: none;
+    }
+    .sv-publish-panel-tools {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .sv-publish-search {
+      width: min(100%, 420px);
+      height: 32px;
+      border: 1px solid #e1deea;
+      border-radius: 999px;
+      background: #ffffff;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 12px;
+    }
+    .sv-publish-search input {
+      width: 100%;
+      border: none;
+      outline: none;
+      background: transparent;
+      font-size: 14px;
+      color: #1e1033;
+      font-family: 'Alexandria', Helvetica, sans-serif;
+    }
+    .sv-publish-search input::placeholder {
+      color: #a09aab;
+      font-size: 14px;
+    }
+    .sv-publish-filters-btn {
+      height: 32px;
+      border-radius: 999px;
+      border: 1px solid #e1deea;
+      background: #ffffff;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0 12px;
+      color: #1e1033;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: 'Alexandria', Helvetica, sans-serif;
+    }
+    .sv-publish-filters-count {
+      color: #787085;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .sv-publish-tags-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .sv-publish-tag {
+      height: 32px;
+      border: 1px solid #e1deea;
+      border-radius: 999px;
+      background: #f7f6fb;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0 10px 0 6px;
+      color: #4b405c;
+      font-size: 14px;
+      line-height: 1;
+    }
+    .sv-publish-tag-avatar {
+      width: 20px;
+      height: 20px;
+      border-radius: 999px;
+      background: #d7cbe8;
+      color: #1e1033;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+    .sv-publish-tag-remove {
+      border: none;
+      background: transparent;
+      padding: 0;
+      width: 14px;
+      height: 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .sv-publish-tag-remove svg {
+      width: 14px;
+      height: 14px;
+      stroke: #787085;
+    }
+
+    .sv-publish-table-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      border-bottom: 1px solid #ece9f2;
+      padding: 10px 0;
+    }
+    .sv-publish-table-title {
+      color: #787085;
+      font-size: 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .sv-publish-mark-all {
+      border: none;
+      background: transparent;
+      color: #787085;
+      font-size: 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      font-family: 'Alexandria', Helvetica, sans-serif;
+    }
+    .sv-publish-mark-all-box {
+      width: 22px;
+      height: 22px;
+      border: 1px solid #d7d4de;
+      border-radius: 6px;
+      background: #f1f0f4;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .sv-publish-employees-list {
+      border-bottom: 1px solid #ece9f2;
+    }
+    .sv-publish-employee-row {
+      min-height: 54px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      border-top: 1px solid #ece9f2;
+      padding: 0 0 0 2px;
+    }
+    .sv-publish-employee-main {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+    .sv-publish-employee-avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      background: #d7cbe8;
+      color: #1e1033;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+    .sv-publish-employee-meta {
+      display: grid;
+      min-width: 0;
+    }
+    .sv-publish-employee-name {
+      color: #1e1033;
+      font-size: 14px;
+      line-height: 1.3;
+      font-weight: 500;
+    }
+    .sv-publish-employee-role {
+      color: #787085;
+      font-size: 14px;
+      line-height: 1.3;
+    }
+    .sv-publish-employee-check {
+      width: 26px;
+      height: 26px;
+      border-radius: 7px;
+      border: 1px solid #d7d4de;
+      background: #f1f0f4;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .sv-publish-employee-check.active {
+      background: #1e1033;
+      border-color: #1e1033;
     }
 
     .sv-publish-modal-footer {
@@ -356,6 +575,9 @@
         max-height: calc(100vh - 104px);
       }
       .sv-publish-modal-body { min-height: 240px; }
+      .sv-publish-search {
+        width: 100%;
+      }
     }
 
     @media (max-width: 768px) {
@@ -385,6 +607,13 @@
         width: 100%;
         justify-content: flex-end;
       }
+      .sv-publish-panel-tools {
+        align-items: stretch;
+      }
+      .sv-publish-filters-btn {
+        width: 100%;
+        justify-content: center;
+      }
       .sv-publish-modal-footer { justify-content: flex-start; }
       .sv-publish-link-btn {
         width: 100%;
@@ -399,6 +628,12 @@
       .sv-publish-footer-actions .sv-secondary-btn,
       .sv-publish-footer-actions .sv-primary-btn {
         width: 100%;
+      }
+      .sv-publish-table-head {
+        flex-wrap: wrap;
+      }
+      .sv-publish-mark-all {
+        margin-left: auto;
       }
     }
   </style>
@@ -447,15 +682,33 @@
             id: 'all-employees',
             title: 'All employees',
             description: 'Send survey to all employees in the organization',
-            selected: true
+            selected: false
           },
           {
             id: 'selected-employees',
             title: 'Selected employees',
+            count: 2,
             description: 'Send survey to a selected group of employees',
-            selected: false
+            selected: true
           }
-        ]
+        ],
+        selectedEmployeesPanel: {
+          visibleFor: 'selected-employees',
+          searchPlaceholder: 'Search',
+          filtersLabel: 'Filters',
+          filtersCount: 2,
+          tags: [
+            { label: 'Fahad AlShahrani', avatarText: 'FA' },
+            { label: 'Turki AlSubaie', avatarText: 'TA' }
+          ],
+          columnsLabel: 'Employee name',
+          markAllLabel: 'Mark all',
+          employees: [
+            { id: 'omar-aljuhani', name: 'Omar AlJuhani', role: 'Marketing manager', selected: false, avatarText: 'OA' },
+            { id: 'fahad-alshahrani', name: 'Fahad AlShahrani', role: 'SMM manager', selected: true, avatarText: 'FA' },
+            { id: 'turki-alsubaie', name: 'Turki AlSubaie', role: 'Junior product designer', selected: true, avatarText: 'TA' }
+          ]
+        }
       },
       footer: {
         copyLinkText: 'Copy responder link',
@@ -478,6 +731,33 @@
       </div>
     `;
 
+    function syncParticipantsView() {
+      const audienceOptions = modalRoot.querySelectorAll('.sv-publish-audience-option');
+      audienceOptions.forEach(function(optionEl) {
+        const input = optionEl.querySelector('.sv-publish-audience-radio-input');
+        optionEl.classList.toggle('active', !!(input && input.checked));
+      });
+
+      const panel = modalRoot.querySelector('.sv-publish-selected-panel');
+      if (panel) {
+        const target = panel.getAttribute('data-sv-visible-for');
+        const checked = modalRoot.querySelector('.sv-publish-audience-radio-input:checked');
+        const show = !!checked && checked.value === target;
+        panel.classList.toggle('is-hidden', !show);
+      }
+    }
+
+    function updateSelectedCount() {
+      const selectedCount = modalRoot.querySelectorAll('.sv-publish-employee-check.active').length;
+      const countNode = modalRoot.querySelector('[data-sv-count-for="selected-employees"]');
+      if (countNode) {
+        countNode.textContent = String(selectedCount);
+      }
+    }
+
+    syncParticipantsView();
+    updateSelectedCount();
+
     function closePopup() {
       window.location.href = 'create-new-survey.html';
     }
@@ -485,6 +765,32 @@
     modalRoot.addEventListener('click', function(event) {
       if (event.target.closest('[data-sv-action="close"]') || event.target.closest('[data-sv-action="cancel"]')) {
         closePopup();
+        return;
+      }
+
+      const employeeCheckButton = event.target.closest('[data-sv-employee-check]');
+      if (employeeCheckButton) {
+        employeeCheckButton.classList.toggle('active');
+        employeeCheckButton.innerHTML = employeeCheckButton.classList.contains('active') ? SurveyComponents.Icons.checkWhite : '';
+        updateSelectedCount();
+        return;
+      }
+
+      const markAllBtn = event.target.closest('.sv-publish-mark-all');
+      if (markAllBtn) {
+        const employeeChecks = Array.from(modalRoot.querySelectorAll('[data-sv-employee-check]'));
+        const shouldSelectAll = employeeChecks.some(function(btn) { return !btn.classList.contains('active'); });
+        employeeChecks.forEach(function(btn) {
+          btn.classList.toggle('active', shouldSelectAll);
+          btn.innerHTML = shouldSelectAll ? SurveyComponents.Icons.checkWhite : '';
+        });
+        updateSelectedCount();
+      }
+    });
+
+    modalRoot.addEventListener('change', function(event) {
+      if (event.target.matches('.sv-publish-audience-radio-input')) {
+        syncParticipantsView();
       }
     });
 

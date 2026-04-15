@@ -27,7 +27,11 @@ const SurveyComponents = (function() {
     close: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#787085" stroke-width="2.2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`,
     link: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8A67D5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.07 0l2.83-2.83a5 5 0 0 0-7.07-7.07L11 4"/><path d="M14 11a5 5 0 0 0-7.07 0L4.1 13.83a5 5 0 0 0 7.07 7.07L13 19"/></svg>`,
     participants: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#787085" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="3"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a3 3 0 0 1 0 5.74"/></svg>`,
-    responses: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#787085" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>`
+    responses: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#787085" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>`,
+    search: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#A09AAB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>`,
+    filter: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1E1033" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="14" y2="6"/><line x1="4" y1="12" x2="11" y2="12"/><line x1="4" y1="18" x2="9" y2="18"/><line x1="16" y1="6" x2="20" y2="10"/><line x1="16" y1="6" x2="20" y2="2"/><line x1="13" y1="12" x2="20" y2="12"/><line x1="11" y1="18" x2="20" y2="18"/></svg>`,
+    sort: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#787085" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 10 12 6 16 10"/><polyline points="8 14 12 18 16 14"/></svg>`,
+    checkWhite: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`
   };
 
   function getTypeIcon(typeLabel) {
@@ -298,14 +302,18 @@ const SurveyComponents = (function() {
       name = 'participants',
       title = '',
       description = '',
-      selected = false
+      selected = false,
+      count = null
     } = config;
+    const countHTML = count !== null && count !== undefined
+      ? `<span class="sv-publish-audience-count" data-sv-count-for="${id}">${count}</span>`
+      : '';
     return `
       <label class="sv-publish-audience-option${selected ? ' active' : ''}">
         <input class="sv-publish-audience-radio-input" type="radio" name="${name}" value="${id}" ${selected ? 'checked' : ''} />
         <span class="sv-publish-audience-radio-indicator" aria-hidden="true"></span>
         <span class="sv-publish-audience-option-inner">
-          <span class="sv-publish-audience-option-title">${title}</span>
+          <span class="sv-publish-audience-option-title">${title}${countHTML}</span>
           <span class="sv-publish-audience-option-desc">${description}</span>
         </span>
       </label>
@@ -325,9 +333,99 @@ const SurveyComponents = (function() {
             name,
             title: option.title,
             description: option.description,
-            selected: !!option.selected
+            selected: !!option.selected,
+            count: option.count
           });
         }).join('')}
+      </div>
+    `;
+  }
+
+  function getInitials(name) {
+    return String(name || '')
+      .split(' ')
+      .filter(Boolean)
+      .slice(0, 2)
+      .map(function(part) { return part.charAt(0).toUpperCase(); })
+      .join('');
+  }
+
+  function SavePublishTag(config) {
+    const {
+      label = '',
+      avatarText = ''
+    } = config;
+    return `
+      <span class="sv-publish-tag">
+        <span class="sv-publish-tag-avatar">${avatarText || getInitials(label)}</span>
+        <span>${label}</span>
+        <button type="button" class="sv-publish-tag-remove" aria-label="Remove tag">${Icons.xSmall}</button>
+      </span>
+    `;
+  }
+
+  function SavePublishEmployeeRow(config) {
+    const {
+      id = '',
+      name = '',
+      role = '',
+      selected = false,
+      avatarText = ''
+    } = config;
+    return `
+      <div class="sv-publish-employee-row" data-sv-employee-id="${id}">
+        <div class="sv-publish-employee-main">
+          <span class="sv-publish-employee-avatar">${avatarText || getInitials(name)}</span>
+          <span class="sv-publish-employee-meta">
+            <span class="sv-publish-employee-name">${name}</span>
+            <span class="sv-publish-employee-role">${role}</span>
+          </span>
+        </div>
+        <button class="sv-publish-employee-check${selected ? ' active' : ''}" type="button" data-sv-employee-check="${id}" aria-label="Select ${name}">
+          ${selected ? Icons.checkWhite : ''}
+        </button>
+      </div>
+    `;
+  }
+
+  function SavePublishSelectedEmployeesPanel(config) {
+    const {
+      visibleFor = 'selected-employees',
+      visible = false,
+      searchPlaceholder = 'Search',
+      filtersLabel = 'Filters',
+      filtersCount = 0,
+      tags = [],
+      columnsLabel = 'Employee name',
+      markAllLabel = 'Mark all',
+      employees = []
+    } = config;
+    return `
+      <div class="sv-publish-selected-panel${visible ? '' : ' is-hidden'}" data-sv-visible-for="${visibleFor}">
+        <div class="sv-publish-panel-tools">
+          <label class="sv-publish-search">
+            ${Icons.search}
+            <input type="text" placeholder="${searchPlaceholder}" />
+          </label>
+          <button type="button" class="sv-publish-filters-btn">${Icons.filter}<span>${filtersLabel}</span><span class="sv-publish-filters-count">${filtersCount}</span></button>
+        </div>
+
+        <div class="sv-publish-tags-row">
+          ${tags.map(function(tag) {
+            return SavePublishTag(tag);
+          }).join('')}
+        </div>
+
+        <div class="sv-publish-table-head">
+          <span class="sv-publish-table-title">${columnsLabel} ${Icons.sort}</span>
+          <button type="button" class="sv-publish-mark-all">${markAllLabel}<span class="sv-publish-mark-all-box"></span></button>
+        </div>
+
+        <div class="sv-publish-employees-list">
+          ${employees.map(function(employee) {
+            return SavePublishEmployeeRow(employee);
+          }).join('')}
+        </div>
       </div>
     `;
   }
@@ -339,6 +437,10 @@ const SurveyComponents = (function() {
       participants = {},
       footer = {}
     } = config;
+
+    const selectedOption = (participants.options || []).find(function(option) { return option.selected; }) || {};
+    const selectedPanelConfig = participants.selectedEmployeesPanel || {};
+    const selectedPanelVisibleFor = selectedPanelConfig.visibleFor || 'selected-employees';
 
     return `
       <section class="sv-publish-modal" role="dialog" aria-modal="true" aria-label="${title}">
@@ -370,6 +472,11 @@ const SurveyComponents = (function() {
             ${SavePublishAudienceGroup({
               name: participants.name || 'participants',
               options: participants.options || []
+            })}
+            ${SavePublishSelectedEmployeesPanel({
+              ...selectedPanelConfig,
+              visibleFor: selectedPanelVisibleFor,
+              visible: selectedOption.id === selectedPanelVisibleFor
             })}
           </section>
         </div>
@@ -472,6 +579,9 @@ const SurveyComponents = (function() {
     SavePublishModal,
     SavePublishAudienceOption,
     SavePublishAudienceGroup,
+    SavePublishSelectedEmployeesPanel,
+    SavePublishEmployeeRow,
+    SavePublishTag,
     SavePublishSectionTitle,
     SavePublishToggle,
     TopBar,
