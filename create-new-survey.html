@@ -147,6 +147,7 @@
     .sv-chip {
       display: inline-flex;
       align-items: center;
+      gap: 4px;
       height: 20px;
       border-radius: 999px;
       padding: 0 8px;
@@ -156,6 +157,14 @@
       white-space: nowrap;
       line-height: 1;
     }
+    .sv-chip-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 11px;
+      height: 11px;
+    }
+    .sv-chip-icon svg { width: 11px; height: 11px; }
 
     .sv-question-body {
       display: grid;
@@ -342,7 +351,6 @@
       .sv-card { padding: 12px; border-radius: 14px; }
       .sv-question-actions { margin-left: 0; }
       .sv-select-btn { font-size: 12px; padding: 0 8px; }
-      .sv-add-option-row { flex-wrap: wrap; white-space: normal; }
       .sv-rating-wrap {
         grid-template-columns: 1fr;
         align-items: start;

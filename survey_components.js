@@ -16,6 +16,7 @@ const SurveyComponents = (function() {
     checkAccent: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2CF7B3" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`,
     star: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#787085" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.1 8.7 22 9.3 17 14.1 18.4 21 12 17.3 5.6 21 7 14.1 2 9.3 8.9 8.7"/></svg>`,
     starSmall: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#787085" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.1 8.7 22 9.3 17 14.1 18.4 21 12 17.3 5.6 21 7 14.1 2 9.3 8.9 8.7"/></svg>`,
+    starFilled: `<svg width="14" height="14" viewBox="0 0 24 24" fill="#A9A3B6" stroke="#A9A3B6" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.1 8.7 22 9.3 17 14.1 18.4 21 12 17.3 5.6 21 7 14.1 2 9.3 8.9 8.7"/></svg>`,
     radio: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8.5" stroke="#8F889E" stroke-width="1.8"/><circle cx="12" cy="12" r="4.2" fill="#A9A3B6"/></svg>`,
     checkbox: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#787085" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="3"/></svg>`,
     yesNo: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#787085" stroke-width="2"><circle cx="12" cy="12" r="8"/><path d="M9 12l2 2 4-4"/></svg>`,
@@ -55,8 +56,8 @@ const SurveyComponents = (function() {
     `;
   }
 
-  function TypeChip(text) {
-    return `<span class="sv-chip">${text}</span>`;
+  function TypeChip(text, icon) {
+    return `<span class="sv-chip">${icon ? `<span class="sv-chip-icon">${icon}</span>` : ''}${text}</span>`;
   }
 
   function OptionRow(config) {
@@ -108,7 +109,7 @@ const SurveyComponents = (function() {
       <div class="sv-rating-wrap">
         <button class="sv-select-btn" type="button">${min} ${Icons.chevronDown}</button>
         <div class="sv-rating-items">${values.join('')}</div>
-        <button class="sv-select-btn" type="button">${Icons.starSmall} ${Icons.chevronDown}</button>
+        <button class="sv-select-btn" type="button">${Icons.starFilled} ${Icons.chevronDown}</button>
       </div>
     `;
   }
@@ -168,7 +169,7 @@ const SurveyComponents = (function() {
         <div class="sv-question-top">
           <span class="sv-drag">${Icons.drag}</span>
           ${TypeChip(`Question ${index}`)}
-          ${TypeChip(type)}
+          ${TypeChip(type, getTypeIcon(type))}
         </div>
         <div class="sv-question-body">
           ${middleContent}
