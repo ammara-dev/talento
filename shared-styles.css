@@ -74,7 +74,8 @@ html, body { height: 100%; overflow: hidden; background: #fff; }
 #sidebar.collapsed .settings-label,
 #sidebar.collapsed #attendance-submenu,
 #sidebar.collapsed #business-missions-submenu,
-#sidebar.collapsed #finance-submenu { display: none !important; }
+#sidebar.collapsed #finance-submenu,
+#sidebar.collapsed #hiring-submenu { display: none !important; }
 #sidebar:not(.collapsed) .logo-icon-only { display: none !important; }
 #sidebar.collapsed .logo-icon-only { display: flex !important; }
 

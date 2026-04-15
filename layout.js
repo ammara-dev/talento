@@ -18,7 +18,8 @@
     'payroll.html': { navItem: 'finance', submenu: 'payroll' },
     'payroll-detail.html': { navItem: 'finance', submenu: 'payroll' },
     'loans.html': { navItem: 'finance', submenu: 'loans' },
-    'loan-installments.html': { navItem: 'finance', submenu: 'loans' }
+    'loan-installments.html': { navItem: 'finance', submenu: 'loans' },
+    'candidate-profile.html': { navItem: 'hiring', submenu: 'job-positions' }
   };
 
   const config = pageConfig[currentPage] || pageConfig['index.html'];
@@ -36,6 +37,10 @@
     const isPayrollActive = config.submenu === 'payroll';
     const isLoansActive = config.submenu === 'loans';
     const isFinanceExpanded = config.navItem === 'finance';
+    const isJobPositionsActive = config.submenu === 'job-positions';
+    const isAllCandidatesActive = config.submenu === 'all-candidates';
+    const isHiringReportActive = config.submenu === 'hiring-report';
+    const isHiringExpanded = config.navItem === 'hiring';
 
     return `
     <!-- Logo + Collapse -->
@@ -201,15 +206,36 @@
           </a>
         </div>
 
-        <!-- Hiring -->
-        <button class="nav-item" data-page="Hiring" aria-haspopup="true"
+        <!-- Hiring (dropdown) -->
+        <button class="nav-item" id="hiring-toggle" data-page="Hiring" aria-haspopup="true" aria-expanded="${isHiringExpanded}"
           style="display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;height:40px;border-radius:8px;padding:0 16px;outline:none;">
           <span style="display:flex;align-items:center;gap:10px;">
             <i class="fa-solid fa-user-plus" style="width:20px;font-size:16px;color:#1e1033;flex-shrink:0;"></i>
             <span class="s-label" style="color:#1e1033;font-size:14px;letter-spacing:-0.14px;white-space:nowrap;">Hiring</span>
           </span>
-          <svg class="s-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4b405c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><polyline points="6 9 12 15 18 9"/></svg>
+          <svg class="s-arrow" id="hiring-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4b405c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;${isHiringExpanded ? 'transform:rotate(180deg);' : ''}transition:transform 200ms;"><polyline points="6 9 12 15 18 9"/></svg>
         </button>
+
+        <!-- Hiring sub-items -->
+        <div id="hiring-submenu" style="display:${isHiringExpanded ? 'flex' : 'none'};flex-direction:column;">
+          <a href="candidate-profile.html" style="text-decoration:none;">
+            <button class="nav-sub-item${isJobPositionsActive ? ' active' : ''}"${isJobPositionsActive ? ' aria-current="page"' : ''}
+              style="display:flex;align-items:center;gap:10px;width:calc(100% - 32px);height:36px;padding:0 8px;margin:1px 8px 1px 24px;text-align:left;outline:none;">
+              <i class="fa-solid fa-briefcase" style="width:16px;font-size:13px;color:${isJobPositionsActive ? '#1e1033' : '#787085'};flex-shrink:0;"></i>
+              <span class="s-label" style="color:${isJobPositionsActive ? '#1e1033' : '#787085'};font-size:13px;${isJobPositionsActive ? 'font-weight:500;' : ''}letter-spacing:-0.13px;line-height:1;white-space:nowrap;">Job positions</span>
+            </button>
+          </a>
+          <button class="nav-sub-item${isAllCandidatesActive ? ' active' : ''}"
+            style="display:flex;align-items:center;gap:10px;width:calc(100% - 32px);height:36px;padding:0 8px;margin:1px 8px 1px 24px;text-align:left;outline:none;">
+            <i class="fa-solid fa-users" style="width:16px;font-size:13px;color:${isAllCandidatesActive ? '#1e1033' : '#787085'};flex-shrink:0;"></i>
+            <span class="s-label" style="color:${isAllCandidatesActive ? '#1e1033' : '#787085'};font-size:13px;${isAllCandidatesActive ? 'font-weight:500;' : ''}letter-spacing:-0.13px;line-height:1;white-space:nowrap;">All Candidates</span>
+          </button>
+          <button class="nav-sub-item${isHiringReportActive ? ' active' : ''}"
+            style="display:flex;align-items:center;gap:10px;width:calc(100% - 32px);height:36px;padding:0 8px;margin:1px 8px 1px 24px;text-align:left;outline:none;">
+            <i class="fa-solid fa-chart-bar" style="width:16px;font-size:13px;color:${isHiringReportActive ? '#1e1033' : '#787085'};flex-shrink:0;"></i>
+            <span class="s-label" style="color:${isHiringReportActive ? '#1e1033' : '#787085'};font-size:13px;${isHiringReportActive ? 'font-weight:500;' : ''}letter-spacing:-0.13px;line-height:1;white-space:nowrap;">Hiring report</span>
+          </button>
+        </div>
 
         <!-- Documents -->
         <button class="nav-item" data-page="Documents" aria-haspopup="true"
@@ -473,6 +499,23 @@
           bmArrow.style.transform = bmOpen ? 'rotate(180deg)' : 'rotate(0deg)';
         }
         bmToggle.setAttribute('aria-expanded', String(bmOpen));
+      });
+    }
+
+    // Hiring submenu toggle
+    const hiringToggle = document.getElementById('hiring-toggle');
+    const hiringSubmenu = document.getElementById('hiring-submenu');
+    const hiringArrow = document.getElementById('hiring-arrow');
+    let hiringOpen = config.navItem === 'hiring';
+
+    if (hiringToggle && hiringSubmenu) {
+      hiringToggle.addEventListener('click', function() {
+        hiringOpen = !hiringOpen;
+        hiringSubmenu.style.display = hiringOpen ? 'flex' : 'none';
+        if (hiringArrow) {
+          hiringArrow.style.transform = hiringOpen ? 'rotate(180deg)' : 'rotate(0deg)';
+        }
+        hiringToggle.setAttribute('aria-expanded', String(hiringOpen));
       });
     }
   }

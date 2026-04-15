@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <title>Talento – Candidate Profile</title>
+  <meta name="description" content="Talento HR Platform – Candidate profile" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared-styles.css" />
+
+  <style>
+    .cp-top-row,
+    .cp-heading-row,
+    .cp-action-strip,
+    .cp-stage-row,
+    .cp-main-grid,
+    .cp-two-col-grid { display: flex; }
+
+    #main-scroll { background: #f6f5f7; }
+
+    .cp-screen-shell {
+      background: #fff;
+      border: 1px solid #e8e7eb;
+      border-radius: 16px;
+      padding: 18px;
+    }
+
+    .cp-top-row { align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+    .cp-breadcrumb { display: flex; align-items: center; gap: 5px; font-size: 14px; color: #787085; }
+    .cp-crumb-link { color: #787085; text-decoration: none; }
+    .cp-crumb-link:hover { color: #4b405c; }
+    .cp-crumb-current { color: #1e1033; }
+    .cp-crumb-separator { color: #c3bdcf; }
+
+    .cp-nav-inline { display: flex; align-items: center; gap: 8px; font-size: 14px; color: #787085; }
+    .cp-link-btn { display: inline-flex; align-items: center; gap: 4px; font-size: 14px; color: #4b405c; }
+
+    .cp-heading-row { justify-content: space-between; align-items: flex-start; gap: 14px; margin-bottom: 12px; flex-wrap: wrap; }
+    .cp-main-title { font-size: 20px; line-height: 1.35; color: #1e1033; font-weight: 600; letter-spacing: -0.2px; }
+    .cp-title-wrap { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .cp-status-badge {
+      display: inline-flex; align-items: center; height: 22px; padding: 0 10px;
+      border-radius: 100px; font-size: 12px; color: #4b405c; background: #f3f4f6;
+    }
+    .cp-meta-row { margin-top: 6px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 14px; color: #787085; }
+    .cp-meta-row strong { color: #1e1033; font-weight: 600; }
+    .cp-recruiter-inline { display: inline-flex; align-items: center; gap: 6px; }
+    .cp-recruiter-inline img { width: 20px; height: 20px; border-radius: 50%; object-fit: cover; }
+
+    .cp-heading-actions { display: flex; align-items: center; gap: 8px; }
+    .cp-secondary-btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+      height: 32px; padding: 0 12px; border: 1px solid #e8e7eb; border-radius: 8px;
+      font-size: 14px; color: #1e1033; background: #fff; transition: background 150ms;
+    }
+    .cp-secondary-btn:hover { background: #f6f5f7; }
+    .cp-icon-btn {
+      width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center;
+      border: 1px solid #e8e7eb; border-radius: 8px; color: #4b405c; background: #fff;
+    }
+
+    .cp-action-strip {
+      align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px;
+      background: #f4f1ff; border: 1px solid #ece8f7; border-radius: 10px; padding: 8px; margin-bottom: 12px;
+    }
+    .cp-action-left { display: flex; gap: 8px; flex-wrap: wrap; }
+    .cp-reject-btn,
+    .cp-approve-btn {
+      height: 30px; padding: 0 10px; border-radius: 8px; font-size: 14px;
+      display: inline-flex; align-items: center; gap: 6px;
+    }
+    .cp-reject-btn { background: #fff; border: 1px solid #e8e7eb; color: #4b405c; }
+    .cp-approve-btn { background: #1e1033; color: #fff; }
+
+    .cp-stage-row {
+      align-items: center; gap: 6px; overflow-x: auto; padding-bottom: 10px; margin-bottom: 10px;
+    }
+    .cp-stage-item { display: inline-flex; align-items: center; gap: 8px; flex-shrink: 0; }
+    .cp-stage-bullet {
+      width: 24px; height: 24px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center;
+      font-size: 12px; border: 1px solid #d9d4e5; color: #787085; background: #fff;
+    }
+    .cp-stage-item.done .cp-stage-bullet { color: #15803d; border-color: #15803d; background: #d7ffe7; }
+    .cp-stage-item.active .cp-stage-bullet { color: #fff; border-color: #1e1033; background: #1e1033; }
+    .cp-stage-label { font-size: 14px; color: #787085; white-space: nowrap; }
+    .cp-stage-item.done .cp-stage-label,
+    .cp-stage-item.active .cp-stage-label { color: #1e1033; }
+    .cp-stage-line { width: 28px; height: 1px; background: #e8e7eb; flex-shrink: 0; }
+
+    .cp-main-grid { align-items: flex-start; gap: 12px; }
+    .cp-left-col { flex: 1 1 65%; min-width: 0; display: grid; gap: 12px; }
+    .cp-right-col { flex: 1 1 35%; min-width: 280px; display: grid; gap: 12px; }
+
+    .cp-card { border: 1px solid #e8e7eb; border-radius: 14px; background: #fff; overflow: hidden; }
+    .cp-card-header { padding: 14px 14px 0; }
+    .cp-card-header h3 { color: #1e1033; font-size: 20px; line-height: 1.3; font-weight: 600; }
+    .cp-card-header p { margin-top: 2px; color: #787085; font-size: 14px; line-height: 1.35; }
+    .cp-section-top {
+      padding: 12px 14px; border-bottom: 1px solid #f0eef6; display: flex; justify-content: space-between; align-items: center; gap: 8px;
+    }
+    .cp-section-top h3, .cp-section-title { font-size: 20px; color: #1e1033; font-weight: 600; line-height: 1.3; }
+
+    .cp-cv-preview { padding: 12px 14px 14px; }
+    .cp-cv-header { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+    .cp-cv-header h2 { font-size: 32px; color: #1e1033; line-height: 1.1; font-weight: 500; }
+    .cp-cv-header p { margin-top: 6px; font-size: 26px; color: #1e1033; line-height: 1.15; }
+    .cp-cv-header img { width: 66px; height: 66px; border-radius: 50%; object-fit: cover; }
+    .cp-cv-meta { margin-top: 10px; font-size: 14px; color: #787085; }
+    .cp-cv-summary { margin-top: 10px; color: #4b405c; font-size: 14px; line-height: 1.6; }
+    .cp-exp-list { margin-top: 10px; display: grid; gap: 8px; }
+    .cp-exp-item strong { display: block; color: #1e1033; font-size: 14px; line-height: 1.35; }
+    .cp-exp-item p, .cp-exp-item span { color: #787085; font-size: 14px; line-height: 1.35; }
+
+    .cp-match-wrap { padding: 12px 14px 14px; display: flex; gap: 12px; justify-content: space-between; align-items: center; }
+    .cp-tag-wrap { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+    .cp-tag {
+      display: inline-flex; align-items: center; height: 22px; padding: 0 10px;
+      border-radius: 100px; background: #ede8fb; color: #7c3aed; font-size: 12px;
+    }
+    .cp-donut-wrap { width: 118px; height: 118px; position: relative; flex-shrink: 0; }
+    .cp-donut-wrap svg { display: block; }
+    .cp-donut-label {
+      position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;
+      color: #787085; font-size: 14px;
+    }
+    .cp-donut-label strong { font-size: 24px; color: #1e1033; line-height: 1; margin-top: 2px; }
+
+    .cp-contact-list, .cp-info-list { padding: 12px 14px 14px; display: grid; gap: 8px; }
+    .cp-contact-row {
+      border: 1px solid #e8e7eb; border-radius: 10px; min-height: 42px; padding: 6px 8px;
+      display: flex; justify-content: space-between; align-items: center; gap: 8px;
+    }
+    .cp-contact-value { display: inline-flex; align-items: center; gap: 6px; color: #1e1033; font-size: 14px; line-height: 1.35; }
+    .cp-copy-btn {
+      height: 30px; padding: 0 10px; border: 1px solid #e8e7eb; border-radius: 8px; font-size: 14px; color: #4b405c; background: #fff;
+      display: inline-flex; align-items: center; gap: 5px;
+    }
+
+    .cp-info-row { padding: 8px 0; border-bottom: 1px solid #f0eef6; display: grid; gap: 4px; }
+    .cp-info-row:last-child { border-bottom: none; }
+    .cp-info-label { display: inline-flex; align-items: center; gap: 6px; color: #787085; font-size: 14px; }
+    .cp-info-row strong { color: #1e1033; font-size: 14px; font-weight: 600; }
+
+    .cp-two-col-grid { gap: 18px; padding: 12px 14px 14px; border-top: 1px solid #f0eef6; }
+    .cp-two-col-grid > div { flex: 1; min-width: 0; }
+    .cp-kv-row { padding: 7px 0; display: grid; gap: 3px; border-bottom: 1px solid #f7f5fa; }
+    .cp-kv-row:last-child { border-bottom: none; }
+    .cp-kv-row span { color: #787085; font-size: 14px; line-height: 1.35; }
+    .cp-kv-row strong { color: #1e1033; font-size: 14px; line-height: 1.35; font-weight: 600; }
+
+    @media (max-width: 1200px) {
+      .cp-main-grid { flex-direction: column; }
+      .cp-right-col { min-width: 0; width: 100%; }
+    }
+
+    @media (max-width: 900px) {
+      .cp-top-row { flex-direction: column; align-items: flex-start; }
+      .cp-heading-actions { width: 100%; justify-content: flex-start; }
+      .cp-two-col-grid { flex-direction: column; gap: 4px; }
+      .cp-cv-header h2 { font-size: 26px; }
+      .cp-cv-header p { font-size: 20px; }
+    }
+
+    @media (max-width: 640px) {
+      .cp-screen-shell { padding: 12px; border-radius: 12px; }
+      .cp-main-title,
+      .cp-card-header h3,
+      .cp-section-top h3,
+      .cp-section-title { font-size: 20px; }
+      .cp-match-wrap { flex-direction: column; align-items: flex-start; }
+      .cp-action-strip { align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="app">
+  <aside id="sidebar"></aside>
+  <div id="overlay"></div>
+  <div id="main-col">
+    <header id="navbar" style="display:flex;align-items:center;justify-content:space-between;height:54px;padding:0 16px;border-bottom:1px solid #e8e7eb;flex-shrink:0;background:#fff;"></header>
+    <main id="main-scroll" style="padding:24px 20px 40px;">
+      <div class="cp-screen-shell">
+        <div id="candidate-profile-content"></div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="layout.js"></script>
+<script src="candidate_profile_components.js"></script>
+<script>
+(function() {
+  'use strict';
+
+  const pageData = {
+    pipelineHeader: {
+      items: [
+        { label: 'Pipeline', href: '#' },
+        { label: 'Candidate profile' }
+      ],
+      currentIndex: 1,
+      total: 2
+    },
+    candidate: {
+      name: 'Samira AlSubaie',
+      badge: 'In review',
+      jobTitle: 'Product designer',
+      appliedDate: '12 Jan 2026',
+      recruiterName: 'Mishari AlSubaie',
+      recruiterAvatar: 'https://randomuser.me/api/portraits/men/35.jpg'
+    },
+    stageConfig: {
+      stages: ['New', 'First interview', 'Second interview', 'Job offer'],
+      activeStage: 1
+    },
+    cv: {
+      candidateName: 'Samira AlSubaie',
+      role: 'Senior Product Designer',
+      email: 'yourmail@gmail.com',
+      phone: '+33 6 33 33 33 33',
+      avatar: 'https://randomuser.me/api/portraits/women/65.jpg',
+      summary: 'Directly collaborated with CEO and Product team to prototype, design and deliver user experiences with a lean design process: research, design, test, and iterate.',
+      experience: [
+        { title: 'Senior UI/UX Product Designer', company: 'Enterprise name', period: 'Aug 2018 - Present • 1 year, Paris' },
+        { title: 'UI/UX Product Designer', company: 'Enterprise name', period: 'Aug 2013 - Aug 2018 • 5 years, Paris' },
+        { title: 'UI Designer', company: 'Enterprise name', period: 'Aug 2012 - Jul 2013 • 1 year, Paris' }
+      ]
+    },
+    predictedMatch: {
+      title: 'Predicted match',
+      subtitle: 'Product designer L2',
+      tags: ['Wireframes', 'Figma', 'User research', 'Fintech', 'Atlassian', 'JIRA', 'SCRUM', 'Lottie animations'],
+      percent: 62
+    },
+    contacts: {
+      contacts: [
+        { icon: CandidateProfileComponents.Icons.mail, value: 'alabdulkarim@company.com' },
+        { icon: CandidateProfileComponents.Icons.phone, value: '+966-32532-7457' }
+      ]
+    },
+    additional: {
+      items: [
+        { icon: CandidateProfileComponents.Icons.briefcase, label: 'Experience', value: '8 years of experience' },
+        { icon: CandidateProfileComponents.Icons.calendar, label: 'Available start date', value: 'May 27, 2026' },
+        { icon: CandidateProfileComponents.Icons.mapPin, label: 'Address', value: '335 South 560 West Lindon, Utah 84042' },
+        { icon: CandidateProfileComponents.Icons.graduationCap, label: 'College/University', value: 'NYU' },
+        { icon: CandidateProfileComponents.Icons.list, label: 'Highest Education Obtained', value: 'College - Bachelor of Fine Arts' },
+        { icon: CandidateProfileComponents.Icons.user, label: 'Referred By', value: 'Mishari AlSubaie' }
+      ]
+    },
+    salaryDetails: {
+      title: 'Salary and allowances details',
+      icon: CandidateProfileComponents.Icons.briefcase,
+      leftItems: [
+        { label: 'Basic salary during trial period', value: 'SAR 15,500.00' },
+        { label: 'Total allowance during trial period', value: 'SAR 2,000.00' },
+        { label: 'Current salary', value: 'Not Provided' }
+      ],
+      rightItems: [
+        { label: 'Expected salary', value: 'SAR 15,000.00' },
+        { label: 'Proposed salary after trial period', value: 'SAR 14,000.00' },
+        { label: 'Total allowance during after trial period', value: 'SAR 3,000.00' }
+      ]
+    },
+    personalInformation: {
+      title: 'Personal information',
+      icon: CandidateProfileComponents.Icons.user,
+      leftItems: [
+        { label: 'Nationality', value: 'Not Provided' },
+        { label: 'Marital status', value: 'Single' },
+        { label: 'Birth date', value: 'Not Provided' },
+        { label: 'Iqama expiry date', value: 'Not Provided' },
+        { label: 'Profession in Iqama', value: 'Not Provided' }
+      ],
+      rightItems: [
+        { label: 'Gender', value: 'Female' },
+        { label: 'Religion', value: 'Muslim' },
+        { label: 'Iqama ID', value: 'Not Provided' },
+        { label: 'Iqama issue date', value: 'Not Provided' },
+        { label: 'Iqama issue place', value: 'Not Provided' }
+      ]
+    }
+  };
+
+  document.addEventListener('DOMContentLoaded', function() {
+    CandidateProfileComponents.render('#candidate-profile-content', pageData);
+  });
+})();
+</script>
+
+</body>
+</html>
+
