@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <title>Talento - Save and publish survey</title>
+  <meta name="description" content="Talento HR Platform - Save and publish survey" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared-styles.css" />
+
+  <style>
+    #main-scroll {
+      background: #f6f5f7;
+      position: relative;
+      min-height: calc(100vh - 54px);
+    }
+
+    .sv-page-wrap {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 18px 8px 28px;
+    }
+
+    .sv-top-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .sv-title {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #1e1033;
+      font-size: 20px;
+      font-weight: 500;
+      letter-spacing: -0.2px;
+      line-height: 1.3;
+      margin: 0;
+    }
+
+    .sv-top-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-left: auto;
+    }
+
+    .sv-secondary-btn,
+    .sv-primary-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      height: 34px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 0 12px;
+      border: 1px solid #e8e7eb;
+      transition: background 150ms ease;
+      white-space: nowrap;
+      text-decoration: none;
+      cursor: pointer;
+      font-family: 'Alexandria', Helvetica, sans-serif;
+    }
+    .sv-secondary-btn { color: #1e1033; background: #ffffff; }
+    .sv-secondary-btn:hover { background: #f6f5f7; }
+    .sv-primary-btn { color: #ffffff; background: #1e1033; border-color: #1e1033; }
+    .sv-primary-btn:hover { background: #2a1745; }
+
+    .sv-save-overlay-wrap {
+      position: relative;
+      min-height: calc(100vh - 160px);
+      padding: 40px 20px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      background: rgba(30, 16, 51, 0.18);
+      border-radius: 24px;
+    }
+
+    .sv-publish-modal {
+      width: min(100%, 940px);
+      background: #fff;
+      border: 1px solid #e8e7eb;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 24px 46px rgba(30, 16, 51, 0.14);
+    }
+
+    .sv-publish-modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 22px 30px;
+      border-bottom: 1px solid #ece9f2;
+    }
+
+    .sv-publish-modal-title {
+      margin: 0;
+      color: #1e1033;
+      font-size: 20px;
+      line-height: 1.25;
+      font-weight: 600;
+    }
+
+    .sv-publish-close-btn {
+      border: none;
+      background: transparent;
+      padding: 0;
+      width: 24px;
+      height: 24px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .sv-publish-modal-body { min-height: 380px; }
+
+    .sv-publish-section {
+      padding: 20px 30px;
+      border-bottom: 1px solid #ece9f2;
+    }
+
+    .sv-publish-section-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .sv-publish-section-title {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: #1e1033;
+    }
+    .sv-publish-section-title h3 {
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.3;
+      font-weight: 500;
+    }
+    .sv-publish-section-icon {
+      width: 16px;
+      height: 16px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #787085;
+      flex-shrink: 0;
+    }
+    .sv-publish-section-icon svg {
+      width: 16px;
+      height: 16px;
+      display: block;
+      stroke: currentColor;
+    }
+
+    .sv-publish-toggle {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px;
+      border-radius: 999px;
+      background: #f0eef4;
+      min-width: 142px;
+    }
+    .sv-publish-toggle-btn {
+      border: none;
+      background: transparent;
+      min-width: 68px;
+      height: 28px;
+      border-radius: 999px;
+      color: #938ca2;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: 'Alexandria', Helvetica, sans-serif;
+    }
+    .sv-publish-toggle-btn.active {
+      background: #1e1033;
+      color: #ffffff;
+      box-shadow: 0 2px 5px rgba(30, 16, 51, 0.14);
+    }
+
+    .sv-publish-audience-grid {
+      margin-top: 16px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .sv-publish-audience-option {
+      border: 1px solid #dcd8e5;
+      border-radius: 12px;
+      background: #fff;
+      padding: 10px 12px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      cursor: pointer;
+      transition: border-color 150ms ease, background 150ms ease;
+    }
+    .sv-publish-audience-option input[type='radio'] {
+      margin: 0;
+      width: 18px;
+      height: 18px;
+      accent-color: #ba8aff;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .sv-publish-audience-option-inner {
+      display: grid;
+      gap: 4px;
+      min-width: 0;
+    }
+    .sv-publish-audience-option-title {
+      color: #1e1033;
+      font-size: 14px;
+      line-height: 1.3;
+      font-weight: 500;
+    }
+    .sv-publish-audience-option-desc {
+      color: #787085;
+      font-size: 14px;
+      line-height: 1.3;
+    }
+    .sv-publish-audience-option.active {
+      border-color: #ba8aff;
+      background: #fcfbff;
+      box-shadow: inset 0 0 0 1px #ece0ff;
+    }
+
+    .sv-publish-modal-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 14px 30px;
+      border-top: 1px solid #ece9f2;
+      flex-wrap: wrap;
+    }
+
+    .sv-publish-link-btn {
+      height: 40px;
+      border-radius: 12px;
+      border: 1px solid #ba8aff;
+      background: #ffffff;
+      color: #1e1033;
+      font-size: 14px;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 14px;
+      font-family: 'Alexandria', Helvetica, sans-serif;
+      cursor: pointer;
+    }
+
+    .sv-publish-footer-actions {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-left: auto;
+    }
+    .sv-publish-footer-actions .sv-secondary-btn,
+    .sv-publish-footer-actions .sv-primary-btn {
+      height: 40px;
+      border-radius: 12px;
+      padding: 0 16px;
+    }
+
+    @media (max-width: 920px) {
+      .sv-save-overlay-wrap {
+        border-radius: 18px;
+        padding: 20px 10px;
+      }
+      .sv-publish-modal-header,
+      .sv-publish-section,
+      .sv-publish-modal-footer {
+        padding-left: 16px;
+        padding-right: 16px;
+      }
+      .sv-publish-audience-grid { grid-template-columns: 1fr; }
+      .sv-publish-modal-body { min-height: 300px; }
+    }
+
+    @media (max-width: 640px) {
+      #main-scroll { padding: 12px 10px 20px !important; }
+      .sv-page-wrap { padding: 10px 0 12px; }
+      .sv-save-overlay-wrap {
+        min-height: auto;
+        padding: 12px 4px;
+      }
+      .sv-top-actions { width: 100%; justify-content: flex-end; }
+      .sv-publish-modal-title { font-size: 20px; }
+      .sv-publish-modal-footer { justify-content: flex-start; }
+      .sv-publish-footer-actions {
+        width: 100%;
+        margin-left: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+  <aside id="sidebar"></aside>
+  <div id="overlay"></div>
+  <div id="main-col">
+    <header id="navbar" style="display:flex;align-items:center;justify-content:space-between;height:54px;padding:0 16px;border-bottom:1px solid #e8e7eb;flex-shrink:0;background:#fff;"></header>
+    <main id="main-scroll" style="padding:18px 18px 30px;">
+      <div class="sv-page-wrap">
+        <div id="save-publish-root"></div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="layout.js"></script>
+<script src="survey_components.js"></script>
+<script>
+(function() {
+  'use strict';
+
+  const savePublishData = {
+    header: {
+      title: 'Create new survey',
+      showBack: false,
+      previewIcon: 'chevron',
+      saveIcon: 'check'
+    },
+    modal: {
+      title: 'Save and publish survey',
+      acceptingResponses: {
+        title: 'Accepting responses',
+        leftLabel: 'No',
+        rightLabel: 'Yes',
+        active: 'Yes'
+      },
+      participants: {
+        title: 'Participants',
+        name: 'participants',
+        options: [
+          {
+            id: 'all-employees',
+            title: 'All employees',
+            description: 'Send survey to all employees in the organization',
+            selected: true
+          },
+          {
+            id: 'selected-employees',
+            title: 'Selected employees',
+            description: 'Send survey to a selected group of employees',
+            selected: false
+          }
+        ]
+      },
+      footer: {
+        copyLinkText: 'Copy responder link',
+        cancelText: 'Cancel',
+        saveText: 'Save & publish'
+      }
+    }
+  };
+
+  document.addEventListener('DOMContentLoaded', function() {
+    SurveyComponents.renderSavePublish('#save-publish-root', savePublishData);
+  });
+})();
+</script>
+</body>
+</html>

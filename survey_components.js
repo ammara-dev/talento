@@ -23,7 +23,11 @@ const SurveyComponents = (function() {
     shortAnswer: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#787085" stroke-width="2" stroke-linecap="round"><line x1="4" y1="8" x2="20" y2="8"/><line x1="4" y1="12" x2="16" y2="12"/><line x1="4" y1="16" x2="12" y2="16"/></svg>`,
     paragraph: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#787085" stroke-width="2" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="11" x2="20" y2="11"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="4" y1="19" x2="20" y2="19"/></svg>`,
     xSmall: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#A9A3B6" stroke-width="2.2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`,
-    check: `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`
+    check: `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`,
+    close: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#787085" stroke-width="2.2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`,
+    link: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8A67D5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.07 0l2.83-2.83a5 5 0 0 0-7.07-7.07L11 4"/><path d="M14 11a5 5 0 0 0-7.07 0L4.1 13.83a5 5 0 0 0 7.07 7.07L13 19"/></svg>`,
+    participants: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#787085" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="3"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a3 3 0 0 1 0 5.74"/></svg>`,
+    responses: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#787085" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>`
   };
 
   function getTypeIcon(typeLabel) {
@@ -193,18 +197,35 @@ const SurveyComponents = (function() {
   function TopBar(config) {
     const {
       title = 'Create new survey',
+      variant = 'default', // 'default' | 'compact'
+      showBack = true,
+      previewHref = '',
+      saveHref = '',
       previewIcon = 'eye', // 'eye' | 'chevron'
       saveIcon = 'check'
     } = config;
     const previewIconSvg = previewIcon === 'chevron' ? Icons.chevronDown : Icons.eye;
     const saveIconSvg = saveIcon === 'none' ? '' : Icons.checkAccent;
+    const isCompact = variant === 'compact';
+    const topRowClass = `sv-top-row${isCompact ? ' sv-top-row-compact' : ''}`;
+    const titleClass = `sv-title${isCompact ? ' sv-title-compact' : ''}`;
+    const secondaryBtnClass = `sv-secondary-btn${isCompact ? ' sv-secondary-btn-compact' : ''}`;
+    const primaryBtnClass = `sv-primary-btn${isCompact ? ' sv-primary-btn-compact' : ''}`;
+    const backIcon = showBack ? `<span class="sv-title-back">${Icons.back}</span>` : '';
+
+    function renderAction(label, icon, className, href) {
+      if (href) {
+        return `<a class="${className}" href="${href}">${label} ${icon}</a>`;
+      }
+      return `<button class="${className}" type="button">${label} ${icon}</button>`;
+    }
 
     return `
-      <div class="sv-top-row">
-        <h1 class="sv-title">${Icons.back} ${title}</h1>
+      <div class="${topRowClass}">
+        <h1 class="${titleClass}">${backIcon}<span>${title}</span></h1>
         <div class="sv-top-actions">
-          <button class="sv-secondary-btn" type="button">Preview ${previewIconSvg}</button>
-          <button class="sv-primary-btn" type="button">Save and publish ${saveIconSvg}</button>
+          ${renderAction('Preview', previewIconSvg, secondaryBtnClass, previewHref)}
+          ${renderAction('Save and publish', saveIconSvg, primaryBtnClass, saveHref)}
         </div>
       </div>
     `;
@@ -240,6 +261,135 @@ const SurveyComponents = (function() {
           }).join('')}
         </div>
       </section>
+    `;
+  }
+
+  function SavePublishSectionTitle(config) {
+    const {
+      title = '',
+      icon = ''
+    } = config;
+    return `
+      <div class="sv-publish-section-title">
+        <span class="sv-publish-section-icon">${icon}</span>
+        <h3>${title}</h3>
+      </div>
+    `;
+  }
+
+  function SavePublishToggle(config) {
+    const {
+      leftLabel = 'No',
+      rightLabel = 'Yes',
+      active = 'right'
+    } = config;
+    const rightActive = active === 'right' || String(active).toLowerCase() === String(rightLabel).toLowerCase();
+    return `
+      <div class="sv-publish-toggle" role="group" aria-label="Accepting responses">
+        <button type="button" class="sv-publish-toggle-btn${rightActive ? '' : ' active'}">${leftLabel}</button>
+        <button type="button" class="sv-publish-toggle-btn${rightActive ? ' active' : ''}">${rightLabel}</button>
+      </div>
+    `;
+  }
+
+  function SavePublishAudienceOption(config) {
+    const {
+      id = '',
+      name = 'participants',
+      title = '',
+      description = '',
+      selected = false
+    } = config;
+    return `
+      <label class="sv-publish-audience-option${selected ? ' active' : ''}">
+        <input type="radio" name="${name}" value="${id}" ${selected ? 'checked' : ''} />
+        <span class="sv-publish-audience-option-inner">
+          <span class="sv-publish-audience-option-title">${title}</span>
+          <span class="sv-publish-audience-option-desc">${description}</span>
+        </span>
+      </label>
+    `;
+  }
+
+  function SavePublishAudienceGroup(config) {
+    const {
+      options = [],
+      name = 'participants'
+    } = config;
+    return `
+      <div class="sv-publish-audience-grid">
+        ${options.map(function(option) {
+          return SavePublishAudienceOption({
+            id: option.id,
+            name,
+            title: option.title,
+            description: option.description,
+            selected: !!option.selected
+          });
+        }).join('')}
+      </div>
+    `;
+  }
+
+  function SavePublishModal(config) {
+    const {
+      title = 'Save and publish survey',
+      acceptingResponses = {},
+      participants = {},
+      footer = {}
+    } = config;
+
+    return `
+      <section class="sv-publish-modal" role="dialog" aria-modal="true" aria-label="${title}">
+        <header class="sv-publish-modal-header">
+          <h2 class="sv-publish-modal-title">${title}</h2>
+          <button class="sv-publish-close-btn" type="button" aria-label="Close">${Icons.close}</button>
+        </header>
+
+        <div class="sv-publish-modal-body">
+          <section class="sv-publish-section">
+            <div class="sv-publish-section-row">
+              ${SavePublishSectionTitle({
+                title: acceptingResponses.title || 'Accepting responses',
+                icon: Icons.responses
+              })}
+              ${SavePublishToggle({
+                leftLabel: acceptingResponses.leftLabel || 'No',
+                rightLabel: acceptingResponses.rightLabel || 'Yes',
+                active: acceptingResponses.active || 'Yes'
+              })}
+            </div>
+          </section>
+
+          <section class="sv-publish-section">
+            ${SavePublishSectionTitle({
+              title: participants.title || 'Participants',
+              icon: Icons.participants
+            })}
+            ${SavePublishAudienceGroup({
+              name: participants.name || 'participants',
+              options: participants.options || []
+            })}
+          </section>
+        </div>
+
+        <footer class="sv-publish-modal-footer">
+          <button class="sv-publish-link-btn" type="button">${footer.copyLinkText || 'Copy responder link'} ${Icons.link}</button>
+          <div class="sv-publish-footer-actions">
+            <button class="sv-secondary-btn" type="button">${footer.cancelText || 'Cancel'} ${Icons.xSmall}</button>
+            <button class="sv-primary-btn" type="button">${footer.saveText || 'Save & publish'} ${Icons.checkAccent}</button>
+          </div>
+        </footer>
+      </section>
+    `;
+  }
+
+  function SavePublishPage(data) {
+    return `
+      ${TopBar(data.header || {})}
+      <div class="sv-save-overlay-wrap">
+        ${SavePublishModal(data.modal || {})}
+      </div>
     `;
   }
 
@@ -301,6 +451,15 @@ const SurveyComponents = (function() {
     container.innerHTML = CreateSurveyChooseTypePage(data);
   }
 
+  function renderSavePublish(containerSelector, data) {
+    const container = typeof containerSelector === 'string'
+      ? document.querySelector(containerSelector)
+      : containerSelector;
+
+    if (!container) return;
+    container.innerHTML = SavePublishPage(data);
+  }
+
   return {
     Icons,
     Field,
@@ -308,9 +467,15 @@ const SurveyComponents = (function() {
     SurveyMetaCard,
     QuestionTypeOption,
     ChooseQuestionTypeCard,
+    SavePublishModal,
+    SavePublishAudienceOption,
+    SavePublishAudienceGroup,
+    SavePublishSectionTitle,
+    SavePublishToggle,
     TopBar,
     render,
-    renderChooseType
+    renderChooseType,
+    renderSavePublish
   };
 })();
 

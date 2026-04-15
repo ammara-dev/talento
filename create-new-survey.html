@@ -65,6 +65,8 @@
       border: 1px solid #e8e7eb;
       transition: background 150ms ease;
       white-space: nowrap;
+      text-decoration: none;
+      cursor: pointer;
     }
     .sv-secondary-btn { color: #1e1033; background: #ffffff; }
     .sv-secondary-btn:hover { background: #f6f5f7; }
@@ -395,7 +397,9 @@
 
   const surveyPageData = {
     header: {
-      title: 'Create new survey'
+      title: 'Create new survey',
+      showBack: false,
+      saveHref: 'save-and-publish-survey.html'
     },
     meta: {
       title: 'Employee satisfaction survey',
