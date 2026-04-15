@@ -19,7 +19,8 @@
     'payroll-detail.html': { navItem: 'finance', submenu: 'payroll' },
     'loans.html': { navItem: 'finance', submenu: 'loans' },
     'loan-installments.html': { navItem: 'finance', submenu: 'loans' },
-    'candidate-profile.html': { navItem: 'hiring', submenu: 'job-positions' }
+    'candidate-profile.html': { navItem: 'hiring', submenu: 'job-positions' },
+    'create-new-survey.html': { navItem: 'team-engagement', submenu: 'surveys' }
   };
 
   const config = pageConfig[currentPage] || pageConfig['index.html'];
@@ -41,6 +42,9 @@
     const isAllCandidatesActive = config.submenu === 'all-candidates';
     const isHiringReportActive = config.submenu === 'hiring-report';
     const isHiringExpanded = config.navItem === 'hiring';
+    const isSurveysActive = config.submenu === 'surveys';
+    const isPerformanceEvaluationActive = config.submenu === 'performance-evaluation';
+    const isTeamEngagementExpanded = config.navItem === 'team-engagement';
 
     return `
     <!-- Logo + Collapse -->
@@ -248,14 +252,28 @@
         </button>
 
         <!-- Team engagement -->
-        <button class="nav-item" data-page="Team engagement" aria-haspopup="true"
+        <button class="nav-item" id="team-engagement-toggle" data-page="Team engagement" aria-haspopup="true" aria-expanded="${isTeamEngagementExpanded}"
           style="display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;height:40px;border-radius:8px;padding:0 16px;outline:none;">
           <span style="display:flex;align-items:center;gap:10px;">
             <i class="fa-solid fa-people-group" style="width:20px;font-size:16px;color:#1e1033;flex-shrink:0;"></i>
             <span class="s-label" style="color:#1e1033;font-size:14px;letter-spacing:-0.14px;white-space:nowrap;">Team engagement</span>
           </span>
-          <svg class="s-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4b405c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><polyline points="6 9 12 15 18 9"/></svg>
+          <svg class="s-arrow" id="team-engagement-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4b405c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;${isTeamEngagementExpanded ? 'transform:rotate(180deg);' : ''}transition:transform 200ms;"><polyline points="6 9 12 15 18 9"/></svg>
         </button>
+        <div id="team-engagement-submenu" style="display:${isTeamEngagementExpanded ? 'flex' : 'none'};flex-direction:column;">
+          <a href="create-new-survey.html" style="text-decoration:none;">
+            <button class="nav-sub-item${isSurveysActive ? ' active' : ''}"${isSurveysActive ? ' aria-current="page"' : ''}
+              style="display:flex;align-items:center;gap:10px;width:calc(100% - 32px);height:36px;padding:0 8px;margin:1px 8px 1px 24px;text-align:left;outline:none;">
+              <i class="fa-regular fa-rectangle-list" style="width:16px;font-size:13px;color:${isSurveysActive ? '#1e1033' : '#787085'};flex-shrink:0;"></i>
+              <span class="s-label" style="color:${isSurveysActive ? '#1e1033' : '#787085'};font-size:13px;${isSurveysActive ? 'font-weight:500;' : ''}letter-spacing:-0.13px;line-height:1;white-space:nowrap;">Surveys</span>
+            </button>
+          </a>
+          <button class="nav-sub-item${isPerformanceEvaluationActive ? ' active' : ''}"
+            style="display:flex;align-items:center;gap:10px;width:calc(100% - 32px);height:36px;padding:0 8px;margin:1px 8px 1px 24px;text-align:left;outline:none;">
+            <i class="fa-solid fa-chart-line" style="width:16px;font-size:13px;color:${isPerformanceEvaluationActive ? '#1e1033' : '#787085'};flex-shrink:0;"></i>
+            <span class="s-label" style="color:${isPerformanceEvaluationActive ? '#1e1033' : '#787085'};font-size:13px;${isPerformanceEvaluationActive ? 'font-weight:500;' : ''}letter-spacing:-0.13px;line-height:1;white-space:nowrap;">Performance evaluation</span>
+          </button>
+        </div>
 
         <!-- Mobile app -->
         <button class="nav-item" data-page="Mobile app" aria-haspopup="true"
@@ -516,6 +534,23 @@
           hiringArrow.style.transform = hiringOpen ? 'rotate(180deg)' : 'rotate(0deg)';
         }
         hiringToggle.setAttribute('aria-expanded', String(hiringOpen));
+      });
+    }
+
+    // Team engagement submenu toggle
+    const teamToggle = document.getElementById('team-engagement-toggle');
+    const teamSubmenu = document.getElementById('team-engagement-submenu');
+    const teamArrow = document.getElementById('team-engagement-arrow');
+    let teamOpen = config.navItem === 'team-engagement';
+
+    if (teamToggle && teamSubmenu) {
+      teamToggle.addEventListener('click', function() {
+        teamOpen = !teamOpen;
+        teamSubmenu.style.display = teamOpen ? 'flex' : 'none';
+        if (teamArrow) {
+          teamArrow.style.transform = teamOpen ? 'rotate(180deg)' : 'rotate(0deg)';
+        }
+        teamToggle.setAttribute('aria-expanded', String(teamOpen));
       });
     }
   }

@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <title>Talento - Create New Survey</title>
+  <meta name="description" content="Talento HR Platform - Create new survey" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared-styles.css" />
+
+  <style>
+    #main-scroll { background: #f6f5f7; }
+
+    .sv-page-wrap {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 18px 6px 28px;
+    }
+
+    .sv-top-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .sv-title {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #1e1033;
+      font-size: 20px;
+      font-weight: 500;
+      letter-spacing: -0.2px;
+      line-height: 1.3;
+    }
+    .sv-title svg { color: #787085; flex-shrink: 0; }
+
+    .sv-top-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-left: auto;
+    }
+
+    .sv-secondary-btn,
+    .sv-primary-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      height: 34px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 0 12px;
+      border: 1px solid #e8e7eb;
+      transition: background 150ms ease;
+      white-space: nowrap;
+    }
+    .sv-secondary-btn { color: #1e1033; background: #ffffff; }
+    .sv-secondary-btn:hover { background: #f6f5f7; }
+    .sv-primary-btn { color: #ffffff; background: #1e1033; border-color: #1e1033; }
+    .sv-primary-btn:hover { background: #2a1745; }
+
+    .sv-page-stack {
+      max-width: 630px;
+      margin: 0 auto;
+      display: grid;
+      gap: 12px;
+    }
+
+    .sv-card {
+      background: #ffffff;
+      border: 1px solid #e8e7eb;
+      border-radius: 16px;
+      padding: 14px;
+      display: grid;
+      gap: 12px;
+    }
+    .sv-card-highlighted {
+      border-color: #d5c1f8;
+      box-shadow: 0 0 0 1px #e7dafc inset;
+    }
+
+    .sv-field {
+      display: grid;
+      gap: 6px;
+    }
+    .sv-label {
+      color: #4b405c;
+      font-size: 12px;
+      line-height: 1.3;
+      font-weight: 500;
+    }
+
+    .sv-input,
+    .sv-option-input {
+      width: 100%;
+      height: 40px;
+      border-radius: 9px;
+      border: 1px solid #e8e7eb;
+      background: #ffffff;
+      padding: 0 12px;
+      font-size: 14px;
+      color: #1e1033;
+      outline: none;
+      transition: border-color 150ms ease, box-shadow 150ms ease;
+      font-family: 'Alexandria', Helvetica, sans-serif;
+    }
+    .sv-input:focus,
+    .sv-option-input:focus {
+      border-color: #ba8aff;
+      box-shadow: 0 0 0 2px #f0e9ff;
+    }
+    .sv-input::placeholder,
+    .sv-option-input::placeholder {
+      color: #a09aab;
+      font-size: 14px;
+    }
+    .sv-textarea {
+      min-height: 40px;
+      height: 40px;
+      line-height: 40px;
+      resize: vertical;
+    }
+
+    .sv-question-top {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 22px;
+    }
+    .sv-drag {
+      display: inline-flex;
+      color: #a09aab;
+      flex-shrink: 0;
+    }
+
+    .sv-chip {
+      display: inline-flex;
+      align-items: center;
+      height: 20px;
+      border-radius: 999px;
+      padding: 0 8px;
+      background: #f6f5f7;
+      color: #4b405c;
+      font-size: 11px;
+      white-space: nowrap;
+      line-height: 1;
+    }
+
+    .sv-question-body {
+      display: grid;
+      gap: 10px;
+    }
+
+    .sv-options-block {
+      display: grid;
+      gap: 8px;
+      margin-top: 2px;
+    }
+    .sv-options-title {
+      font-size: 14px;
+      color: #1e1033;
+      font-weight: 500;
+      line-height: 1.4;
+    }
+    .sv-option-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .sv-option-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 14px;
+      color: #787085;
+      flex-shrink: 0;
+    }
+    .sv-option-remove {
+      color: #a09aab;
+      width: 16px;
+      height: 16px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      border: none;
+      background: transparent;
+      padding: 0;
+    }
+    .sv-option-remove svg { width: 16px; height: 16px; }
+    .sv-add-option-row {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: nowrap;
+      white-space: nowrap;
+      justify-self: start;
+      margin-top: 2px;
+    }
+    .sv-add-option {
+      color: #8a67d5;
+      font-size: 14px;
+      line-height: 1.4;
+      border: none;
+      background: transparent;
+      padding: 0;
+    }
+    .sv-or-text {
+      color: #a09aab;
+      font-size: 14px;
+      line-height: 1.2;
+    }
+
+    .sv-rating-wrap {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: end;
+      gap: 10px;
+      margin-top: 4px;
+    }
+    .sv-rating-items {
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: minmax(18px, auto);
+      align-items: end;
+      gap: 11px;
+      min-width: 0;
+    }
+    .sv-rating-item {
+      display: grid;
+      gap: 4px;
+      justify-items: center;
+      min-width: 18px;
+    }
+    .sv-rating-number {
+      color: #787085;
+      font-size: 10px;
+      line-height: 1;
+    }
+
+    .sv-question-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 2px;
+    }
+
+    .sv-required-wrap {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #1e1033;
+      font-size: 14px;
+      line-height: 1.3;
+    }
+    .sv-required-check {
+      width: 14px;
+      height: 14px;
+      border-radius: 3px;
+      background: #1e1033;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .sv-required-input {
+      position: absolute;
+      opacity: 0;
+      width: 1px;
+      height: 1px;
+      pointer-events: none;
+    }
+
+    .sv-question-actions {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-left: auto;
+      flex-wrap: wrap;
+    }
+    .sv-select-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      height: 30px;
+      border: 1px solid #e8e7eb;
+      border-radius: 7px;
+      padding: 0 10px;
+      font-size: 12px;
+      color: #4b405c;
+      background: #ffffff;
+      white-space: nowrap;
+    }
+    .sv-icon-btn {
+      width: 28px;
+      height: 28px;
+      border: 1px solid #e8e7eb;
+      border-radius: 7px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #787085;
+      background: #ffffff;
+    }
+
+    .sv-add-question {
+      height: 46px;
+      border-radius: 12px;
+      border: 1px solid #e8e7eb;
+      background: #ffffff;
+      color: #1e1033;
+      font-size: 14px;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    @media (max-width: 900px) {
+      .sv-page-wrap { padding: 16px 2px 24px; }
+      .sv-page-stack { max-width: 100%; }
+    }
+
+    @media (max-width: 640px) {
+      #main-scroll { padding: 14px 10px 24px !important; }
+      .sv-top-row { margin-bottom: 12px; }
+      .sv-title { font-size: 20px; }
+      .sv-card { padding: 12px; border-radius: 14px; }
+      .sv-question-actions { margin-left: 0; }
+      .sv-select-btn { font-size: 12px; padding: 0 8px; }
+      .sv-add-option-row { flex-wrap: wrap; white-space: normal; }
+      .sv-rating-wrap {
+        grid-template-columns: 1fr;
+        align-items: start;
+        gap: 8px;
+      }
+      .sv-rating-items {
+        grid-auto-flow: row;
+        grid-template-columns: repeat(5, minmax(18px, auto));
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div id="app">
+  <aside id="sidebar"></aside>
+  <div id="overlay"></div>
+  <div id="main-col">
+    <header id="navbar" style="display:flex;align-items:center;justify-content:space-between;height:54px;padding:0 16px;border-bottom:1px solid #e8e7eb;flex-shrink:0;background:#fff;"></header>
+    <main id="main-scroll" style="padding:18px 18px 30px;">
+      <div class="sv-page-wrap">
+        <div id="create-survey-root"></div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="layout.js"></script>
+<script src="survey_components.js"></script>
+<script>
+(function() {
+  'use strict';
+
+  const surveyPageData = {
+    header: {
+      title: 'Create new survey'
+    },
+    meta: {
+      title: 'Employee satisfaction survey',
+      description: ''
+    },
+    questions: [
+      {
+        type: 'Short answer',
+        questionPlaceholder: 'Enter your question',
+        descriptionPlaceholder: 'Add description'
+      },
+      {
+        type: 'Paragraph',
+        questionPlaceholder: 'Enter your question',
+        descriptionPlaceholder: 'Add description'
+      },
+      {
+        type: 'Multiple choice',
+        questionPlaceholder: 'Enter your question',
+        descriptionPlaceholder: 'Add description',
+        showOptions: true,
+        optionVariant: 'radio',
+        options: ['Option 1', 'Option 2', 'Option 3']
+      },
+      {
+        type: 'Checkboxes',
+        questionPlaceholder: 'Enter your question',
+        descriptionPlaceholder: 'Add description',
+        showOptions: true,
+        optionVariant: 'checkbox',
+        options: ['Option 1', 'Option 2', 'Option 3']
+      },
+      {
+        type: 'Yes/No',
+        questionPlaceholder: 'Enter your question',
+        descriptionPlaceholder: 'Add description'
+      },
+      {
+        type: 'Rating scale',
+        questionPlaceholder: 'Enter your question',
+        descriptionPlaceholder: 'Add description',
+        showRating: true,
+        ratingMin: 10,
+        ratingMax: 10,
+        highlighted: true
+      }
+    ]
+  };
+
+  document.addEventListener('DOMContentLoaded', function() {
+    SurveyComponents.render('#create-survey-root', surveyPageData);
+  });
+})();
+</script>
+
+</body>
+</html>
