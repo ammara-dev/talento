@@ -78,14 +78,28 @@
     .sv-primary-btn:hover { background: #2a1745; }
 
     .sv-save-overlay-wrap {
-      position: relative;
-      min-height: calc(100vh - 160px);
-      padding: 40px 20px;
+      position: fixed;
+      inset: 0;
+      z-index: 60;
+      padding: 100px 20px 24px;
       display: flex;
       justify-content: center;
       align-items: flex-start;
-      background: rgba(30, 16, 51, 0.18);
-      border-radius: 24px;
+      pointer-events: none;
+    }
+
+    #save-publish-modal-root {
+      position: relative;
+      z-index: 60;
+    }
+
+    .sv-popup-layer {
+      position: fixed;
+      inset: 0;
+      z-index: 55;
+      background: rgba(30, 16, 51, 0.04);
+      backdrop-filter: blur(0.5px);
+      -webkit-backdrop-filter: blur(0.5px);
     }
 
     .sv-publish-modal {
@@ -95,6 +109,7 @@
       border-radius: 24px;
       overflow: hidden;
       box-shadow: 0 24px 46px rgba(30, 16, 51, 0.14);
+      pointer-events: auto;
     }
 
     .sv-publish-modal-header {
@@ -131,6 +146,10 @@
     .sv-publish-section {
       padding: 20px 30px;
       border-bottom: 1px solid #ece9f2;
+      background: #ffffff;
+    }
+    .sv-publish-section-muted {
+      background: #FAF9FB;
     }
 
     .sv-publish-section-row {
@@ -174,7 +193,7 @@
       align-items: center;
       padding: 2px;
       border-radius: 999px;
-      background: #f0eef4;
+      background: #E8E7EB;
       min-width: 142px;
     }
     .sv-publish-toggle-btn {
@@ -213,13 +232,41 @@
       cursor: pointer;
       transition: border-color 150ms ease, background 150ms ease;
     }
-    .sv-publish-audience-option input[type='radio'] {
+    .sv-publish-audience-radio-input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+      width: 1px;
+      height: 1px;
+    }
+    .sv-publish-audience-radio-indicator {
+      width: 24px;
+      height: 24px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+      position: relative;
+    }
+    .sv-publish-audience-radio-indicator::before {
+      content: '';
       margin: 0;
       width: 18px;
       height: 18px;
-      accent-color: #ba8aff;
-      flex-shrink: 0;
-      margin-top: 1px;
+      border: 2px solid #8f889e;
+      border-radius: 999px;
+      background: #ffffff;
+      box-sizing: border-box;
+    }
+    .sv-publish-audience-radio-indicator::after {
+      content: '';
+      width: 9px;
+      height: 9px;
+      border-radius: 999px;
+      background: #D4B9FF;
+      position: absolute;
+      opacity: 0;
     }
     .sv-publish-audience-option-inner {
       display: grid;
@@ -241,6 +288,14 @@
       border-color: #ba8aff;
       background: #fcfbff;
       box-shadow: inset 0 0 0 1px #ece0ff;
+    }
+    .sv-publish-audience-option.active .sv-publish-audience-radio-indicator::before,
+    .sv-publish-audience-radio-input:checked + .sv-publish-audience-radio-indicator::before {
+      border-color: #BA8AFF;
+    }
+    .sv-publish-audience-option.active .sv-publish-audience-radio-indicator::after,
+    .sv-publish-audience-radio-input:checked + .sv-publish-audience-radio-indicator::after {
+      opacity: 1;
     }
 
     .sv-publish-modal-footer {
@@ -283,10 +338,7 @@
     }
 
     @media (max-width: 920px) {
-      .sv-save-overlay-wrap {
-        border-radius: 18px;
-        padding: 20px 10px;
-      }
+      .sv-save-overlay-wrap { padding: 76px 10px 16px; }
       .sv-publish-modal-header,
       .sv-publish-section,
       .sv-publish-modal-footer {
@@ -300,10 +352,7 @@
     @media (max-width: 640px) {
       #main-scroll { padding: 12px 10px 20px !important; }
       .sv-page-wrap { padding: 10px 0 12px; }
-      .sv-save-overlay-wrap {
-        min-height: auto;
-        padding: 12px 4px;
-      }
+      .sv-save-overlay-wrap { padding: 62px 4px 10px; }
       .sv-top-actions { width: 100%; justify-content: flex-end; }
       .sv-publish-modal-title { font-size: 20px; }
       .sv-publish-modal-footer { justify-content: flex-start; }
@@ -327,6 +376,7 @@
     </main>
   </div>
 </div>
+<div id="save-publish-modal-root"></div>
 
 <script src="layout.js"></script>
 <script src="survey_components.js"></script>
@@ -376,7 +426,17 @@
   };
 
   document.addEventListener('DOMContentLoaded', function() {
-    SurveyComponents.renderSavePublish('#save-publish-root', savePublishData);
+    const pageRoot = document.getElementById('save-publish-root');
+    const modalRoot = document.getElementById('save-publish-modal-root');
+    if (!pageRoot || !modalRoot) return;
+
+    pageRoot.innerHTML = SurveyComponents.TopBar(savePublishData.header);
+    modalRoot.innerHTML = `
+      <div class="sv-popup-layer" aria-hidden="true"></div>
+      <div class="sv-save-overlay-wrap">
+        ${SurveyComponents.SavePublishModal(savePublishData.modal)}
+      </div>
+    `;
   });
 })();
 </script>

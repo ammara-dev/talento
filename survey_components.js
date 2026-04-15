@@ -302,7 +302,8 @@ const SurveyComponents = (function() {
     } = config;
     return `
       <label class="sv-publish-audience-option${selected ? ' active' : ''}">
-        <input type="radio" name="${name}" value="${id}" ${selected ? 'checked' : ''} />
+        <input class="sv-publish-audience-radio-input" type="radio" name="${name}" value="${id}" ${selected ? 'checked' : ''} />
+        <span class="sv-publish-audience-radio-indicator" aria-hidden="true"></span>
         <span class="sv-publish-audience-option-inner">
           <span class="sv-publish-audience-option-title">${title}</span>
           <span class="sv-publish-audience-option-desc">${description}</span>
@@ -347,7 +348,7 @@ const SurveyComponents = (function() {
         </header>
 
         <div class="sv-publish-modal-body">
-          <section class="sv-publish-section">
+          <section class="sv-publish-section sv-publish-section-muted">
             <div class="sv-publish-section-row">
               ${SavePublishSectionTitle({
                 title: acceptingResponses.title || 'Accepting responses',
@@ -387,6 +388,7 @@ const SurveyComponents = (function() {
   function SavePublishPage(data) {
     return `
       ${TopBar(data.header || {})}
+      <div class="sv-popup-layer" aria-hidden="true"></div>
       <div class="sv-save-overlay-wrap">
         ${SavePublishModal(data.modal || {})}
       </div>
