@@ -98,12 +98,7 @@ const CandidateProfileComponents = (function() {
   }
 
   function TagGroup(tags = []) {
-    return tags.map(tag => `
-      <span class="cp-tag">
-        <span class="cp-tag-check">${Icons.check}</span>
-        ${tag}
-      </span>
-    `).join('');
+    return tags.map(tag => `<span class="cp-tag"><span class="cp-tag-check">${Icons.check}</span>${tag}</span>`).join('');
   }
 
   function RightCard({ title, subtitle = '', bodyHTML }) {
@@ -142,10 +137,14 @@ const CandidateProfileComponents = (function() {
   }
 
   function ContactRow({ icon, value }) {
+    const copyText = String(value || '').replace(/"/g, '&quot;');
     return `
       <div class="cp-contact-row">
         <span class="cp-contact-value"><span class="cp-contact-icon">${icon}</span><span class="cp-contact-text">${value}</span></span>
-        <button class="cp-copy-btn">Copy ${Icons.copy}</button>
+        <button type="button" class="cp-copy-btn" data-copy-text="${copyText}">
+          <span class="cp-copy-label">Copy</span>
+          ${Icons.copy}
+        </button>
       </div>
     `;
   }
@@ -249,6 +248,43 @@ const CandidateProfileComponents = (function() {
       : containerSelector;
     if (!container) return;
     container.innerHTML = renderPage(data);
+
+    if (!container.__cpCopyBound) {
+      container.addEventListener('click', async function(event) {
+        const button = event.target.closest('.cp-copy-btn');
+        if (!button || !container.contains(button)) return;
+
+        const textToCopy = button.getAttribute('data-copy-text') || '';
+        if (!textToCopy) return;
+
+        try {
+          if (navigator.clipboard && window.isSecureContext) {
+            await navigator.clipboard.writeText(textToCopy);
+          } else {
+            const textarea = document.createElement('textarea');
+            textarea.value = textToCopy;
+            textarea.setAttribute('readonly', '');
+            textarea.style.position = 'absolute';
+            textarea.style.left = '-9999px';
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+          }
+
+          const label = button.querySelector('.cp-copy-label');
+          if (label) label.textContent = 'Copied';
+          button.classList.add('is-copied');
+          window.setTimeout(function() {
+            if (label) label.textContent = 'Copy';
+            button.classList.remove('is-copied');
+          }, 1200);
+        } catch (error) {
+          console.error('Copy failed:', error);
+        }
+      });
+      container.__cpCopyBound = true;
+    }
   }
 
   return {

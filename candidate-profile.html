@@ -124,15 +124,15 @@
 
     .cp-match-wrap {
       padding: 12px 14px 14px;
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) 118px;
+      display: flex;
       align-items: center;
-      gap: 12px;
+      justify-content: space-between;
+      gap: 14px;
     }
-    .cp-tag-wrap { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
+    .cp-tag-wrap { display: flex; align-items: center; align-content: flex-start; flex-wrap: wrap; gap: 6px; min-width: 0; flex: 1; }
     .cp-tag {
-      display: inline-flex; align-items: center; gap: 5px; height: 22px; padding: 0 10px;
-      border-radius: 100px; color: #1e1033; background: #ddd0f8; font-size: 14px;
+      display: inline-flex; align-items: center; gap: 4px; height: 24px; padding: 0 8px;
+      border-radius: 100px; color: #1e1033; background: #ddd0f8; font-size: 12px;
     }
     .cp-tag-check {
       width: 14px; height: 14px; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center;
@@ -182,14 +182,9 @@
       display: inline-flex; align-items: center; gap: 6px;
       padding: 12px 14px 10px; border-bottom: 1px solid #ece9f3;
     }
-    .cp-two-col-grid {
-      display: flex;
-      gap: 0;
-      padding: 0 14px 14px;
-      border-top: 1px dashed #ddd8e8;
-    }
+    .cp-two-col-grid { display: flex; gap: 0; padding: 0 14px 14px; }
     .cp-two-col-grid > div { flex: 1; min-width: 0; }
-    .cp-two-col-grid > div:first-child { border-right: 1px dashed #ddd8e8; padding-right: 18px; }
+    .cp-two-col-grid > div:first-child { padding-right: 18px; }
     .cp-two-col-grid > div:last-child { padding-left: 18px; }
     .cp-kv-row { display: grid; gap: 3px; border-bottom: 1px dashed #e5deef; padding: 7px 0; }
     .cp-kv-row:last-child { border-bottom: 1px dashed #e5deef; }
@@ -198,14 +193,11 @@
     .cp-kv-value { font-size: 14px !important; line-height: 1.35; }
     .cp-kv-value-strong { color: #1e1033 !important; }
     .cp-kv-value-muted { color: #787085 !important; }
+    .cp-copy-btn.is-copied { border-color: #BA8AFF; color: #6f49c9; background: #f4efff; }
 
     @media (max-width: 1200px) {
       .cp-main-grid { flex-direction: column; }
       .cp-right-col { min-width: 0; width: 100%; }
-      .cp-match-wrap {
-        grid-template-columns: minmax(0, 1fr) 118px;
-        align-items: center;
-      }
     }
 
     @media (max-width: 900px) {
@@ -215,12 +207,11 @@
       .cp-card-header { padding: 12px 12px 0; }
       .cp-match-wrap {
         padding: 10px 12px 12px;
-        grid-template-columns: minmax(0, 1fr) 108px;
         gap: 10px;
       }
       .cp-donut-wrap { width: 108px; height: 108px; }
       .cp-donut-wrap svg { width: 108px; height: 108px; }
-      .cp-two-col-grid { flex-direction: column; gap: 6px; border-top: 1px dashed #ddd8e8; }
+      .cp-two-col-grid { flex-direction: column; gap: 6px; }
       .cp-two-col-grid > div:first-child { border-right: none; padding-right: 0; }
       .cp-two-col-grid > div:last-child { padding-left: 0; }
       .cp-section-top h3, .cp-card-header h3, .cp-section-title { font-size: 18px; }
@@ -235,7 +226,6 @@
       .cp-copy-btn { width: 100%; justify-content: center; min-width: 82px; padding: 0 8px; }
       .cp-action-strip { align-items: flex-start; }
       .cp-match-wrap {
-        grid-template-columns: minmax(0, 1fr) 96px;
         align-items: center;
       }
       .cp-donut-wrap { width: 96px; height: 96px; }
@@ -267,7 +257,7 @@
 (function() {
   'use strict';
 
-  const cvImageFile = './60121e4b1c8ed4cfa74a4ffcfdc409dd9b2bc03e.png';
+  const cvImageCandidates = ['./CV.png', 'CV.png', './cv.png', './60121e4b1c8ed4cfa74a4ffcfdc409dd9b2bc03e.png'];
 
   const pageData = {
     pipelineHeader: {
@@ -287,7 +277,7 @@
       recruiterAvatar: 'https://randomuser.me/api/portraits/men/35.jpg'
     },
     cv: {
-      cvImageSrc: cvImageFile,
+      cvImageSrc: './CV.png',
       cvDownloadName: 'samira-alsubaie-cv.png',
       stageConfig: {
         stages: ['New', 'First interview', 'Second interview', 'Job offer'],
@@ -350,7 +340,26 @@
     }
   };
 
-  document.addEventListener('DOMContentLoaded', function() {
+  function resolveCvImageSrc(candidates) {
+    return new Promise(function(resolve) {
+      let index = 0;
+      function tryNext() {
+        if (index >= candidates.length) {
+          resolve(candidates[0]);
+          return;
+        }
+        const src = candidates[index++];
+        const img = new Image();
+        img.onload = function() { resolve(src); };
+        img.onerror = tryNext;
+        img.src = src;
+      }
+      tryNext();
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', async function() {
+    pageData.cv.cvImageSrc = await resolveCvImageSrc(cvImageCandidates);
     CandidateProfileComponents.render('#candidate-profile-content', pageData);
   });
 })();
