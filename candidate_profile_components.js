@@ -144,7 +144,7 @@ const CandidateProfileComponents = (function() {
   function ContactRow({ icon, value }) {
     return `
       <div class="cp-contact-row">
-        <span class="cp-contact-value">${icon}${value}</span>
+        <span class="cp-contact-value"><span class="cp-contact-icon">${icon}</span><span class="cp-contact-text">${value}</span></span>
         <button class="cp-copy-btn">Copy ${Icons.copy}</button>
       </div>
     `;
@@ -193,6 +193,20 @@ const CandidateProfileComponents = (function() {
   }
 
   function CVPreviewCard({ cvImageSrc, cvDownloadName, stageConfig }) {
+    const fallbackSvg = encodeURIComponent(
+      `<svg xmlns="http://www.w3.org/2000/svg" width="900" height="1200" viewBox="0 0 900 1200">
+        <rect width="900" height="1200" fill="#f6f5f7"/>
+        <rect x="40" y="40" width="820" height="1120" rx="16" fill="#ffffff" stroke="#d8d3e1"/>
+        <rect x="72" y="90" width="360" height="32" rx="6" fill="#ece9f3"/>
+        <rect x="72" y="142" width="240" height="20" rx="6" fill="#ece9f3"/>
+        <rect x="72" y="218" width="756" height="2" fill="#ece9f3"/>
+        <rect x="72" y="260" width="520" height="18" rx="6" fill="#ece9f3"/>
+        <rect x="72" y="292" width="680" height="18" rx="6" fill="#ece9f3"/>
+        <rect x="72" y="324" width="620" height="18" rx="6" fill="#ece9f3"/>
+        <rect x="72" y="356" width="680" height="18" rx="6" fill="#ece9f3"/>
+        <text x="72" y="454" fill="#a59fad" font-size="34" font-family="Arial, sans-serif">Candidate CV preview</text>
+      </svg>`
+    );
     return `
       <section class="cp-card">
         ${StageStrip(stageConfig)}
@@ -203,7 +217,7 @@ const CandidateProfileComponents = (function() {
           </a>
         </div>
         <div class="cp-cv-preview">
-          <img src="${cvImageSrc}" alt="Candidate CV preview">
+          <img src="${cvImageSrc}" alt="Candidate CV preview" onerror="this.onerror=null;this.src='data:image/svg+xml;charset=UTF-8,${fallbackSvg}'">
         </div>
       </section>
     `;

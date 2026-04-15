@@ -148,7 +148,7 @@
     .cp-donut-label span { color: #1e1033; font-size: 24px; line-height: 1.05; }
 
     .cp-contact-list, .cp-info-list { padding: 12px 14px 14px; display: grid; gap: 8px; }
-    .cp-contact-row { display: grid; grid-template-columns: minmax(0, 1fr) 136px; gap: 8px; }
+    .cp-contact-row { display: grid; grid-template-columns: minmax(0, 1fr) 108px; gap: 8px; }
     .cp-contact-value, .cp-copy-btn {
       height: 44px;
       border: 1px solid #ddd8e8;
@@ -161,6 +161,8 @@
       display: inline-flex; align-items: center; gap: 8px;
       padding: 0 14px; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
     }
+    .cp-contact-icon { color: #787085; display: inline-flex; align-items: center; flex-shrink: 0; }
+    .cp-contact-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
     .cp-copy-btn {
       display: inline-flex; align-items: center; justify-content: center; gap: 6px;
       padding: 0 12px; min-width: 96px;
@@ -189,8 +191,8 @@
     .cp-two-col-grid > div { flex: 1; min-width: 0; }
     .cp-two-col-grid > div:first-child { border-right: 1px dashed #ddd8e8; padding-right: 18px; }
     .cp-two-col-grid > div:last-child { padding-left: 18px; }
-    .cp-kv-row { display: grid; gap: 3px; border-bottom: 1px solid #f2eff8; padding: 7px 0; }
-    .cp-kv-row:last-child { border-bottom: none; }
+    .cp-kv-row { display: grid; gap: 3px; border-bottom: 1px dashed #e5deef; padding: 7px 0; }
+    .cp-kv-row:last-child { border-bottom: 1px dashed #e5deef; }
     .cp-kv-label-default { color: #a59fad; font-size: 14px; line-height: 1.35; }
     .cp-kv-label-trial { color: #787085; font-size: 14px; line-height: 1.35; }
     .cp-kv-value { font-size: 14px !important; line-height: 1.35; }
@@ -200,12 +202,24 @@
     @media (max-width: 1200px) {
       .cp-main-grid { flex-direction: column; }
       .cp-right-col { min-width: 0; width: 100%; }
-      .cp-match-wrap { align-items: flex-start; }
+      .cp-match-wrap {
+        grid-template-columns: minmax(0, 1fr) 118px;
+        align-items: center;
+      }
     }
 
     @media (max-width: 900px) {
       .cp-top-row { flex-direction: column; align-items: flex-start; }
       .cp-heading-actions { width: 100%; justify-content: flex-start; }
+      .cp-main-grid { gap: 10px; }
+      .cp-card-header { padding: 12px 12px 0; }
+      .cp-match-wrap {
+        padding: 10px 12px 12px;
+        grid-template-columns: minmax(0, 1fr) 108px;
+        gap: 10px;
+      }
+      .cp-donut-wrap { width: 108px; height: 108px; }
+      .cp-donut-wrap svg { width: 108px; height: 108px; }
       .cp-two-col-grid { flex-direction: column; gap: 6px; border-top: 1px dashed #ddd8e8; }
       .cp-two-col-grid > div:first-child { border-right: none; padding-right: 0; }
       .cp-two-col-grid > div:last-child { padding-left: 0; }
@@ -216,10 +230,19 @@
       .cp-screen-shell { padding: 12px; border-radius: 12px; }
       .cp-main-title { font-size: 24px; }
       .cp-section-top h3, .cp-card-header h3, .cp-section-title { font-size: 18px; }
-      .cp-contact-row { grid-template-columns: 1fr; }
-      .cp-copy-btn { width: 100%; justify-content: flex-end; }
+      .cp-contact-list { padding: 10px 12px 12px; }
+      .cp-contact-row { grid-template-columns: minmax(0, 1fr) 82px; }
+      .cp-copy-btn { width: 100%; justify-content: center; min-width: 82px; padding: 0 8px; }
       .cp-action-strip { align-items: flex-start; }
-      .cp-match-wrap { grid-template-columns: 1fr; }
+      .cp-match-wrap {
+        grid-template-columns: minmax(0, 1fr) 96px;
+        align-items: center;
+      }
+      .cp-donut-wrap { width: 96px; height: 96px; }
+      .cp-donut-wrap svg { width: 96px; height: 96px; }
+      .cp-donut-label { font-size: 12px; }
+      .cp-donut-label span { font-size: 20px; }
+      .cp-tag { font-size: 13px; height: 20px; padding: 0 8px; }
     }
   </style>
 </head>
@@ -244,7 +267,7 @@
 (function() {
   'use strict';
 
-  const cvImageFile = 'file:///C:/Users/HH%20Traders/Downloads/60121e4b1c8ed4cfa74a4ffcfdc409dd9b2bc03e.png';
+  const cvImageFile = './60121e4b1c8ed4cfa74a4ffcfdc409dd9b2bc03e.png';
 
   const pageData = {
     pipelineHeader: {
