@@ -20,7 +20,8 @@
     'loans.html': { navItem: 'finance', submenu: 'loans' },
     'loan-installments.html': { navItem: 'finance', submenu: 'loans' },
     'candidate-profile.html': { navItem: 'hiring', submenu: 'job-positions' },
-    'create-new-survey.html': { navItem: 'team-engagement', submenu: 'surveys' }
+    'create-new-survey.html': { navItem: 'team-engagement', submenu: 'surveys' },
+    'create-new-survey-choose-question-type.xml': { navItem: 'team-engagement', submenu: 'surveys' }
   };
 
   const config = pageConfig[currentPage] || pageConfig['index.html'];

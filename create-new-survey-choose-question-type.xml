@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <title>Talento - Create New Survey Choose Type</title>
+  <meta name="description" content="Talento HR Platform - Create new survey choose question type" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared-styles.css" />
+
+  <style type="text/css">
+    #main-scroll { background: #f6f5f7; }
+
+    .sv-page-wrap {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 18px 6px 28px;
+    }
+
+    .sv-top-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .sv-title {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #1e1033;
+      font-size: 20px;
+      font-weight: 500;
+      letter-spacing: -0.2px;
+      line-height: 1.3;
+    }
+    .sv-title svg { color: #787085; flex-shrink: 0; }
+
+    .sv-top-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-left: auto;
+    }
+
+    .sv-secondary-btn,
+    .sv-primary-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      height: 34px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 0 12px;
+      border: 1px solid #e8e7eb;
+      transition: background 150ms ease;
+      white-space: nowrap;
+    }
+    .sv-secondary-btn { color: #1e1033; background: #ffffff; }
+    .sv-secondary-btn:hover { background: #f6f5f7; }
+    .sv-primary-btn { color: #ffffff; background: #1e1033; border-color: #1e1033; }
+    .sv-primary-btn:hover { background: #2a1745; }
+
+    .sv-page-stack {
+      max-width: 690px;
+      margin: 0 auto;
+      display: grid;
+      gap: 12px;
+    }
+
+    .sv-card {
+      background: #ffffff;
+      border: 1px solid #e8e7eb;
+      border-radius: 16px;
+      padding: 18px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .sv-field { display: grid; gap: 6px; }
+    .sv-label {
+      color: #4b405c;
+      font-size: 14px;
+      line-height: 1.3;
+      font-weight: 500;
+    }
+    .sv-input {
+      width: 100%;
+      height: 52px;
+      border-radius: 12px;
+      border: 1px solid #e8e7eb;
+      background: #ffffff;
+      padding: 0 14px;
+      font-size: 14px;
+      color: #1e1033;
+      outline: none;
+      font-family: 'Alexandria', Helvetica, sans-serif;
+    }
+    .sv-input::placeholder { color: #a09aab; font-size: 14px; }
+
+    .sv-type-card { gap: 14px; }
+    .sv-type-heading {
+      color: #4b405c;
+      font-size: 20px;
+      line-height: 1.1;
+      letter-spacing: -0.2px;
+      font-weight: 500;
+    }
+    .sv-type-card {
+      background: #0E121B05;
+      border-color: #e8e7eb;
+    }
+    .sv-type-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .sv-type-option {
+      min-height: 78px;
+      border: 1px solid #d8d5df;
+      border-radius: 14px;
+      background: #fff;
+      text-align: left;
+      display: grid;
+      align-content: center;
+      gap: 4px;
+      padding: 12px 14px;
+      transition: border-color 150ms ease, box-shadow 150ms ease, background 150ms ease;
+    }
+    .sv-type-option:hover { border-color: #c5b0eb; }
+    .sv-type-option-active {
+      border-color: #ba8aff;
+      box-shadow: 0 0 0 1px #e7dafc inset;
+      background: #fcfbff;
+    }
+    .sv-type-option-title {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #1e1033;
+      font-size: 14px;
+      line-height: 1.3;
+      font-weight: 500;
+      letter-spacing: -0.14px;
+    }
+    .sv-type-option-title svg {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+      color: #787085;
+    }
+    .sv-type-option-desc {
+      color: #787085;
+      font-size: 14px;
+      line-height: 1.3;
+      padding-left: 24px;
+    }
+
+    @media (max-width: 900px) {
+      .sv-page-wrap { padding: 16px 4px 24px; }
+      .sv-page-stack { max-width: 100%; }
+      .sv-type-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 640px) {
+      #main-scroll { padding: 14px 10px 24px !important; }
+      .sv-title { font-size: 20px; }
+      .sv-card { padding: 14px; border-radius: 14px; }
+      .sv-type-heading { font-size: 20px; }
+      .sv-type-grid { grid-template-columns: 1fr; gap: 8px; }
+      .sv-input { height: 46px; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="app">
+  <aside id="sidebar"></aside>
+  <div id="overlay"></div>
+  <div id="main-col">
+    <header id="navbar" style="display:flex;align-items:center;justify-content:space-between;height:54px;padding:0 16px;border-bottom:1px solid #e8e7eb;flex-shrink:0;background:#fff;"></header>
+    <main id="main-scroll" style="padding:18px 18px 30px;">
+      <div class="sv-page-wrap">
+        <div id="choose-type-root"></div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script type="text/javascript" src="layout.js"></script>
+<script type="text/javascript" src="survey_components.js"></script>
+<script type="text/javascript">
+//<![CDATA[
+(function() {
+  'use strict';
+
+  const chooseTypeData = {
+    header: {
+      title: 'Create new survey',
+      previewIcon: 'chevron',
+      saveIcon: 'check'
+    },
+    meta: {
+      title: 'Employee satisfaction survey',
+      description: ''
+    },
+    questionType: {
+      title: 'Choose question type',
+      options: [
+        { type: 'Short answer', description: 'Brief text response', selected: true },
+        { type: 'Paragraph', description: 'Long text response', selected: false },
+        { type: 'Multiple choice', description: 'Single option selection', selected: false },
+        { type: 'Checkboxes', description: 'Multiple selections', selected: false },
+        { type: 'Yes/No', description: 'Boolean choice', selected: false },
+        { type: 'Rating scale', description: '1-5 star rating', selected: false }
+      ]
+    }
+  };
+
+  document.addEventListener('DOMContentLoaded', function() {
+    SurveyComponents.renderChooseType('#choose-type-root', chooseTypeData);
+  });
+})();
+//]]>
+</script>
+
+</body>
+</html>

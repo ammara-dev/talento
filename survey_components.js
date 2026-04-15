@@ -191,15 +191,64 @@ const SurveyComponents = (function() {
   }
 
   function TopBar(config) {
-    const { title = 'Create new survey' } = config;
+    const {
+      title = 'Create new survey',
+      previewIcon = 'eye', // 'eye' | 'chevron'
+      saveIcon = 'check'
+    } = config;
+    const previewIconSvg = previewIcon === 'chevron' ? Icons.chevronDown : Icons.eye;
+    const saveIconSvg = saveIcon === 'none' ? '' : Icons.checkAccent;
 
     return `
       <div class="sv-top-row">
         <h1 class="sv-title">${Icons.back} ${title}</h1>
         <div class="sv-top-actions">
-          <button class="sv-secondary-btn" type="button">Preview ${Icons.eye}</button>
-          <button class="sv-primary-btn" type="button">Save and publish ${Icons.checkAccent}</button>
+          <button class="sv-secondary-btn" type="button">Preview ${previewIconSvg}</button>
+          <button class="sv-primary-btn" type="button">Save and publish ${saveIconSvg}</button>
         </div>
+      </div>
+    `;
+  }
+
+  function QuestionTypeOption(config) {
+    const {
+      type = 'Short answer',
+      description = '',
+      selected = false
+    } = config;
+
+    return `
+      <button class="sv-type-option ${selected ? 'sv-type-option-active' : ''}" type="button">
+        <span class="sv-type-option-title">${getTypeIcon(type)}<span>${type}</span></span>
+        <span class="sv-type-option-desc">${description}</span>
+      </button>
+    `;
+  }
+
+  function ChooseQuestionTypeCard(config) {
+    const {
+      title = 'Choose question type',
+      options = []
+    } = config;
+
+    return `
+      <section class="sv-card sv-type-card">
+        <h2 class="sv-type-heading">${title}</h2>
+        <div class="sv-type-grid">
+          ${options.map(function(option) {
+            return QuestionTypeOption(option);
+          }).join('')}
+        </div>
+      </section>
+    `;
+  }
+
+  function CreateSurveyChooseTypePage(data) {
+    return `
+      ${TopBar(data.header)}
+      <div class="sv-page-stack">
+        ${SurveyMetaCard(data.meta)}
+        ${ChooseQuestionTypeCard(data.questionType)}
       </div>
     `;
   }
@@ -243,13 +292,25 @@ const SurveyComponents = (function() {
     container.innerHTML = CreateSurveyPage(data);
   }
 
+  function renderChooseType(containerSelector, data) {
+    const container = typeof containerSelector === 'string'
+      ? document.querySelector(containerSelector)
+      : containerSelector;
+
+    if (!container) return;
+    container.innerHTML = CreateSurveyChooseTypePage(data);
+  }
+
   return {
     Icons,
     Field,
     QuestionCard,
     SurveyMetaCard,
+    QuestionTypeOption,
+    ChooseQuestionTypeCard,
     TopBar,
-    render
+    render,
+    renderChooseType
   };
 })();
 
