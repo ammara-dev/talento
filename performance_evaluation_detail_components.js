@@ -13,6 +13,7 @@ const PerformanceEvaluationDetailComponents = (function() {
     employees: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`,
     evaluators: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8l1.2 2.4 2.8.4-2 2 .47 2.82L19 14.3l-2.47 1.3.47-2.82-2-2 2.8-.4L19 8Z"/></svg>`,
     warning: `<svg width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 3.4 16.7 15H3.3L10 3.4Z" stroke="#7F768F" stroke-width="1.7" stroke-linejoin="round"/><path d="M10 7.2v3.6" stroke="#7F768F" stroke-width="1.7" stroke-linecap="round"/><circle cx="10" cy="13.15" r=".9" fill="#7F768F"/></svg>`,
+    bellAccent: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2CF7B3" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 17h5l-1.4-1.4A2 2 0 0 1 18 14.2V11a6 6 0 1 0-12 0v3.2a2 2 0 0 1-.6 1.4L4 17h5"/><path d="M9.5 20a2.5 2.5 0 0 0 5 0"/></svg>`,
     dangerProgress: `<svg width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="8" fill="#D92D20"/><path d="M10 5.9v4.35" stroke="#ffffff" stroke-width="1.9" stroke-linecap="round"/><circle cx="10" cy="13.3" r="1.05" fill="#ffffff"/></svg>`,
     successProgress: `<svg width="16" height="16" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="8" fill="#34C38F"/><path d="m6.7 10.2 2.1 2.1 4.45-4.55" stroke="#ffffff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
     sort: `<svg width="12" height="12" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="7 8 10 5 13 8"/><polyline points="7 12 10 15 13 12"/></svg>`
@@ -55,12 +56,13 @@ const PerformanceEvaluationDetailComponents = (function() {
   function Avatar(config) {
     const name = config && config.name ? config.name : '';
     const src = config && config.avatar ? config.avatar : '';
+    const compactClass = config && config.compact ? ' ped-avatar--sm' : '';
 
     if (src) {
-      return `<img class="ped-avatar" src="${escapeHtml(src)}" alt="${escapeHtml(name)}" />`;
+      return `<img class="ped-avatar${compactClass}" src="${escapeHtml(src)}" alt="${escapeHtml(name)}" />`;
     }
 
-    return `<span class="ped-avatar ped-avatar--fallback">${escapeHtml(getInitials(name))}</span>`;
+    return `<span class="ped-avatar${compactClass} ped-avatar--fallback">${escapeHtml(getInitials(name))}</span>`;
   }
 
   function Breadcrumb(config) {
@@ -220,12 +222,15 @@ const PerformanceEvaluationDetailComponents = (function() {
   }
 
   function MemberCell(config) {
+    const compactClass = config && config.compact ? ' ped-member-cell--compact' : '';
+    const role = config && config.role ? config.role : '';
+
     return `
-      <div class="ped-member-cell">
+      <div class="ped-member-cell${compactClass}">
         ${Avatar(config)}
         <div class="ped-member-copy">
           <span class="ped-member-name">${escapeHtml(config && config.name ? config.name : '')}</span>
-          <span class="ped-member-role">${escapeHtml(config && config.role ? config.role : '')}</span>
+          ${role ? `<span class="ped-member-role">${escapeHtml(role)}</span>` : ''}
         </div>
       </div>
     `;
@@ -284,23 +289,25 @@ const PerformanceEvaluationDetailComponents = (function() {
     const label = config && config.label ? config.label : '';
     const width = config && config.width ? ` style="width:${config.width};"` : '';
     const checkbox = config && config.type === 'checkbox';
+    const sortable = !checkbox && config && config.sortable !== false;
+    const extraClass = config && config.className ? ` ${config.className}` : '';
 
     if (checkbox) {
       const checked = !!(config && config.selectAll && config.selectAll.checked);
       const checkedAttr = checked ? ' checked="checked"' : '';
 
       return `
-        <th${width} class="ped-checkbox-head">
+        <th${width} class="ped-checkbox-head${extraClass}">
           <input type="checkbox" class="ped-table-checkbox" data-detail-select-all aria-label="Select all visible rows"${checkedAttr} />
         </th>
       `;
     }
 
     return `
-      <th${width}>
+      <th${width} class="${extraClass.trim()}">
         <span class="ped-head-label">
           <span>${escapeHtml(label)}</span>
-          ${getIcon('sort')}
+          ${sortable ? getIcon('sort') : ''}
         </span>
       </th>
     `;
@@ -376,7 +383,7 @@ const PerformanceEvaluationDetailComponents = (function() {
                   { label: 'Upward feedback', width: '180px' },
                   { label: 'Received peer feedback', width: '190px' },
                   { label: 'Self-review evaluation', width: '200px' },
-                  { label: '', width: '56px' }
+                  { label: '', width: '56px', sortable: false }
                 ].map(TableHeadCell).join('')}
               </tr>
             </thead>
@@ -413,12 +420,92 @@ const PerformanceEvaluationDetailComponents = (function() {
                   { label: 'Evaluation type', width: '180px' },
                   { label: 'Progress', width: '180px' },
                   { label: 'Status', width: '140px' },
-                  { label: '', width: '56px' }
+                  { label: '', width: '56px', sortable: false }
                 ].map(TableHeadCell).join('')}
               </tr>
             </thead>
             <tbody>
               ${rows.map(EvaluatorsRow).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+  }
+
+  function AppraisalStatusBadge(config) {
+    const type = config && config.type ? config.type : 'pending';
+    const label = config && config.label ? config.label : (type === 'completed' ? 'Completed' : 'Pending evaluation');
+
+    return `<span class="ped-status-badge ped-status-badge--${type === 'completed' ? 'completed' : 'progress'}">${escapeHtml(label)}</span>`;
+  }
+
+  function RowActionButton(config) {
+    const label = config && config.label ? config.label : '';
+    const variant = config && config.variant ? config.variant : 'view';
+    const icon = variant === 'reminder' ? getIcon('bellAccent') : getSharedIcon('arrowUpRight');
+
+    return `
+      <button type="button" class="ped-inline-action ped-inline-action--${variant}">
+        <span>${escapeHtml(label)}</span>
+        ${icon || ''}
+      </button>
+    `;
+  }
+
+  function AppraisalEvaluatorsRow(row) {
+    const checkedAttr = row && row.checked ? ' checked="checked"' : '';
+
+    return `
+      <tr>
+        <td class="ped-checkbox-cell">
+          <input type="checkbox" class="ped-table-checkbox" data-detail-row-check="${escapeHtml(row.id)}" aria-label="Select ${escapeHtml(row.name)}"${checkedAttr} />
+        </td>
+        <td>${MemberCell({ name: row.name, role: row.role, avatar: row.avatar, compact: true })}</td>
+        <td>${AppraisalStatusBadge(row.status)}</td>
+        <td><span class="ped-inline-text">${escapeHtml(row.employeeRole || '')}</span></td>
+        <td><span class="ped-inline-text">${escapeHtml(row.deadline || '')}</span></td>
+        <td>${MemberCell({ name: row.evaluatesWhom && row.evaluatesWhom.name, avatar: row.evaluatesWhom && row.evaluatesWhom.avatar, compact: true })}</td>
+        <td>
+          <div class="ped-row-action-group">
+            ${RowActionButton(row.action)}
+            ${TableMoreButton(`More actions for ${row.name}`)}
+          </div>
+        </td>
+      </tr>
+    `;
+  }
+
+  function AppraisalEvaluatorsTable(config) {
+    const rows = config && Array.isArray(config.rows) ? config.rows : [];
+    const selectAll = config && config.selectAll ? config.selectAll : {};
+
+    if (!rows.length) {
+      return EmptyState({
+        title: 'No evaluator assignments found',
+        description: 'There are no evaluator assignments that match the current search.'
+      });
+    }
+
+    return `
+      <div class="table-container ped-table-wrap">
+        <div class="table-scroll-wrap">
+          <table class="data-table ped-data-table ped-data-table--appraisal-evaluators">
+            <thead>
+              <tr>
+                ${[
+                  { type: 'checkbox', width: '44px', selectAll: selectAll },
+                  { label: 'Employee name', width: '260px' },
+                  { label: 'Status', width: '190px' },
+                  { label: 'Employee role', width: '180px' },
+                  { label: 'Deadline', width: '150px' },
+                  { label: 'Evaluates whom', width: '230px' },
+                  { label: 'Actions', width: '220px', sortable: false, className: 'ped-actions-head' }
+                ].map(TableHeadCell).join('')}
+              </tr>
+            </thead>
+            <tbody>
+              ${rows.map(AppraisalEvaluatorsRow).join('')}
             </tbody>
           </table>
         </div>
@@ -432,6 +519,7 @@ const PerformanceEvaluationDetailComponents = (function() {
     DetailTabs,
     EmployeesTable,
     EvaluatorsTable,
+    AppraisalEvaluatorsTable,
     FeedbackStatus,
     EvaluationBadge
   };

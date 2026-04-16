@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <title>Talento - Requests</title>
+  <meta name="description" content="Talento HR Platform - Requests" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared-styles.css" />
+  <script src="design-tokens.js"></script>
+
+  <style>
+    .requests-page-card {
+      background: #fff;
+      border-radius: 20px;
+      padding: 20px 20px 24px;
+      min-width: 0;
+      overflow: hidden;
+    }
+
+    .requests-shell {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      min-width: 0;
+    }
+
+    .requests-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .requests-title {
+      color: #1e1033;
+      font-size: 20px;
+      font-weight: 500;
+      letter-spacing: -0.2px;
+      line-height: 1.3;
+    }
+
+    .requests-scope-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px;
+      border-radius: 12px;
+      border: 1px solid #e8e7eb;
+      background: #f6f5f7;
+      flex-wrap: wrap;
+    }
+
+    .requests-scope-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      height: 32px;
+      padding: 0 12px;
+      border-radius: 8px;
+      color: #787085;
+      font-size: 14px;
+      line-height: 1;
+      transition: background 150ms ease, color 150ms ease, box-shadow 150ms ease;
+      white-space: nowrap;
+    }
+
+    .requests-scope-btn:hover:not(.active) {
+      background: rgba(236, 233, 239, 0.55);
+    }
+
+    .requests-scope-btn.active {
+      color: #1e1033;
+      background: #fff;
+      box-shadow: 0 1px 2px rgba(30, 16, 51, 0.08);
+    }
+
+    .requests-count-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 18px;
+      height: 18px;
+      padding: 0 6px;
+      border-radius: 999px;
+      background: #ede5ff;
+      color: #8b5cf6;
+      font-size: 11px;
+      font-weight: 600;
+      line-height: 1;
+    }
+
+    .requests-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .requests-search {
+      flex: 1 1 420px;
+      min-width: min(100%, 260px);
+      max-width: 430px;
+    }
+
+    .requests-search .search-input-wrap,
+    .requests-search-fallback {
+      width: 100% !important;
+      height: 38px !important;
+      padding: 0 14px !important;
+      gap: 10px !important;
+      border-radius: 999px !important;
+      background: #fff !important;
+      border: 1px solid #e6e3ea !important;
+      box-shadow: none !important;
+    }
+
+    .requests-search .search-input-wrap input,
+    .requests-search-fallback input {
+      font-size: 14px !important;
+      color: #4b405c !important;
+      line-height: 1.2 !important;
+    }
+
+    .requests-search .search-input-wrap svg,
+    .requests-search-fallback svg,
+    .requests-search-fallback i {
+      width: 16px;
+      height: 16px;
+      color: #8a8393;
+      stroke: #8a8393;
+      flex-shrink: 0;
+    }
+
+    .requests-search .search-input-wrap input::placeholder,
+    .requests-search-fallback input::placeholder {
+      color: #7f778d;
+    }
+
+    .requests-filter-btn {
+      height: 40px;
+      padding: 0 16px;
+      border-radius: 999px;
+      background: #fff;
+      font-size: 14px;
+    }
+
+    .requests-filter-count {
+      color: #787085;
+    }
+
+    .requests-status-row {
+      padding-bottom: 12px;
+      border-bottom: 1px solid #f0eef6;
+    }
+
+    .requests-status-tabs {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex-wrap: wrap;
+    }
+
+    .requests-status-tab {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 32px;
+      padding: 0 8px 2px;
+      color: #787085;
+      font-size: 14px;
+      line-height: 1;
+      border-bottom: 2px solid transparent;
+      transition: color 150ms ease, border-color 150ms ease, background 150ms ease;
+      white-space: nowrap;
+    }
+
+    .requests-status-tab:hover:not(.active) {
+      color: #4b405c;
+      background: rgba(236, 233, 239, 0.3);
+      border-radius: 8px;
+    }
+
+    .requests-status-tab.active {
+      color: #1e1033;
+      font-weight: 500;
+      border-color: #1e1033;
+    }
+
+    .requests-status-icon {
+      width: 14px;
+      text-align: center;
+      font-size: 13px;
+      color: inherit;
+      flex-shrink: 0;
+    }
+
+    .requests-table-container {
+      border-radius: 16px;
+    }
+
+    .requests-table {
+      min-width: 1080px;
+    }
+
+    .requests-table th,
+    .requests-table td {
+      padding-top: 14px;
+      padding-bottom: 14px;
+      font-size: 14px;
+    }
+
+    .requests-table th {
+      color: #787085;
+      font-weight: 400;
+    }
+
+    .requests-table td {
+      color: #1e1033;
+    }
+
+    .requests-table .badge-pending,
+    .requests-table .badge-approved,
+    .requests-table .badge-rejected,
+    .requests-table .badge-default {
+      height: 24px;
+      padding: 0 12px;
+      font-size: 12px;
+      font-weight: 500;
+      border-radius: 999px;
+      line-height: 1;
+    }
+
+    .requests-table .badge-pending {
+      background: #efedf2;
+      color: #635c72;
+    }
+
+    .requests-table .badge-approved {
+      background: #dff9e7;
+      color: #14a05a;
+    }
+
+    .requests-table .badge-rejected {
+      background: #ffe2e5;
+      color: #df303b;
+    }
+
+    .requests-table .badge-default {
+      background: #f1eff4;
+      color: #7a7387;
+    }
+
+    .requests-table th:first-child,
+    .requests-table td:first-child {
+      width: 310px;
+    }
+
+    .requests-header-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .requests-actions-header {
+      text-align: right;
+      width: 140px;
+    }
+
+    .requests-employee-cell,
+    .requests-approver-cell {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .requests-employee-cell {
+      min-width: 260px;
+    }
+
+    .requests-person-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    .requests-person-name,
+    .requests-approver-name {
+      color: #1e1033;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 1.3;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .requests-person-role {
+      color: #787085;
+      font-size: 13px;
+      line-height: 1.3;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .requests-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      object-fit: cover;
+      flex-shrink: 0;
+      background: #ece9ef;
+      box-shadow: 0 4px 12px rgba(30, 16, 51, 0.08);
+    }
+
+    .requests-avatar-fallback {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #4b405c;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .requests-dates-cell {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .requests-type-cell {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #1e1033;
+      font-size: 14px;
+    }
+
+    .requests-type-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      color: #4b405c;
+      flex-shrink: 0;
+    }
+
+    .requests-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .requests-view-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      height: 36px;
+      padding: 0 14px;
+      border-radius: 10px;
+      background: #211034;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: transform 150ms ease, box-shadow 150ms ease, background 150ms ease;
+      white-space: nowrap;
+    }
+
+    .requests-view-btn:hover {
+      background: #2a1745;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 14px rgba(30, 16, 51, 0.22);
+    }
+
+    .requests-view-arrow {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #2cf7b3;
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+    }
+
+    .requests-view-arrow svg {
+      width: 14px;
+      height: 14px;
+      display: block;
+    }
+
+    .requests-more-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
+      border: 1px solid #e8e7eb;
+      color: #787085;
+      background: #fff;
+      transition: background 150ms ease, color 150ms ease;
+    }
+
+    .requests-more-btn:hover {
+      background: #f6f5f7;
+      color: #4b405c;
+    }
+
+    .requests-empty-wrap {
+      border: 1px solid #e8e7eb;
+      border-radius: 16px;
+      background: #fff;
+    }
+
+    .requests-empty-fallback {
+      padding: 48px 24px;
+      text-align: center;
+    }
+
+    .requests-empty-fallback h3 {
+      font-size: 18px;
+      font-weight: 500;
+      color: #1e1033;
+      margin-bottom: 8px;
+    }
+
+    .requests-empty-fallback p {
+      font-size: 14px;
+      color: #787085;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 900px) {
+      .requests-actions {
+        justify-content: flex-start;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .requests-page-card {
+        padding: 16px;
+      }
+
+      .requests-scope-toggle {
+        width: 100%;
+      }
+
+      .requests-scope-btn {
+        flex: 1 1 140px;
+        justify-content: center;
+      }
+
+      .requests-toolbar {
+        align-items: stretch;
+      }
+
+      .requests-search {
+        max-width: none;
+        flex-basis: 100%;
+      }
+
+      .requests-filter-btn {
+        align-self: flex-start;
+      }
+    }
+  </style>
+</head>
+
+<body>
+<div id="app">
+  <div id="overlay" aria-hidden="true"></div>
+  <aside id="sidebar" aria-label="Main navigation"></aside>
+
+  <div id="main-col">
+    <header id="navbar" style="display:flex;align-items:center;justify-content:space-between;height:56px;padding:0 16px;background:#fff;border-bottom:1px solid #e8e7eb;flex-shrink:0;min-width:0;"></header>
+
+    <div id="main-scroll">
+      <div style="padding:16px;background:#f6f5f7;min-height:calc(100vh - 56px);">
+        <div class="requests-page-card">
+          <div id="requests-screen-root"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="layout.js"></script>
+<script src="leave_components.js"></script>
+<script src="requests_components.js"></script>
+
+<script>
+const requestsData = {
+  team: [
+    {
+      employeeName: 'Fahad AlShahrani',
+      employeeRole: 'Marketing lead',
+      avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
+      statusKey: 'pending',
+      statusLabel: 'Pending',
+      dateLabel: '12 Oct. - 16 Oct. 2025',
+      duration: '12 days',
+      typeKey: 'vacation',
+      requestType: 'Vacation',
+      approver: 'Samira AlSubaie',
+      approverAvatar: 'https://randomuser.me/api/portraits/women/44.jpg',
+      href: 'leave.html'
+    },
+    {
+      employeeName: 'Khalid AlAnazi',
+      employeeRole: 'People & culture lead',
+      avatar: 'https://randomuser.me/api/portraits/men/45.jpg',
+      statusKey: 'pending',
+      statusLabel: 'Pending',
+      dateLabel: '12 Oct. - 16 Oct. 2025',
+      duration: '12 days',
+      typeKey: 'time-off',
+      requestType: 'Time off',
+      approver: 'Mishari AlSubaie',
+      approverAvatar: 'https://randomuser.me/api/portraits/men/63.jpg',
+      href: 'leave.html'
+    },
+    {
+      employeeName: 'Fahad AlShahrani',
+      employeeRole: 'Marketing lead',
+      avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
+      statusKey: 'done',
+      statusLabel: 'Done',
+      dateLabel: 'Tue, Aug 26 2025',
+      duration: '',
+      typeKey: 'salary',
+      requestType: 'Salary',
+      approver: 'Samira AlSubaie',
+      approverAvatar: 'https://randomuser.me/api/portraits/women/44.jpg',
+      href: 'payroll.html'
+    },
+    {
+      employeeName: 'Mishari AlSubaie',
+      employeeRole: 'Marketing lead',
+      avatar: 'https://randomuser.me/api/portraits/men/63.jpg',
+      statusKey: 'done',
+      statusLabel: 'Done',
+      dateLabel: 'Tue, Aug 26 2025',
+      duration: '',
+      typeKey: 'air-tickets',
+      requestType: 'Air tickets',
+      approver: 'Samira AlSubaie',
+      approverAvatar: 'https://randomuser.me/api/portraits/women/44.jpg',
+      href: 'air-tickets.html'
+    },
+    {
+      employeeName: 'Fahad AlShahrani',
+      employeeRole: 'Marketing lead',
+      avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
+      statusKey: 'rejected',
+      statusLabel: 'Rejected',
+      dateLabel: '01 Oct. - 05 Oct. 2025',
+      duration: '5 days',
+      typeKey: 'vacation',
+      requestType: 'Vacation',
+      approver: 'Samira AlSubaie',
+      approverAvatar: 'https://randomuser.me/api/portraits/women/44.jpg',
+      href: 'leave.html'
+    }
+  ],
+  mine: [
+    {
+      employeeName: 'Huda AlQahtani',
+      employeeRole: 'Product developer',
+      avatar: 'https://randomuser.me/api/portraits/women/65.jpg',
+      statusKey: 'pending',
+      statusLabel: 'Pending',
+      dateLabel: '21 Oct. - 23 Oct. 2025',
+      duration: '3 days',
+      typeKey: 'vacation',
+      requestType: 'Vacation',
+      approver: 'Samira AlSubaie',
+      approverAvatar: 'https://randomuser.me/api/portraits/women/44.jpg',
+      href: 'leave.html'
+    },
+    {
+      employeeName: 'Huda AlQahtani',
+      employeeRole: 'Product developer',
+      avatar: 'https://randomuser.me/api/portraits/women/65.jpg',
+      statusKey: 'done',
+      statusLabel: 'Done',
+      dateLabel: 'Tue, Aug 12 2025',
+      duration: '',
+      typeKey: 'salary',
+      requestType: 'Salary',
+      approver: 'Mishari AlSubaie',
+      approverAvatar: 'https://randomuser.me/api/portraits/men/63.jpg',
+      href: 'payroll.html'
+    },
+    {
+      employeeName: 'Huda AlQahtani',
+      employeeRole: 'Product developer',
+      avatar: 'https://randomuser.me/api/portraits/women/65.jpg',
+      statusKey: 'rejected',
+      statusLabel: 'Rejected',
+      dateLabel: '01 Sep. - 03 Sep. 2025',
+      duration: '3 days',
+      typeKey: 'air-tickets',
+      requestType: 'Air tickets',
+      approver: 'Samira AlSubaie',
+      approverAvatar: 'https://randomuser.me/api/portraits/women/44.jpg',
+      href: 'air-tickets.html'
+    },
+    {
+      employeeName: 'Huda AlQahtani',
+      employeeRole: 'Product developer',
+      avatar: 'https://randomuser.me/api/portraits/women/65.jpg',
+      statusKey: 'expired',
+      statusLabel: 'Expired',
+      dateLabel: '15 Jul. - 16 Jul. 2025',
+      duration: '2 days',
+      typeKey: 'time-off',
+      requestType: 'Time off',
+      approver: 'Samira AlSubaie',
+      approverAvatar: 'https://randomuser.me/api/portraits/women/44.jpg',
+      href: 'leave.html'
+    }
+  ]
+};
+
+const requestsState = {
+  scope: 'team',
+  status: 'all',
+  query: ''
+};
+
+document.addEventListener('DOMContentLoaded', function() {
+  renderRequestsScreen();
+});
+
+function normalizeStatus(statusKey) {
+  if (statusKey === 'done' || statusKey === 'approved') {
+    return 'approved';
+  }
+
+  return statusKey;
+}
+
+function countPending(rows) {
+  return rows.filter(function(row) {
+    return normalizeStatus(row.statusKey) === 'pending';
+  }).length;
+}
+
+function getScopeOptions() {
+  return [
+    {
+      value: 'team',
+      label: 'Team requests',
+      count: countPending(requestsData.team)
+    },
+    {
+      value: 'mine',
+      label: 'My requests',
+      count: countPending(requestsData.mine)
+    }
+  ];
+}
+
+function getStatusTabs(rows) {
+  return [
+    {
+      value: 'all',
+      label: 'All requests',
+      icon: 'all'
+    },
+    {
+      value: 'pending',
+      label: 'Pending',
+      icon: 'pending',
+      count: rows.filter(function(row) {
+        return normalizeStatus(row.statusKey) === 'pending';
+      }).length,
+      showCount: true
+    },
+    {
+      value: 'approved',
+      label: 'Approved',
+      icon: 'approved'
+    },
+    {
+      value: 'rejected',
+      label: 'Rejected',
+      icon: 'rejected'
+    },
+    {
+      value: 'expired',
+      label: 'Expired',
+      icon: 'expired'
+    }
+  ];
+}
+
+function getFilteredRows() {
+  const scopedRows = requestsData[requestsState.scope] || [];
+  const query = requestsState.query.trim().toLowerCase();
+
+  return scopedRows.filter(function(row) {
+    const matchesStatus = requestsState.status === 'all' || normalizeStatus(row.statusKey) === requestsState.status;
+    const matchesQuery = !query || [
+      row.employeeName,
+      row.employeeRole,
+      row.requestType,
+      row.approver,
+      row.dateLabel,
+      row.duration
+    ].join(' ').toLowerCase().includes(query);
+
+    return matchesStatus && matchesQuery;
+  });
+}
+
+function renderRequestsScreen(shouldFocusSearch) {
+  const root = document.getElementById('requests-screen-root');
+  const scopedRows = requestsData[requestsState.scope] || [];
+  const filteredRows = getFilteredRows();
+
+  root.innerHTML = RequestsComponents.Page({
+    title: 'Requests',
+    scopeOptions: getScopeOptions(),
+    activeScope: requestsState.scope,
+    searchValue: requestsState.query,
+    searchPlaceholder: 'Search',
+    filterCount: 2,
+    statusTabs: getStatusTabs(scopedRows),
+    activeStatus: requestsState.status,
+    rows: filteredRows,
+    emptyState: {
+      title: 'No requests match this view',
+      description: 'Try a different status or search term to see more requests.'
+    }
+  });
+
+  bindRequestsScreenEvents();
+
+  if (shouldFocusSearch) {
+    const searchInput = root.querySelector('.requests-search input');
+    if (searchInput) {
+      searchInput.focus();
+      searchInput.setSelectionRange(searchInput.value.length, searchInput.value.length);
+    }
+  }
+}
+
+function bindRequestsScreenEvents() {
+  const root = document.getElementById('requests-screen-root');
+
+  root.querySelectorAll('[data-scope-value]').forEach(function(button) {
+    button.addEventListener('click', function() {
+      requestsState.scope = button.getAttribute('data-scope-value');
+      requestsState.status = 'all';
+      renderRequestsScreen(false);
+    });
+  });
+
+  root.querySelectorAll('[data-status-value]').forEach(function(button) {
+    button.addEventListener('click', function() {
+      requestsState.status = button.getAttribute('data-status-value');
+      renderRequestsScreen(false);
+    });
+  });
+
+  const searchInput = root.querySelector('.requests-search input');
+  if (searchInput) {
+    searchInput.addEventListener('input', function(event) {
+      requestsState.query = event.target.value;
+      renderRequestsScreen(true);
+    });
+  }
+}
+</script>
+</body>
+</html>
