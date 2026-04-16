@@ -175,6 +175,11 @@
     @media (max-width: 640px) {
       #main-scroll { padding: 14px 10px 24px !important; }
       .sv-title { font-size: 20px; }
+      .sv-top-actions {
+        margin-left: 0;
+        width: 100%;
+        justify-content: flex-start;
+      }
       .sv-card { padding: 14px; border-radius: 14px; }
       .sv-type-heading { font-size: 20px; }
       .sv-type-grid { grid-template-columns: 1fr; gap: 8px; }
@@ -207,7 +212,7 @@
   const chooseTypeData = {
     header: {
       title: 'Create new survey',
-      previewIcon: 'chevron',
+      previewIcon: 'eye',
       saveIcon: 'check'
     },
     meta: {
