@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <title>Talento - Performance evaluation appraisal detail</title>
+  <meta name="description" content="Talento HR Platform - Performance evaluation appraisal detail" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared-styles.css" />
+  <script src="design-tokens.js"></script>
+
+  <style>
+    #main-scroll {
+      background: #f6f5f7;
+    }
+
+    .ped-page-wrap {
+      padding: 16px;
+      min-height: calc(100vh - 56px);
+    }
+
+    .ped-page-inner {
+      max-width: 1380px;
+      margin: 0 auto;
+    }
+
+    .ped-screen-card {
+      background: #ffffff;
+      border: 1px solid #ece9ef;
+      border-radius: 24px;
+      padding: 22px 20px 24px;
+      box-shadow: 0 10px 24px rgba(30, 16, 51, 0.04);
+    }
+
+    .ped-screen {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .ped-header-card {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .ped-header-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .ped-breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      min-width: 0;
+      flex-wrap: wrap;
+      font-size: 14px;
+      line-height: 1.4;
+      color: #787085;
+    }
+
+    .ped-breadcrumb-item {
+      color: #787085;
+    }
+
+    .ped-breadcrumb-item--current {
+      color: #4b405c;
+    }
+
+    .ped-breadcrumb-divider {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #b0a9bb;
+      flex-shrink: 0;
+    }
+
+    .ped-pager {
+      display: inline-flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .ped-pager-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
+      line-height: 1.4;
+      color: #4b405c;
+      background: transparent;
+      border: none;
+      padding: 0;
+      white-space: nowrap;
+      transition: color 150ms ease;
+    }
+
+    .ped-pager-btn:hover {
+      color: #1e1033;
+    }
+
+    .ped-pager-progress {
+      font-size: 14px;
+      line-height: 1.4;
+      color: #4b405c;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    .ped-header-main {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 24px;
+      flex-wrap: wrap;
+    }
+
+    .ped-title-group {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-width: 0;
+      flex: 1 1 520px;
+    }
+
+    .ped-title {
+      font-size: 20px;
+      line-height: 1.3;
+      font-weight: 500;
+      color: #1e1033;
+      letter-spacing: -0.2px;
+    }
+
+    .ped-summary-line {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      font-size: 14px;
+      line-height: 1.45;
+      color: #787085;
+    }
+
+    .ped-summary-copy,
+    .ped-summary-text {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      min-width: 0;
+    }
+
+    .ped-summary-label {
+      color: #787085;
+    }
+
+    .ped-summary-value {
+      color: #4b405c;
+    }
+
+    .ped-summary-separator {
+      color: #b0a9bb;
+    }
+
+    .ped-meta-badge {
+      display: inline-flex;
+      align-items: center;
+      height: 22px;
+      padding: 0 10px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    .ped-meta-badge--neutral {
+      color: #6b7280;
+      background: #f3f4f6;
+    }
+
+    .ped-meta-badge--success {
+      color: #15803d;
+      background: #d7ffe7;
+    }
+
+    .ped-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 12px;
+      flex: 0 0 auto;
+      flex-wrap: wrap;
+    }
+
+    .ped-action-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 42px;
+      padding: 0 16px;
+      border-radius: 14px;
+      border: 1px solid #ece9ef;
+      background: #ffffff;
+      color: #1e1033;
+      font-size: 14px;
+      line-height: 1;
+      font-weight: 500;
+      white-space: nowrap;
+      transition: background 150ms ease, border-color 150ms ease, color 150ms ease;
+    }
+
+    .ped-action-btn:hover {
+      background: #f8f7fa;
+      border-color: #ddd7e6;
+    }
+
+    .ped-action-btn--icon-only {
+      width: 42px;
+      padding: 0;
+    }
+
+    .ped-tabs {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      flex-wrap: wrap;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #ece9ef;
+    }
+
+    .ped-tab {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 0 10px;
+      border: none;
+      border-bottom: 2px solid transparent;
+      background: transparent;
+      color: #787085;
+      font-size: 14px;
+      line-height: 1.4;
+      transition: color 150ms ease, border-color 150ms ease;
+      white-space: nowrap;
+    }
+
+    .ped-tab:hover {
+      color: #4b405c;
+    }
+
+    .ped-tab.active {
+      color: #1e1033;
+      font-weight: 500;
+      border-bottom-color: #1e1033;
+    }
+
+    .ped-tab-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .ped-toolbar-shell .pe-toolbar-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .ped-toolbar-shell .pe-search-box {
+      width: 100%;
+      max-width: 430px;
+      min-width: 240px;
+      min-height: 42px;
+      padding: 0 16px;
+      border-radius: 14px;
+      border: 1px solid #ece9ef;
+      box-shadow: none;
+      background: #ffffff;
+      flex: 1;
+    }
+
+    .ped-toolbar-shell .pe-search-box input {
+      font-size: 14px;
+      line-height: 1.4;
+      color: #4b405c;
+    }
+
+    .ped-toolbar-shell .pe-filter-btn {
+      min-height: 40px;
+      padding: 0 16px;
+      border-radius: 999px;
+      border: 1px solid #ece9ef;
+      background: #ffffff;
+      color: #1e1033;
+      font-size: 14px;
+      gap: 8px;
+    }
+
+    .ped-toolbar-shell .pe-filter-count {
+      font-size: 14px;
+      color: #a09aab;
+    }
+
+    .ped-table-wrap {
+      border-radius: 18px;
+      overflow: hidden;
+    }
+
+    .ped-data-table {
+      min-width: 1180px;
+    }
+
+    .ped-data-table thead tr {
+      background: #f6f5f7;
+    }
+
+    .ped-data-table th {
+      padding: 12px 14px;
+      font-size: 12px;
+      font-weight: 400;
+      color: #8b8499;
+    }
+
+    .ped-data-table th:first-child,
+    .ped-data-table td:first-child {
+      padding-left: 14px;
+    }
+
+    .ped-data-table td {
+      padding: 12px 14px;
+      font-size: 14px;
+      line-height: 1.4;
+      color: #1e1033;
+      white-space: nowrap;
+      vertical-align: middle;
+    }
+
+    .ped-checkbox-head,
+    .ped-checkbox-cell {
+      width: 44px;
+      text-align: center;
+      padding-right: 8px;
+    }
+
+    .ped-table-checkbox {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 16px;
+      height: 16px;
+      border: 1px solid #ddd8e5;
+      border-radius: 4px;
+      background: #ffffff;
+      display: inline-block;
+      position: relative;
+      cursor: pointer;
+      margin: 0;
+      vertical-align: middle;
+    }
+
+    .ped-table-checkbox:hover {
+      border-color: #c9c0d8;
+    }
+
+    .ped-table-checkbox:checked {
+      border-color: #1e1033;
+      background: #1e1033;
+    }
+
+    .ped-table-checkbox:checked::after {
+      content: '';
+      position: absolute;
+      left: 4px;
+      top: 1px;
+      width: 4px;
+      height: 8px;
+      border: solid #ffffff;
+      border-width: 0 2px 2px 0;
+      transform: rotate(45deg);
+    }
+
+    .ped-table-checkbox:indeterminate {
+      border-color: #1e1033;
+      background: #1e1033;
+    }
+
+    .ped-table-checkbox:indeterminate::after {
+      content: '';
+      position: absolute;
+      left: 3px;
+      top: 6px;
+      width: 8px;
+      height: 2px;
+      border-radius: 999px;
+      background: #ffffff;
+    }
+
+    .ped-head-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .ped-actions-head {
+      text-align: right;
+    }
+
+    .ped-actions-head .ped-head-label {
+      width: 100%;
+      justify-content: flex-end;
+    }
+
+    .ped-member-cell {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .ped-member-cell--compact {
+      gap: 10px;
+    }
+
+    .ped-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      object-fit: cover;
+      flex-shrink: 0;
+      background: linear-gradient(135deg, #d7d0e2 0%, #f3eef9 100%);
+      box-shadow: inset 0 0 0 1px #ede7f5;
+    }
+
+    .ped-avatar--sm {
+      width: 28px;
+      height: 28px;
+    }
+
+    .ped-avatar--fallback {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #5d5072;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .ped-member-copy {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    .ped-member-name {
+      font-size: 14px;
+      line-height: 1.35;
+      font-weight: 500;
+      color: #1e1033;
+    }
+
+    .ped-member-role {
+      font-size: 14px;
+      line-height: 1.35;
+      color: #8b8499;
+    }
+
+    .ped-status-badge {
+      display: inline-flex;
+      align-items: center;
+      height: 22px;
+      padding: 0 10px;
+      border-radius: 100px;
+      font-size: 12px;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    .ped-status-badge--progress {
+      color: #6b7280;
+      background: #f3f4f6;
+    }
+
+    .ped-status-badge--completed {
+      color: #15803d;
+      background: #d7ffe7;
+    }
+
+    .ped-feedback-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      line-height: 1.4;
+      white-space: nowrap;
+    }
+
+    .ped-feedback-status--pending {
+      color: #5f566f;
+    }
+
+    .ped-feedback-status--negative,
+    .ped-feedback-status--positive {
+      color: #4b405c;
+    }
+
+    .ped-inline-text {
+      font-size: 14px;
+      line-height: 1.4;
+      color: #1e1033;
+    }
+
+    .ped-row-action-group {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .ped-inline-action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      min-height: 34px;
+      padding: 0 14px;
+      border-radius: 10px;
+      border: 1px solid #ece9ef;
+      font-size: 14px;
+      line-height: 1;
+      font-weight: 500;
+      white-space: nowrap;
+      transition: background 150ms ease, border-color 150ms ease, color 150ms ease;
+    }
+
+    .ped-inline-action--view {
+      background: #ffffff;
+      color: #4b405c;
+    }
+
+    .ped-inline-action--view:hover {
+      background: #f8f7fa;
+    }
+
+    .ped-inline-action--view svg {
+      stroke: #4b405c;
+      color: #4b405c;
+    }
+
+    .ped-inline-action--reminder {
+      background: #1e1033;
+      border-color: #1e1033;
+      color: #ffffff;
+    }
+
+    .ped-inline-action--reminder:hover {
+      background: #2b1848;
+      border-color: #2b1848;
+    }
+
+    .ped-more-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      border: 1px solid #ece9ef;
+      background: #ffffff;
+      color: #8b8499;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 150ms ease, color 150ms ease;
+      flex-shrink: 0;
+    }
+
+    .ped-more-btn:hover {
+      background: #f7f5fb;
+      color: #4b405c;
+    }
+
+    .ped-empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 220px;
+      padding: 32px 20px;
+      border: 1px dashed #e8e7eb;
+      border-radius: 18px;
+      background: #fbfafc;
+      text-align: center;
+    }
+
+    .ped-empty-state h2 {
+      font-size: 20px;
+      line-height: 1.3;
+      font-weight: 500;
+      color: #1e1033;
+    }
+
+    .ped-empty-state p {
+      max-width: 380px;
+      font-size: 14px;
+      line-height: 1.5;
+      color: #787085;
+    }
+
+    @media (max-width: 900px) {
+      .ped-screen-card {
+        padding: 18px 16px 22px;
+      }
+
+      .ped-header-top,
+      .ped-header-main {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .ped-header-main {
+        gap: 16px;
+      }
+
+      .ped-title-group {
+        flex: 0 1 auto;
+        width: 100%;
+      }
+
+      .ped-actions {
+        width: 100%;
+        justify-content: flex-start;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .ped-page-wrap {
+        padding: 12px 10px 20px;
+      }
+
+      .ped-screen-card {
+        border-radius: 20px;
+        padding: 16px 14px 20px;
+      }
+
+      .ped-pager {
+        gap: 12px;
+        justify-content: flex-start;
+      }
+
+      .ped-toolbar-shell .pe-toolbar-row {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .ped-toolbar-shell .pe-search-box {
+        max-width: none;
+        min-width: 0;
+      }
+
+      .ped-toolbar-shell .pe-filter-btn {
+        align-self: flex-start;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .ped-title {
+        font-size: 20px;
+      }
+
+      .ped-summary-line {
+        align-items: flex-start;
+        gap: 6px;
+      }
+
+      .ped-actions {
+        width: 100%;
+      }
+
+      .ped-action-btn:not(.ped-action-btn--icon-only) {
+        flex: 1 1 calc(50% - 6px);
+        min-width: 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+<div id="app">
+  <div id="overlay" aria-hidden="true"></div>
+  <aside id="sidebar" aria-label="Main navigation"></aside>
+
+  <div id="main-col">
+    <header id="navbar" style="display:flex;align-items:center;justify-content:space-between;height:56px;padding:0 16px;background:#fff;border-bottom:1px solid #e8e7eb;flex-shrink:0;min-width:0;"></header>
+
+    <div id="main-scroll">
+      <div class="ped-page-wrap">
+        <div class="ped-page-inner">
+          <div class="ped-screen-card">
+            <div id="performance-evaluation-appraisal-detail-root" class="ped-screen"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="layout.js"></script>
+<script src="performance_evaluation_components.js"></script>
+<script src="performance_evaluation_detail_components.js"></script>
+<script>
+(function() {
+  'use strict';
+
+  const screenData = {
+    header: {
+      breadcrumb: ['Performance evaluations list', 'Appraisal name'],
+      navigation: {
+        backLabel: 'Back',
+        progressLabel: '2 of 12',
+        nextLabel: 'Next'
+      },
+      title: 'Performance evaluation name',
+      summaryLines: [
+        [
+          { text: '12 November 2025' },
+          { text: '12 December 2025' },
+          { label: 'Frequency', value: 'Calendar year' }
+        ],
+        [
+          { label: 'Created on', value: '23 Jan, 2026' },
+          { badge: 'Evaluation type', tone: 'neutral' },
+          { badge: 'Active', tone: 'success' }
+        ]
+      ],
+      actions: [
+        { label: 'Settings', icon: 'sliders', action: 'settings', iconPosition: 'trailing' },
+        { label: 'Edit evaluation', icon: 'pencil', action: 'edit', iconPosition: 'trailing' },
+        { icon: 'moreVertical', action: 'more', iconOnly: true, ariaLabel: 'More actions' }
+      ]
+    },
+    tabs: [
+      { id: 'employees', label: 'Employees', icon: 'employees' },
+      { id: 'evaluators', label: 'Evaluators', icon: 'evaluators' }
+    ],
+    toolbar: {
+      searchPlaceholder: 'Search',
+      filtersCount: 2
+    },
+    employees: [
+      {
+        id: 'emp-01',
+        name: 'Fahad AlShahrani',
+        role: 'Marketing lead',
+        avatar: 'https://randomuser.me/api/portraits/men/45.jpg',
+        status: 'in-progress',
+        managerEvaluation: { type: 'pending', label: 'Pending evaluation' },
+        upwardFeedback: { type: 'pending', label: 'Pending evaluation' },
+        peerFeedback: { type: 'partial', label: '1/3 completed' },
+        selfReview: { type: 'pending', label: 'Pending evaluation' },
+        checked: false
+      },
+      {
+        id: 'emp-02',
+        name: 'Khalid AlAnazi',
+        role: 'People & culture lead',
+        avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
+        status: 'completed',
+        managerEvaluation: { type: 'pending', label: 'Pending evaluation' },
+        upwardFeedback: { type: 'pending', label: 'Pending evaluation' },
+        peerFeedback: { type: 'completed', label: '3/3 completed' },
+        selfReview: { type: 'pending', label: 'Pending evaluation' },
+        checked: false
+      },
+      {
+        id: 'emp-03',
+        name: 'Razan AlQahtani',
+        role: 'Product manager',
+        avatar: 'https://randomuser.me/api/portraits/women/44.jpg',
+        status: 'in-progress',
+        managerEvaluation: { type: 'pending', label: 'Pending evaluation' },
+        upwardFeedback: { type: 'pending', label: 'Pending evaluation' },
+        peerFeedback: { type: 'partial', label: '2/4 completed' },
+        selfReview: { type: 'pending', label: 'Pending evaluation' },
+        checked: false
+      }
+    ],
+    appraisalEvaluators: [
+      {
+        id: 'ass-01',
+        name: 'Mishari AlSubaie',
+        role: '',
+        avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
+        status: { type: 'completed', label: 'Completed' },
+        employeeRole: 'Direct manager',
+        deadline: '29 Dec 2026',
+        evaluatesWhom: {
+          name: 'Turki AlSubaie',
+          avatar: 'https://randomuser.me/api/portraits/men/67.jpg'
+        },
+        action: { variant: 'view', label: 'View evaluation' },
+        checked: false
+      },
+      {
+        id: 'ass-02',
+        name: 'Mishari AlSubaie',
+        role: '',
+        avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
+        status: { type: 'completed', label: 'Completed' },
+        employeeRole: 'Direct manager',
+        deadline: '29 Dec 2026',
+        evaluatesWhom: {
+          name: 'Samira AlSubaie',
+          avatar: 'https://randomuser.me/api/portraits/women/65.jpg'
+        },
+        action: { variant: 'view', label: 'View evaluation' },
+        checked: false
+      },
+      {
+        id: 'ass-03',
+        name: 'Turki AlSubaie',
+        role: '',
+        avatar: 'https://randomuser.me/api/portraits/men/67.jpg',
+        status: { type: 'pending', label: 'Pending evaluation' },
+        employeeRole: 'Employee',
+        deadline: '29 Dec 2026',
+        evaluatesWhom: {
+          name: 'Mishari AlSubaie',
+          avatar: 'https://randomuser.me/api/portraits/men/32.jpg'
+        },
+        action: { variant: 'reminder', label: 'Send a reminder' },
+        checked: false
+      },
+      {
+        id: 'ass-04',
+        name: 'Samira AlSubaie',
+        role: '',
+        avatar: 'https://randomuser.me/api/portraits/women/65.jpg',
+        status: { type: 'pending', label: 'Pending evaluation' },
+        employeeRole: 'HR manager',
+        deadline: '29 Dec 2026',
+        evaluatesWhom: {
+          name: 'Mishari AlSubaie',
+          avatar: 'https://randomuser.me/api/portraits/men/32.jpg'
+        },
+        action: { variant: 'reminder', label: 'Send a reminder' },
+        checked: false
+      }
+    ]
+  };
+
+  let activeTab = 'evaluators';
+  let searchValue = '';
+  let employees = JSON.parse(JSON.stringify(screenData.employees));
+  let appraisalEvaluators = JSON.parse(JSON.stringify(screenData.appraisalEvaluators));
+
+  const root = document.getElementById('performance-evaluation-appraisal-detail-root');
+
+  function getActiveRows() {
+    return activeTab === 'employees' ? employees : appraisalEvaluators;
+  }
+
+  function setActiveRows(rows) {
+    if (activeTab === 'employees') {
+      employees = rows;
+      return;
+    }
+
+    appraisalEvaluators = rows;
+  }
+
+  function buildSearchIndex(row) {
+    if (activeTab === 'employees') {
+      return [
+        row.name,
+        row.role,
+        row.status,
+        row.managerEvaluation && row.managerEvaluation.label,
+        row.upwardFeedback && row.upwardFeedback.label,
+        row.peerFeedback && row.peerFeedback.label,
+        row.selfReview && row.selfReview.label
+      ].join(' ').toLowerCase();
+    }
+
+    return [
+      row.name,
+      row.employeeRole,
+      row.deadline,
+      row.status && row.status.label,
+      row.evaluatesWhom && row.evaluatesWhom.name,
+      row.action && row.action.label
+    ].join(' ').toLowerCase();
+  }
+
+  function getVisibleRows() {
+    const rows = getActiveRows();
+
+    if (!searchValue) {
+      return rows;
+    }
+
+    const needle = searchValue.toLowerCase();
+
+    return rows.filter(function(row) {
+      return buildSearchIndex(row).indexOf(needle) !== -1;
+    });
+  }
+
+  function getSelectAllState(rows) {
+    const total = rows.length;
+    const selected = rows.filter(function(row) {
+      return row.checked;
+    }).length;
+
+    return {
+      checked: total > 0 && selected === total,
+      indeterminate: selected > 0 && selected < total
+    };
+  }
+
+  function updateCheckedState(id, checked) {
+    setActiveRows(getActiveRows().map(function(row) {
+      if (String(row.id) === String(id)) {
+        return Object.assign({}, row, { checked: checked });
+      }
+
+      return row;
+    }));
+  }
+
+  function syncSelectAllToggle() {
+    const toggle = root.querySelector('[data-detail-select-all]');
+    if (!toggle) return;
+
+    const state = getSelectAllState(getVisibleRows());
+    toggle.indeterminate = state.indeterminate;
+  }
+
+  function renderTabs() {
+    const tabsRegion = document.getElementById('ped-tabs-region');
+    if (!tabsRegion) return;
+
+    tabsRegion.innerHTML = PerformanceEvaluationDetailComponents.DetailTabs({
+      tabs: screenData.tabs,
+      activeTab: activeTab
+    });
+  }
+
+  function renderToolbar() {
+    const toolbarRegion = document.getElementById('ped-toolbar-region');
+    if (!toolbarRegion) return;
+
+    toolbarRegion.innerHTML = PerformanceEvaluationComponents.SearchToolbar({
+      searchPlaceholder: screenData.toolbar.searchPlaceholder,
+      searchValue: searchValue,
+      filtersCount: screenData.toolbar.filtersCount
+    });
+  }
+
+  function renderTable() {
+    const tableRegion = document.getElementById('ped-table-region');
+    if (!tableRegion) return;
+
+    const visibleRows = getVisibleRows();
+    const selectAll = getSelectAllState(visibleRows);
+
+    tableRegion.innerHTML = activeTab === 'employees'
+      ? PerformanceEvaluationDetailComponents.EmployeesTable({
+          rows: visibleRows,
+          selectAll: selectAll
+        })
+      : PerformanceEvaluationDetailComponents.AppraisalEvaluatorsTable({
+          rows: visibleRows,
+          selectAll: selectAll
+        });
+
+    syncSelectAllToggle();
+  }
+
+  function bindEvents() {
+    if (!root || root.__performanceEvaluationAppraisalDetailBound) return;
+
+    root.addEventListener('click', function(event) {
+      const tabButton = event.target.closest('[data-detail-tab]');
+      if (tabButton) {
+        activeTab = tabButton.getAttribute('data-detail-tab');
+        renderTabs();
+        renderTable();
+        return;
+      }
+    });
+
+    root.addEventListener('input', function(event) {
+      if (!event.target.matches('[data-evaluation-search]')) return;
+      searchValue = event.target.value.trim();
+      renderTable();
+    });
+
+    root.addEventListener('change', function(event) {
+      if (event.target.matches('[data-detail-row-check]')) {
+        updateCheckedState(event.target.getAttribute('data-detail-row-check'), event.target.checked);
+        renderTable();
+        return;
+      }
+
+      if (event.target.matches('[data-detail-select-all]')) {
+        const checked = event.target.checked;
+        const visibleIds = {};
+
+        getVisibleRows().forEach(function(row) {
+          visibleIds[String(row.id)] = true;
+        });
+
+        setActiveRows(getActiveRows().map(function(row) {
+          if (visibleIds[String(row.id)]) {
+            return Object.assign({}, row, { checked: checked });
+          }
+
+          return row;
+        }));
+
+        renderTable();
+      }
+    });
+
+    root.__performanceEvaluationAppraisalDetailBound = true;
+  }
+
+  function renderScreen() {
+    if (!root) return;
+
+    root.innerHTML = `
+      ${PerformanceEvaluationDetailComponents.DetailHeader(screenData.header)}
+      <div id="ped-tabs-region"></div>
+      <div id="ped-toolbar-region" class="ped-toolbar-shell"></div>
+      <div id="ped-table-region"></div>
+    `;
+
+    renderTabs();
+    renderToolbar();
+    renderTable();
+    bindEvents();
+  }
+
+  document.addEventListener('DOMContentLoaded', renderScreen);
+})();
+</script>
+</body>
+</html>
