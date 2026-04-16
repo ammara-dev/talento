@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <title>Talento - Survey Published</title>
+  <meta name="description" content="Talento HR Platform - Published survey screen" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared-styles.css" />
+
+  <style>
+    #main-scroll {
+      background: linear-gradient(120deg, #f6f5f7 0%, #f8f6fb 45%, #f2f0f8 100%);
+      min-height: calc(100vh - 54px);
+    }
+
+    .sv-preview-page-wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 16px 8px 26px;
+      font-family: 'Alexandria', Helvetica, sans-serif;
+    }
+    .sv-preview-page-wrap,
+    .sv-preview-page-wrap * {
+      font-family: 'Alexandria', Helvetica, sans-serif;
+    }
+
+    .sv-preview-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .sv-preview-top-title {
+      margin: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #1e1033;
+      font-size: 20px;
+      line-height: 1.3;
+      font-weight: 400;
+    }
+
+    .sv-preview-top-actions {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-left: auto;
+      max-width: 100%;
+    }
+
+    .sv-preview-top-action-btn {
+      height: 32px;
+      border: 1px solid #e8e7eb;
+      border-radius: 10px;
+      background: #ffffff;
+      color: #4b405c;
+      font-size: 14px;
+      line-height: 1;
+      font-weight: 400;
+      padding: 0 10px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .sv-preview-top-action-published {
+      border-color: #d4b9ff;
+      box-shadow: inset 0 0 0 1px rgba(212, 185, 255, 0.25);
+    }
+    .sv-preview-top-action-icon-only {
+      width: 32px;
+      padding: 0;
+      color: #787085;
+    }
+
+    .sv-preview-stack {
+      max-width: 700px;
+      margin: 0 auto;
+      display: grid;
+      gap: 10px;
+    }
+
+    .sv-preview-card {
+      background: #ffffff;
+      border: 1px solid #e8e7eb;
+      border-radius: 16px;
+      padding: 14px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .sv-preview-main-title {
+      margin: 0;
+      color: #1e1033;
+      font-size: 20px;
+      line-height: 1.3;
+      font-weight: 400;
+      letter-spacing: -0.2px;
+    }
+
+    .sv-preview-body-text {
+      font-size: 14px;
+      line-height: 1.4;
+      color: #a59fad;
+    }
+
+    .sv-preview-description {
+      margin: 0;
+      color: #a59fad;
+    }
+
+    .sv-preview-required-note {
+      color: #1e1033;
+    }
+
+    .sv-preview-intro-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      border-top: 1px dashed #ece9f2;
+      padding-top: 10px;
+      flex-wrap: wrap;
+    }
+
+    .sv-preview-respondent {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-left: auto;
+      max-width: 100%;
+    }
+
+    .sv-preview-respondent-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      object-fit: cover;
+      border: 1px solid #e8e7eb;
+      flex-shrink: 0;
+    }
+
+    .sv-preview-respondent-meta {
+      display: grid;
+      gap: 1px;
+      min-width: 0;
+    }
+
+    .sv-preview-respondent-name {
+      color: #1e1033;
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 1.3;
+    }
+
+    .sv-preview-respondent-email {
+      color: #787085;
+      font-size: 14px;
+      line-height: 1.3;
+      font-weight: 400;
+      overflow-wrap: anywhere;
+    }
+
+    .sv-preview-question-meta {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .sv-preview-meta-chip {
+      display: inline-flex;
+      align-items: center;
+      padding: 0 8px;
+      height: 20px;
+      border-radius: 999px;
+      background: #f6f5f7;
+      color: #4b405c;
+      font-size: 11px;
+      line-height: 1;
+      white-space: nowrap;
+    }
+
+    .sv-preview-question-title {
+      margin: 0;
+      color: #1e1033;
+      font-size: 14px;
+      line-height: 1.4;
+      font-weight: 500;
+    }
+
+    .sv-preview-answer-input {
+      width: 100%;
+      height: 40px;
+      border-radius: 9px;
+      border: 1px solid #e8e7eb;
+      background: #ffffff;
+      padding: 0 12px;
+      font-family: 'Alexandria', Helvetica, sans-serif;
+      font-size: 14px;
+      color: #1e1033;
+      outline: none;
+      box-sizing: border-box;
+      max-width: 100%;
+    }
+
+    .sv-preview-answer-input::placeholder {
+      color: #a59fad;
+      font-size: 14px;
+    }
+
+    .sv-preview-answer-paragraph {
+      min-height: 112px;
+      resize: none;
+      padding-top: 10px;
+      line-height: 1.4;
+    }
+
+    .sv-preview-choice-list {
+      display: grid;
+      gap: 6px;
+    }
+
+    .sv-preview-choice-grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 6px;
+    }
+
+    .sv-preview-choice-with-input {
+      border: 1px solid #e8e7eb;
+      border-radius: 9px;
+      background: #ffffff;
+      padding: 0 10px 10px;
+      display: grid;
+      gap: 8px;
+      overflow: hidden;
+      box-sizing: border-box;
+    }
+
+    .sv-preview-choice-with-input.selected {
+      border-color: #d4b9ff;
+      box-shadow: 0 0 0 1px rgba(212, 185, 255, 0.34) inset;
+      background: #fcfbff;
+    }
+
+    .sv-preview-choice-with-input .sv-preview-choice-row {
+      border: none;
+      border-radius: 9px;
+      background: transparent;
+      min-height: 40px;
+      margin: 0 -10px;
+      box-sizing: border-box;
+    }
+
+    .sv-preview-choice-row {
+      min-height: 38px;
+      border: 1px solid #e8e7eb;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 10px;
+      background: #fff;
+    }
+
+    .sv-preview-choice-row.selected {
+      border-color: #d4b9ff;
+      box-shadow: 0 0 0 1px rgba(212, 185, 255, 0.34) inset;
+      background: #fcfbff;
+    }
+
+    .sv-preview-choice-icon {
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1.7px solid #9b95a8;
+      background: #fff;
+    }
+
+    .sv-preview-radio { border-radius: 999px; }
+    .sv-preview-checkbox { border-radius: 3px; }
+
+    .sv-preview-choice-row.selected .sv-preview-radio {
+      border-color: #d4b9ff;
+      box-shadow: inset 0 0 0 3px #ffffff, inset 0 0 0 8px #d4b9ff;
+    }
+
+    .sv-preview-choice-row.selected .sv-preview-checkbox {
+      border-color: #1e1033;
+      background: #1e1033;
+      box-shadow: inset 0 0 0 2px #1e1033;
+    }
+
+    .sv-preview-choice-tick {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 10px;
+      height: 10px;
+    }
+
+    .sv-preview-choice-tick svg {
+      width: 10px;
+      height: 10px;
+      display: block;
+    }
+
+    .sv-preview-choice-label {
+      color: #1e1033;
+    }
+
+    .sv-preview-other-input {
+      margin: 0;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .sv-preview-yes-no-wrap {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .sv-preview-rating-wrap {
+      display: grid;
+      grid-template-columns: repeat(10, minmax(0, 1fr));
+      gap: 8px;
+      align-items: end;
+    }
+
+    .sv-preview-card-rating .sv-preview-rating-wrap {
+      margin-top: 24px;
+    }
+
+    .sv-preview-rating-item {
+      display: grid;
+      justify-items: center;
+      gap: 4px;
+      min-width: 0;
+    }
+
+    .sv-preview-rating-number {
+      color: #787085;
+      font-size: 10px;
+      line-height: 1;
+    }
+
+    .sv-preview-rating-star {
+      display: inline-flex;
+      color: #a9a3b6;
+    }
+
+    .sv-preview-rating-star.active svg {
+      fill: #ba8aff;
+      stroke: #ba8aff;
+    }
+
+    @media (max-width: 900px) {
+      .sv-preview-page-wrap {
+        padding: 14px 4px 22px;
+      }
+      .sv-preview-stack {
+        max-width: 100%;
+      }
+      .sv-preview-top-actions {
+        margin-left: 0;
+      }
+    }
+
+    @media (max-width: 640px) {
+      #main-scroll {
+        padding: 12px 10px 20px !important;
+      }
+      .sv-preview-page-wrap {
+        padding: 10px 0 14px;
+      }
+      .sv-preview-card {
+        padding: 12px;
+      }
+      .sv-preview-yes-no-wrap,
+      .sv-preview-choice-grid-2 {
+        grid-template-columns: 1fr;
+      }
+      .sv-preview-rating-wrap {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+        row-gap: 10px;
+      }
+      .sv-preview-topbar {
+        margin-bottom: 12px;
+        align-items: flex-start;
+        justify-content: flex-start;
+      }
+      .sv-preview-intro-footer {
+        align-items: flex-start;
+        justify-content: flex-start;
+      }
+      .sv-preview-respondent {
+        margin-left: 0;
+        width: 100%;
+      }
+      .sv-preview-top-actions {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+  <aside id="sidebar"></aside>
+  <div id="overlay"></div>
+  <div id="main-col">
+    <header id="navbar" style="display:flex;align-items:center;justify-content:space-between;height:54px;padding:0 16px;border-bottom:1px solid #e8e7eb;flex-shrink:0;background:#fff;"></header>
+    <main id="main-scroll" style="padding:18px 18px 30px;">
+      <div class="sv-preview-page-wrap">
+        <div id="survey-published-root"></div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="layout.js"></script>
+<script src="survey_components.js"></script>
+<script>
+(function() {
+  'use strict';
+
+  const publishedPageData = {
+    showBack: false,
+    headerTitle: 'Create new survey',
+    headerActions: [
+      { label: 'Edit form', icon: 'editPencil', variant: 'ghost' },
+      { label: 'Preview', icon: 'eye', variant: 'ghost' },
+      { label: 'Published', icon: 'refresh', variant: 'published' },
+      { icon: 'moreVertical', variant: 'icon-only', ariaLabel: 'More actions' }
+    ],
+    intro: {
+      title: 'Employee satisfaction & engagement survey',
+      description: 'This survey helps us understand your experience at work and identify areas for improvement. Your responses will remain confidential.',
+      requiredNote: '* Indicates required question',
+      respondentName: 'Huda AlQahtani',
+      respondentEmail: 'alqatani@gmail.com',
+      respondentAvatar: 'https://randomuser.me/api/portraits/women/44.jpg'
+    },
+    questions: [
+      {
+        typeLabel: 'Short answer',
+        required: true,
+        kind: 'short-answer',
+        title: 'What is your current job title or department?',
+        placeholder: 'Enter your answer'
+      },
+      {
+        typeLabel: 'Paragraph',
+        required: true,
+        kind: 'paragraph',
+        title: 'What is one improvement that would make your work experience better?',
+        placeholder: 'Enter your question'
+      },
+      {
+        typeLabel: 'Multiple choice',
+        required: false,
+        kind: 'multiple-choice',
+        title: 'How satisfied are you with your overall work experience at the company?',
+        options: [
+          { label: 'Very satisfied' },
+          { label: 'Satisfied', selected: true },
+          { label: 'Neutral' },
+          { label: 'Dissatisfied' },
+          { label: 'Very dissatisfied' },
+          { label: 'Other' }
+        ]
+      },
+      {
+        typeLabel: 'Checkboxes',
+        required: false,
+        kind: 'checkboxes',
+        title: 'Which benefits or workplace features do you value the most? (Select all that apply)',
+        options: [
+          { label: 'Flexible working hours', selected: false },
+          { label: 'Career growth opportunities', selected: true },
+          { label: 'Competitive salary', selected: false },
+          { label: 'Health and wellness benefits', selected: true },
+          { label: 'Work-life balance', selected: true }
+        ]
+      },
+      {
+        typeLabel: 'Checkboxes',
+        required: false,
+        kind: 'checkboxes',
+        layout: 'grid-2',
+        title: 'Which benefits or workplace features do you value the most? (Select all that apply)',
+        options: [
+          { label: 'Flexible working hours', selected: false },
+          { label: 'Health and wellness benefits', selected: true },
+          { label: 'Career growth opportunities', selected: true },
+          { label: 'Health and wellness benefits', selected: true },
+          { label: 'Competitive salary', selected: false },
+          { label: 'Work-life balance', selected: true }
+        ]
+      },
+      {
+        typeLabel: 'Yes/No',
+        required: true,
+        kind: 'yes-no',
+        title: 'Do you feel your work is recognized and appreciated by your manager?',
+        options: [
+          { label: 'Yes', selected: true },
+          { label: 'No', selected: false }
+        ]
+      },
+      {
+        typeLabel: 'Rating scale',
+        required: true,
+        kind: 'rating-scale',
+        title: 'On a scale from 1 to 10, how likely are you to recommend this company as a great place to work? (1 = Not likely, 10 = Extremely likely)',
+        min: 1,
+        max: 10,
+        selected: 6
+      }
+    ],
+    showActions: false
+  };
+
+  document.addEventListener('DOMContentLoaded', function() {
+    SurveyComponents.renderPreview('#survey-published-root', publishedPageData);
+  });
+})();
+</script>
+</body>
+</html>

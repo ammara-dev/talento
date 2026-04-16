@@ -32,7 +32,9 @@ const SurveyComponents = (function() {
     filter: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1E1033" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="14" y2="6"/><line x1="4" y1="12" x2="11" y2="12"/><line x1="4" y1="18" x2="9" y2="18"/><line x1="16" y1="6" x2="20" y2="10"/><line x1="16" y1="6" x2="20" y2="2"/><line x1="13" y1="12" x2="20" y2="12"/><line x1="11" y1="18" x2="20" y2="18"/></svg>`,
     sort: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#787085" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="8 10 12 6 16 10"/><polyline points="8 14 12 18 16 14"/></svg>`,
     checkWhite: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`,
-    refresh: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#A59FAD" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.5 9a9 9 0 0 1 14.3-3.36L23 10"/><path d="M20.5 15a9 9 0 0 1-14.3 3.36L1 14"/></svg>`
+    refresh: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#A59FAD" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.5 9a9 9 0 0 1 14.3-3.36L23 10"/><path d="M20.5 15a9 9 0 0 1-14.3 3.36L1 14"/></svg>`,
+    editPencil: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4B405C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/></svg>`,
+    moreVertical: `<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg>`
   };
 
   function getTypeIcon(typeLabel) {
@@ -623,6 +625,21 @@ const SurveyComponents = (function() {
     return `<div class="sv-preview-rating-wrap">${stars.join('')}</div>`;
   }
 
+  function PreviewTopActionButton(config) {
+    const {
+      label = '',
+      icon = '',
+      variant = 'ghost',
+      ariaLabel = ''
+    } = config;
+    const iconSvg = icon && Icons[icon] ? Icons[icon] : '';
+    const className = `sv-preview-top-action-btn sv-preview-top-action-${variant}`;
+    if (variant === 'icon-only') {
+      return `<button class="${className}" type="button" aria-label="${ariaLabel || label || 'Action'}">${iconSvg}</button>`;
+    }
+    return `<button class="${className}" type="button">${label}${iconSvg ? ` ${iconSvg}` : ''}</button>`;
+  }
+
   function PreviewQuestionBody(question) {
     const kind = String(question.kind || '').toLowerCase();
 
@@ -647,8 +664,9 @@ const SurveyComponents = (function() {
     }
 
     if (kind === 'checkboxes') {
+      const listClass = question.layout === 'grid-2' ? 'sv-preview-choice-grid-2' : 'sv-preview-choice-list';
       return `
-        <div class="sv-preview-choice-list">
+        <div class="${listClass}">
           ${(question.options || []).map(function(option) {
             return PreviewChoiceRow({
               type: 'checkbox',
@@ -728,15 +746,27 @@ const SurveyComponents = (function() {
       });
     }).join('');
 
+    const rightContent = (data.headerActions && data.headerActions.length > 0)
+      ? `
+        <div class="sv-preview-top-actions">
+          ${(data.headerActions || []).map(function(action) {
+            return PreviewTopActionButton(action);
+          }).join('')}
+        </div>
+      `
+      : (data.statusText
+        ? `<p class="sv-preview-status">${data.statusText} <span class="sv-preview-status-close">${Icons.xSmall}</span></p>`
+        : '');
+
     return `
       <div class="sv-preview-topbar">
-        <h1 class="sv-preview-top-title"><span class="sv-preview-back-icon">${Icons.back}</span><span>${data.headerTitle || 'Preview mode'}</span></h1>
-        <p class="sv-preview-status">${data.statusText || ''} <span class="sv-preview-status-close">${Icons.xSmall}</span></p>
+        <h1 class="sv-preview-top-title">${data.showBack === false ? '' : `<span class="sv-preview-back-icon">${Icons.back}</span>`}<span>${data.headerTitle || 'Preview mode'}</span></h1>
+        ${rightContent}
       </div>
       <div class="sv-preview-stack">
         ${PreviewSurveyHeader(data.intro || {})}
         ${questions}
-        ${PreviewActions(data.actions || {})}
+        ${data.showActions === false ? '' : PreviewActions(data.actions || {})}
       </div>
     `;
   }
@@ -795,6 +825,7 @@ const SurveyComponents = (function() {
     PreviewSurveyHeader,
     PreviewChoiceRow,
     PreviewQuestionCard,
+    PreviewTopActionButton,
     PreviewPage,
     TopBar,
     render,
