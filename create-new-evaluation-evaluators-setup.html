@@ -395,6 +395,8 @@
     }
 
     .es-template-preview svg {
+      width: 24px;
+      height: 24px;
       color: #746d82;
       flex-shrink: 0;
     }
@@ -407,7 +409,7 @@
       padding: 12px;
       display: flex;
       align-items: center;
-      justify-content: flex-start;
+      justify-content: center;
       gap: 8px;
       cursor: pointer;
       font-family: 'Alexandria', Helvetica, sans-serif;
@@ -415,6 +417,28 @@
       line-height: 1.4;
       font-weight: 500;
       color: #8f64f7;
+      position: relative;
+    }
+
+    .es-template-create-label {
+      text-align: center;
+      padding-right: 28px;
+    }
+
+    .es-template-create-plus {
+      width: 24px;
+      height: 24px;
+      border: 1px solid #d8c9f6;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #8f64f7;
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      flex-shrink: 0;
     }
 
     .es-inline-row,
@@ -656,12 +680,30 @@
       }
 
       .es-template-option {
-        flex-wrap: wrap;
-        align-items: flex-start;
+        display: grid;
+        grid-template-columns: 22px minmax(0, 1fr);
+        column-gap: 10px;
+        row-gap: 8px;
+        align-items: center;
+      }
+
+      .es-template-option-label {
+        grid-column: 2;
+        grid-row: 1;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .es-template-radio {
+        grid-column: 1;
+        grid-row: 1;
       }
 
       .es-template-preview {
-        margin-left: 32px;
+        grid-column: 2;
+        grid-row: 2;
+        margin-left: 0;
       }
 
       .es-counter-controls {

@@ -14,7 +14,8 @@ const CreateNewEvaluationEvaluatorsSetupComponents = (function() {
     selfEvaluation: `<svg width="24" height="24" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M10 2.4a7.6 7.6 0 1 1 0 15.2 7.6 7.6 0 0 1 0-15.2Zm0 4.5a1 1 0 1 0 0 2 1 1 0 0 0 0-2Zm-.8 3.1v4.2h1.6V10H9.2Z"/></svg>`,
     check: `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`,
     chevronDown: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1E1033" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>`,
-    eye: `<svg width="14" height="14" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M1.8 10s2.7-4 8.2-4 8.2 4 8.2 4-2.7 4-8.2 4-8.2-4-8.2-4Z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="10" cy="10" r="2.4" fill="currentColor"/></svg>`,
+    eye: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>`,
+    plusAccent: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>`,
     minus: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#787085" stroke-width="2.1" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>`,
     plus: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#787085" stroke-width="2.1" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>`
   };
@@ -58,8 +59,8 @@ const CreateNewEvaluationEvaluatorsSetupComponents = (function() {
             }).join('')}
           </div>
           <button type="button" class="es-template-create" data-template-create>
-            <span>${createLabel}</span>
-            <span>+</span>
+            <span class="es-template-create-label">${createLabel}</span>
+            <span class="es-template-create-plus">${Icons.plusAccent}</span>
           </button>
         </div>
       </div>
