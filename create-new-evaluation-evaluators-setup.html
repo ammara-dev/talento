@@ -264,6 +264,7 @@
       padding: 10px 12px;
       display: grid;
       gap: 8px;
+      position: relative;
     }
 
     .es-template-label {
@@ -291,12 +292,152 @@
       gap: 10px;
       cursor: pointer;
       text-align: left;
+      transition: border-color 150ms ease;
     }
 
     .es-template-tail {
       display: inline-flex;
       align-items: center;
       justify-content: center;
+      flex-shrink: 0;
+      transition: transform 150ms ease;
+    }
+
+    .es-template-dropdown {
+      display: none;
+      margin-top: -2px;
+      border: 1px solid #e5e0ea;
+      border-top: 0;
+      border-radius: 0 0 14px 14px;
+      background: #ffffff;
+      box-shadow: 0 12px 24px rgba(30, 16, 51, 0.12);
+      overflow: hidden;
+      position: relative;
+      z-index: 2;
+    }
+
+    .es-template-card.is-open .es-template-select {
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+      border-color: #d8d1e1;
+    }
+
+    .es-template-card.is-open .es-template-tail {
+      transform: rotate(180deg);
+    }
+
+    .es-template-card.is-open .es-template-dropdown {
+      display: block;
+    }
+
+    .es-template-options {
+      display: grid;
+    }
+
+    .es-template-option {
+      width: 100%;
+      border: 0;
+      border-top: 1px solid #efebf3;
+      background: #ffffff;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      text-align: left;
+      font-family: 'Alexandria', Helvetica, sans-serif;
+      color: #1e1033;
+    }
+
+    .es-template-option-label {
+      font-size: 14px;
+      line-height: 1.4;
+      font-weight: 500;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .es-template-radio {
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      border: 2px solid #a59fad;
+      flex-shrink: 0;
+      display: inline-block;
+      position: relative;
+    }
+
+    .es-template-option.is-selected .es-template-radio::after {
+      content: '';
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: #1e1033;
+      position: absolute;
+      top: 4px;
+      left: 4px;
+    }
+
+    .es-template-preview {
+      border: 1px solid #e5e0ea;
+      border-radius: 10px;
+      background: #f8f7fa;
+      min-height: 38px;
+      padding: 0 10px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      line-height: 1.2;
+      font-weight: 500;
+      color: #1e1033;
+      flex-shrink: 0;
+    }
+
+    .es-template-preview svg {
+      width: 24px;
+      height: 24px;
+      color: #746d82;
+      flex-shrink: 0;
+    }
+
+    .es-template-create {
+      width: 100%;
+      border: 0;
+      border-top: 1px solid #efebf3;
+      background: #ffffff;
+      padding: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      font-family: 'Alexandria', Helvetica, sans-serif;
+      font-size: 14px;
+      line-height: 1.4;
+      font-weight: 500;
+      color: #8f64f7;
+      position: relative;
+    }
+
+    .es-template-create-label {
+      text-align: center;
+      padding-right: 28px;
+    }
+
+    .es-template-create-plus {
+      width: 24px;
+      height: 24px;
+      border: 1px solid #d8c9f6;
+      border-radius: 6px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #8f64f7;
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
       flex-shrink: 0;
     }
 
@@ -538,6 +679,33 @@
         align-items: stretch;
       }
 
+      .es-template-option {
+        display: grid;
+        grid-template-columns: 22px minmax(0, 1fr);
+        column-gap: 10px;
+        row-gap: 8px;
+        align-items: center;
+      }
+
+      .es-template-option-label {
+        grid-column: 2;
+        grid-row: 1;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .es-template-radio {
+        grid-column: 1;
+        grid-row: 1;
+      }
+
+      .es-template-preview {
+        grid-column: 2;
+        grid-row: 2;
+        margin-left: 0;
+      }
+
       .es-counter-controls {
         justify-content: flex-end;
       }
@@ -585,6 +753,11 @@
 (function() {
   'use strict';
 
+  const templateOptions = [
+    { label: 'Managers team evaluation' },
+    { label: 'Annual performance review' }
+  ];
+
   const screenData = {
     title: 'Create new evaluation',
     steps: [
@@ -604,7 +777,9 @@
           checked: true,
           template: {
             label: 'Select template for this evaluators*',
-            placeholder: 'Select template'
+            placeholder: 'Select template',
+            options: templateOptions,
+            createLabel: 'Create new evaluation from scratch'
           }
         },
         {
@@ -620,7 +795,9 @@
           checked: true,
           template: {
             label: 'Select template for this evaluators*',
-            placeholder: 'Select template'
+            placeholder: 'Select template',
+            options: templateOptions,
+            createLabel: 'Create new evaluation from scratch'
           },
           toggle: {
             enabled: true,
@@ -641,7 +818,9 @@
           checked: true,
           template: {
             label: 'Select template for this evaluators*',
-            placeholder: 'Select template'
+            placeholder: 'Select template',
+            options: templateOptions,
+            createLabel: 'Create new evaluation from scratch'
           },
           counter: {
             title: 'Number of peers per employee*',
@@ -670,6 +849,72 @@
 
   const root = document.getElementById('create-new-evaluation-evaluators-setup-root');
 
+  function closeTemplateDropdowns(exceptCard) {
+    if (!root) return;
+    root.querySelectorAll('[data-template-card].is-open').forEach(function(card) {
+      if (card !== exceptCard) {
+        card.classList.remove('is-open');
+        const trigger = card.querySelector('[data-template-trigger]');
+        if (trigger) trigger.setAttribute('aria-expanded', 'false');
+      }
+    });
+  }
+
+  function bindEvents() {
+    if (!root || root.__templateDropdownBound) return;
+
+    root.addEventListener('click', function(event) {
+      const preview = event.target.closest('[data-template-preview]');
+      if (preview) {
+        event.preventDefault();
+        event.stopPropagation();
+        return;
+      }
+
+      const option = event.target.closest('[data-template-option]');
+      if (option) {
+        const card = option.closest('[data-template-card]');
+        if (!card) return;
+
+        const value = option.getAttribute('data-template-option') || '';
+        const valueNode = card.querySelector('[data-template-value]');
+        if (valueNode) valueNode.textContent = value;
+
+        card.querySelectorAll('[data-template-option]').forEach(function(node) {
+          node.classList.toggle('is-selected', node === option);
+        });
+
+        card.classList.remove('is-open');
+        const trigger = card.querySelector('[data-template-trigger]');
+        if (trigger) trigger.setAttribute('aria-expanded', 'false');
+        return;
+      }
+
+      const trigger = event.target.closest('[data-template-trigger]');
+      if (trigger) {
+        const card = trigger.closest('[data-template-card]');
+        if (!card) return;
+        const isOpen = card.classList.contains('is-open');
+        closeTemplateDropdowns(card);
+        card.classList.toggle('is-open', !isOpen);
+        trigger.setAttribute('aria-expanded', String(!isOpen));
+        return;
+      }
+
+      if (!event.target.closest('[data-template-card]')) {
+        closeTemplateDropdowns();
+      }
+    });
+
+    document.addEventListener('click', function(event) {
+      if (!root.contains(event.target)) {
+        closeTemplateDropdowns();
+      }
+    });
+
+    root.__templateDropdownBound = true;
+  }
+
   function renderScreen() {
     if (!root) return;
 
@@ -685,7 +930,10 @@
     `;
   }
 
-  document.addEventListener('DOMContentLoaded', renderScreen);
+  document.addEventListener('DOMContentLoaded', function() {
+    renderScreen();
+    bindEvents();
+  });
 })();
 </script>
 </body>

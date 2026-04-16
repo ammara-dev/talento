@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <title>Talento - Create new evaluation from scratch</title>
+  <meta name="description" content="Talento HR Platform - Create new evaluation from scratch" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared-styles.css" />
+  <script src="design-tokens.js"></script>
+  <style>
+    #main-scroll { background: #f6f5f7; }
+    .ce-page-wrap { padding: 18px 18px 0; min-height: calc(100vh - 56px); }
+    .ce-screen { min-height: calc(100vh - 92px); display: flex; flex-direction: column; gap: 14px; }
+    .ce-flow-stack { width: min(100%, 760px); margin: 0 auto; display: grid; gap: 12px; }
+    .ce-stepper-card { background: #fff; border: 1px solid #ece9ef; border-radius: 20px; box-shadow: 0 10px 24px rgba(30,16,51,.04); padding: 16px 14px; }
+    .ce-stepper-grid { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 12px; }
+    .ce-step-item { position: relative; display: grid; justify-items: center; gap: 10px; text-align: center; min-height: 64px; }
+    .ce-step-item::after { content: ''; position: absolute; top: 18px; left: calc(50% + 24px); right: calc(-50% + 24px); height: 1px; background: #e6e1ea; z-index: 0; }
+    .ce-step-item--last::after { display: none; }
+    .ce-step-icon { width: 30px; height: 30px; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; color: #b7b1c0; background: #f2eef4; box-shadow: inset 0 0 0 1px #ece7f1; z-index: 1; }
+    .ce-step-label { font-size: 12px; line-height: 1.35; font-weight: 400; color: #8b8499; }
+    .ce-step-item--completed .ce-step-icon { color: #7a48de; background: #f0e7ff; box-shadow: inset 0 0 0 1px #e5d7ff; }
+    .ce-step-item--completed .ce-step-label { color: #5e5770; }
+    .ce-step-item--active .ce-step-icon { color: #fff; background: #ab73ff; box-shadow: 0 0 0 4px rgba(171,115,255,.14); }
+    .ce-step-item--active .ce-step-label { color: #1e1033; font-weight: 500; }
+
+    .fs-back-link { border: 0; background: transparent; color: #787085; font-family: 'Alexandria', Helvetica, sans-serif; font-size: 14px; display: inline-flex; align-items: center; gap: 8px; padding: 0; cursor: pointer; }
+    .fs-back-link svg { color: #625a71; }
+
+    .fs-summary-card, .fs-builder-card { background: #fff; border: 1px solid #ece9ef; border-radius: 16px; padding: 14px; box-shadow: 0 8px 20px rgba(30,16,51,.04); }
+    .fs-summary-progress { display: flex; align-items: center; gap: 14px; margin-bottom: 12px; }
+    .fs-summary-progress p { margin: 0; font-size: 14px; color: #5f566f; white-space: nowrap; }
+    .fs-progress-track { flex: 1; height: 4px; border-radius: 999px; background: #ebddff; overflow: hidden; }
+    .fs-progress-track span { display: block; height: 100%; background: #46285f; border-radius: inherit; }
+    .fs-intro-card { border: 1px solid #ece9ef; border-radius: 14px; background: #faf9fc; padding: 14px; display: flex; justify-content: space-between; gap: 10px; }
+    .fs-intro-copy h2 { margin: 0 0 6px; font-size: 20px; line-height: 1.3; font-weight: 500; color: #1e1033; }
+    .fs-intro-copy p { margin: 0; font-size: 14px; line-height: 1.4; color: #5f566f; }
+    .fs-donut { display: flex; align-items: center; }
+    .fs-donut-ring { width: 74px; height: 74px; border-radius: 999px; background: conic-gradient(#ab73ff 0 62%, #ece8f4 62% 100%); display: grid; place-items: center; }
+    .fs-donut-ring span { width: 54px; height: 54px; border-radius: 999px; background: #fff; display: grid; place-items: center; font-size: 10px; line-height: 1.2; color: #7a7288; text-align: center; }
+    .fs-donut-ring strong { font-size: 20px; color: #3f3454; line-height: 1; font-weight: 600; }
+    .fs-summary-fields { display: grid; gap: 10px; margin-top: 12px; }
+    .fs-row { display: grid; grid-template-columns: minmax(0, 1fr) 130px; gap: 10px; }
+    .fs-field { display: grid; gap: 6px; }
+    .fs-field span { font-size: 14px; line-height: 1.35; font-weight: 500; color: #5d546d; }
+    .fs-field input, .fs-field textarea { width: 100%; min-height: 40px; border-radius: 9px; border: 1px solid #e8e3ed; background: #fff; padding: 0 12px; box-sizing: border-box; font-family: 'Alexandria', Helvetica, sans-serif; font-size: 14px; color: #1e1033; outline: none; }
+    .fs-field textarea { min-height: 66px; resize: vertical; padding-top: 10px; }
+    .fs-field input::placeholder, .fs-field textarea::placeholder { color: #a59fad; }
+    .fs-field--importance input { border-color: #dac7fb; background: #fcfaff; }
+
+    .fs-builder-card { display: grid; gap: 8px; padding: 8px; }
+    .fs-question-card { border: 1px solid #ece9ef; border-radius: 14px; padding: 12px; display: grid; gap: 10px; background: #fff; }
+    .fs-question-top { display: flex; align-items: center; gap: 8px; }
+    .fs-drag { color: #a89fb6; display: inline-flex; align-items: center; justify-content: center; }
+    .fs-question-tags { display: inline-flex; gap: 6px; flex-wrap: wrap; }
+    .fs-tag { background: #f2f0f6; color: #6f667f; border-radius: 999px; padding: 3px 8px; font-size: 12px; line-height: 1; }
+    .fs-options-title { margin: 2px 0 0; font-size: 14px; color: #2c233d; font-weight: 500; }
+    .fs-options-list { display: grid; gap: 8px; margin-top: 4px; }
+    .fs-option-row { display: grid; grid-template-columns: 18px minmax(0,1fr) 14px; align-items: center; gap: 8px; }
+    .fs-option-dot { color: #a59fad; display: inline-flex; align-items: center; justify-content: center; }
+    .fs-option-row input { min-height: 36px; border-radius: 9px; border: 1px solid #e8e3ed; padding: 0 12px; font-size: 14px; color: #1e1033; font-family: 'Alexandria', Helvetica, sans-serif; }
+    .fs-option-row input::placeholder { color: #a59fad; }
+    .fs-option-remove { border: 0; background: transparent; color: #9c94ab; font-size: 18px; line-height: 1; padding: 0; cursor: pointer; }
+    .fs-option-add { margin: 2px 0 0 26px; font-size: 14px; color: #6f667f; }
+    .fs-option-add span { color: #8f64f7; }
+    .fs-question-footer { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+    .fs-required { display: inline-flex; align-items: center; gap: 8px; color: #2f2540; font-size: 14px; }
+    .fs-required-box { width: 16px; height: 16px; border-radius: 3px; background: #1e1033; display: inline-flex; align-items: center; justify-content: center; }
+    .fs-footer-actions { display: inline-flex; align-items: center; gap: 6px; }
+    .fs-type-btn { height: 28px; border-radius: 8px; border: 1px solid #e8e3ed; background: #fff; color: #2f2540; padding: 0 8px; display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-family: 'Alexandria', Helvetica, sans-serif; }
+    .fs-icon-btn { width: 28px; height: 28px; border-radius: 8px; border: 1px solid #e8e3ed; background: #fff; color: #8f879e; display: inline-flex; align-items: center; justify-content: center; }
+
+    .fs-add-question { height: 44px; border-radius: 12px; border: 1px solid #ece9ef; background: #fff; color: #2f2540; display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-family: 'Alexandria', Helvetica, sans-serif; font-size: 14px; }
+
+    .fs-footer-bar { margin: 2px auto 0; width: min(100%, 760px); display: flex; justify-content: space-between; gap: 10px; padding-bottom: 8px; }
+    .fs-btn { height: 36px; border-radius: 10px; border: 1px solid #e8e3ed; padding: 0 14px; font-family: 'Alexandria', Helvetica, sans-serif; font-size: 14px; display: inline-flex; align-items: center; gap: 8px; }
+    .fs-btn--ghost { background: #fff; color: #6f667f; }
+    .fs-btn--primary { border-color: #1e1033; background: #1e1033; color: #fff; box-shadow: 0 8px 18px rgba(53, 22, 89, .25); }
+
+    @media (max-width: 900px) {
+      .ce-page-wrap { padding: 16px 12px 0; }
+      .ce-stepper-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+      .ce-step-item::after { display: none; }
+      .fs-row { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 640px) {
+      .ce-page-wrap { padding: 14px 10px 0; }
+      .ce-stepper-grid { grid-template-columns: 1fr; }
+      .ce-step-item { justify-items: start; text-align: left; grid-template-columns: 34px 1fr; min-height: unset; }
+      .fs-intro-copy h2 { font-size: 20px; }
+      .fs-donut-ring { width: 62px; height: 62px; }
+      .fs-donut-ring span { width: 46px; height: 46px; }
+      .fs-footer-bar { flex-direction: column; }
+      .fs-btn { width: 100%; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+  <div id="overlay" aria-hidden="true"></div>
+  <aside id="sidebar" aria-label="Main navigation"></aside>
+  <div id="main-col">
+    <header id="navbar" style="display:flex;align-items:center;justify-content:space-between;height:56px;padding:0 16px;background:#fff;border-bottom:1px solid #e8e7eb;flex-shrink:0;min-width:0;"></header>
+    <div id="main-scroll">
+      <div class="ce-page-wrap">
+        <div id="create-new-evaluation-from-scratch-root" class="ce-screen"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="layout.js"></script>
+<script src="performance_evaluation_components.js"></script>
+<script src="create_new_evaluation_components.js"></script>
+<script src="create_new_evaluation_from_scratch_components.js"></script>
+<script>
+(function() {
+  'use strict';
+
+  const screenData = {
+    steps: [
+      { label: 'Basic information', icon: 'basicInformation', status: 'completed' },
+      { label: 'Add employees', icon: 'addEmployees', status: 'completed' },
+      { label: 'Evaluators & setup', icon: 'evaluatorsSetup', status: 'active' },
+      { label: 'Review & launch', icon: 'reviewLaunch', status: 'upcoming' }
+    ],
+    back: { label: 'Start new evaluation from scratch' },
+    summary: {
+      stepText: 'Step 01 of 02',
+      progress: 52,
+      title: 'What do we evaluate?',
+      descriptionLine1: 'Define the structure and content of your evaluation.',
+      descriptionLine2: 'Group related questions into sections.',
+      total: '62',
+      nameValue: 'Annual Evaluation',
+      descriptionPlaceholder: 'Add a short overview of what this evaluation covers'
+    },
+    builder: {
+      questions: [
+        { type: 'Short answer', importance: '40%' },
+        { type: 'Paragraph', importance: '22%' },
+        { type: 'Multiple choice', importance: '20%', options: ['Option 1', 'Option 2', 'Option 3'] }
+      ]
+    },
+    footer: { clearLabel: 'Clear form', nextLabel: 'Next step' }
+  };
+
+  const root = document.getElementById('create-new-evaluation-from-scratch-root');
+
+  function renderScreen() {
+    if (!root) return;
+    root.innerHTML = `
+      <div class="ce-flow-stack">
+        ${CreateNewEvaluationComponents.Stepper({ steps: screenData.steps })}
+        ${CreateNewEvaluationFromScratchComponents.BackLabel(screenData.back)}
+        ${CreateNewEvaluationFromScratchComponents.ProgressSummary(screenData.summary)}
+        ${CreateNewEvaluationFromScratchComponents.QuestionBuilder(screenData.builder)}
+      </div>
+      ${CreateNewEvaluationFromScratchComponents.FooterBar(screenData.footer)}
+    `;
+  }
+
+  document.addEventListener('DOMContentLoaded', renderScreen);
+})();
+</script>
+</body>
+</html>
