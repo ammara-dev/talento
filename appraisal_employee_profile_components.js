@@ -15,6 +15,8 @@ const AppraisalEmployeeProfileComponents = (function() {
     selfReview: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><path d="M12 9.2v3.1"/><circle cx="12" cy="15.6" r=".9" fill="currentColor" stroke="none"/></svg>`,
     evaluators: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="8.2" cy="9" r="2.2"/><circle cx="15.8" cy="9" r="2.2"/><path d="M3.8 17a4.4 4.4 0 0 1 8.8 0"/><path d="M11.4 17a4.4 4.4 0 0 1 8.8 0"/></svg>`,
     level: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#34C38F"/><path d="M12 5.8 13.9 9.6l4.2.6-3.1 3 .7 4.2L12 15.5l-3.7 1.9.7-4.2-3.1-3 4.2-.6L12 5.8Z" fill="#ffffff"/></svg>`,
+    statusCompleted: `<svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="8" fill="#34C38F"/><path d="m6.7 10.2 2.1 2.1 4.45-4.55" stroke="#ffffff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+    statusPending: `<svg viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M10 3.5 17 15H3L10 3.5Z" fill="#7F768F"/><path d="M10 7.2v4.25" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round"/><circle cx="10" cy="13.35" r=".9" fill="#ffffff"/></svg>`,
     strength: `<svg width="14" height="14" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" fill="#B892FF"/><path d="m6.4 10.1 2.2 2.2 4.8-4.9" stroke="#ffffff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
     improvement: `<svg width="14" height="14" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" fill="#C98316"/><path d="M10 5.8v5.4" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round"/><circle cx="10" cy="13.9" r="1" fill="#ffffff"/></svg>`,
     line: `<svg width="3" height="44" viewBox="0 0 3 44" fill="none"><rect x=".5" y=".5" width="2" height="43" rx="1" fill="#B892FF"/></svg>`
@@ -212,13 +214,14 @@ const AppraisalEmployeeProfileComponents = (function() {
 
     const statusMarkup = peerMode
       ? AvatarStack(summary)
-      : (typeof PerformanceEvaluationDetailComponents !== 'undefined' &&
-        typeof PerformanceEvaluationDetailComponents.FeedbackStatus === 'function'
-          ? PerformanceEvaluationDetailComponents.FeedbackStatus({
-              type: statusType,
-              label: statusLabel
-            })
-          : `<span class="aep-fallback-status">${escapeHtml(statusLabel)}</span>`);
+      : `
+        <span class="aep-eval-state aep-eval-state--${statusType === 'completed' ? 'completed' : 'pending'}">
+          <span class="aep-eval-state-icon">
+            ${statusType === 'completed' ? getIcon('statusCompleted') : getIcon('statusPending')}
+          </span>
+          <span>${escapeHtml(statusLabel)}</span>
+        </span>
+      `;
 
     return `
       <article class="aep-card aep-card--status">

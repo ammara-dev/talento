@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
-  <title>Talento - Appraisal Employee profile</title>
-  <meta name="description" content="Talento HR Platform - Appraisal employee profile" />
+  <title>Talento - Appraisal Employee profile answers</title>
+  <meta name="description" content="Talento HR Platform - Appraisal employee profile answers" />
   <link rel="icon" type="image/png" href="/favicon.png" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -250,241 +250,160 @@
       flex-shrink: 0;
     }
 
-    .aep-content-grid {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) minmax(320px, 0.42fr);
-      gap: 14px;
-      align-items: start;
-      align-content: start;
-    }
-
-    .aep-left-col,
-    .aep-right-col {
+    .aepa-questions {
       display: grid;
       gap: 10px;
       align-content: start;
     }
 
-    .aep-card {
+    .aepa-question-card {
       background: #f9f8fb;
       border: 1px solid #ece9ef;
-      border-radius: 18px;
-      padding: 14px;
+      border-radius: 16px;
+      overflow: hidden;
     }
 
-    .aep-card-title {
-      font-size: 20px;
-      line-height: 1.3;
-      font-weight: 500;
-      color: #1e1033;
-      margin-bottom: 10px;
-      letter-spacing: -0.2px;
-    }
-
-    .aep-card--level {
-      background: #eef9f5;
-      border-color: #bfeee1;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      min-height: 90px;
-    }
-
-    .aep-level-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: #d8f6ea;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .aep-level-copy {
-      display: grid;
-      gap: 2px;
-    }
-
-    .aep-level-label {
-      color: #787085;
-      font-size: 14px;
-      line-height: 1.4;
-    }
-
-    .aep-level-value {
-      display: inline-flex;
-      align-items: baseline;
-      gap: 10px;
-      font-size: 34px;
-      line-height: 1.25;
-      color: #1e1033;
-      font-weight: 500;
-    }
-
-    .aep-level-percent {
-      color: #34b58a;
-    }
-
-    .aep-bullet-list {
-      display: grid;
-      gap: 9px;
-      padding: 0;
-      margin: 0;
-      list-style: none;
-    }
-
-    .aep-bullet-row {
-      display: grid;
-      grid-template-columns: 16px minmax(0, 1fr);
-      align-items: center;
-      gap: 10px;
-      color: #1e1033;
-      font-size: 14px;
-      line-height: 1.45;
-    }
-
-    .aep-bullet-icon {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .aep-card--conclusion .aep-conclusion-copy {
-      display: grid;
-      grid-template-columns: 3px minmax(0, 1fr);
-      gap: 10px;
-      align-items: start;
-      color: #1e1033;
-      font-size: 14px;
-      line-height: 1.45;
-    }
-
-    .aep-conclusion-line {
-      display: inline-flex;
-    }
-
-    .aep-conclusion-text {
-      margin: 0;
-      color: #1e1033;
-    }
-
-    .aep-card--status {
-      display: grid;
-      gap: 12px;
-      min-height: 112px;
-      align-content: center;
-    }
-
-    .aep-status-head {
+    .aepa-question-head {
+      width: 100%;
+      border: none;
+      background: transparent;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 10px;
+      padding: 12px 12px 12px 16px;
+      text-align: left;
     }
 
-    .aep-status-title {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
-      color: #787085;
-      font-size: 14px;
-      line-height: 1.4;
+    .aepa-question-title {
+      font-size: 20px;
+      line-height: 1.35;
+      font-weight: 500;
+      color: #1e1033;
     }
 
-    .aep-status-icon {
+    .aepa-head-chevron {
+      width: 34px;
+      height: 34px;
+      border: 1px solid #e6e2ec;
+      border-radius: 10px;
+      background: #ffffff;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      color: #787085;
       flex-shrink: 0;
     }
 
-    .aep-open-btn {
-      border: none;
-      background: transparent;
-      color: #787085;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 20px;
-      height: 20px;
-      padding: 0;
+    .aepa-question-body {
+      padding: 0 12px 12px;
     }
 
-    .aep-status-body .aep-eval-state {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 14px;
-      line-height: 1.4;
-      color: #1e1033;
-      font-weight: 500;
-      white-space: normal;
+    .aepa-answers-stack {
+      display: grid;
+      gap: 6px;
     }
 
-    .aep-status-body .aep-eval-state-icon {
+    .aepa-answer-entry {
+      border: 1px solid #ece9ef;
+      border-radius: 14px;
+      background: #ffffff;
+      padding: 10px 10px 9px;
+    }
+
+    .aepa-source-row {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      flex-wrap: wrap;
+      margin-bottom: 8px;
+    }
+
+    .aepa-source-icon {
       width: 14px;
       height: 14px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
+      color: #7f768f;
       flex-shrink: 0;
     }
 
-    .aep-status-body .aep-eval-state-icon svg {
-      width: 1em;
-      height: 1em;
-      display: block;
-    }
-
-    .aep-peer-stack {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .aep-peer-count {
-      font-size: 34px;
-      line-height: 1.15;
-      color: #1e1033;
-      font-weight: 500;
-      letter-spacing: -0.4px;
-    }
-
-    .aep-peer-avatars {
-      display: inline-flex;
-      align-items: center;
-      margin-left: 2px;
-    }
-
-    .aep-peer-avatars img {
-      width: 24px;
-      height: 24px;
+    .aepa-source-avatar {
+      width: 18px;
+      height: 18px;
       border-radius: 50%;
       object-fit: cover;
-      border: 2px solid #ffffff;
-      margin-left: -6px;
+      flex-shrink: 0;
+      border: 1px solid #e9e4f1;
       background: #f1ecf8;
     }
 
-    .aep-peer-avatars img:first-child {
-      margin-left: 0;
+    .aepa-source-label {
+      font-size: 14px;
+      line-height: 1.35;
+      font-weight: 500;
+      color: #1e1033;
     }
 
-    @media (max-width: 1100px) {
-      .aep-content-grid {
-        grid-template-columns: 1fr;
+    .aepa-source-meta {
+      font-size: 14px;
+      line-height: 1.35;
+      color: #787085;
+    }
+
+    .aepa-source-badge {
+      display: inline-flex;
+      align-items: center;
+      height: 22px;
+      padding: 0 10px;
+      border-radius: 999px;
+      background: #f3f4f6;
+      color: #6b7280;
+      font-size: 12px;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    .aepa-answer-text {
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.45;
+      color: #4b405c;
+    }
+
+    .aepa-empty {
+      border: 1px dashed #e5e1eb;
+      border-radius: 16px;
+      background: #fbfafd;
+      min-height: 140px;
+      display: grid;
+      place-items: center;
+      padding: 18px;
+      color: #787085;
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    @media (max-width: 900px) {
+      .aep-header-top,
+      .aep-profile-row {
+        flex-direction: column;
+        align-items: flex-start;
       }
 
-      .aep-right-col {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+      .aep-header-actions {
+        width: 100%;
+      }
+
+      .aep-edit-btn {
+        flex: 1;
+        justify-content: center;
       }
     }
 
     @media (max-width: 760px) {
       .aep-page-wrap {
-        padding: 4px 10px 12px;
+        padding: 6px 10px 12px;
         min-height: auto;
       }
 
@@ -502,75 +421,20 @@
         padding-bottom: 0;
       }
 
-      .aep-header-top {
-        display: flex;
-        width: 100%;
-        gap: 8px;
-        align-items: flex-start;
-      }
-
-      .aep-profile-row {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 8px;
-      }
-
-      .aep-breadcrumb {
-        width: 100%;
-        font-size: 13px;
-        line-height: 1.35;
-        gap: 4px;
-      }
-
-      .aep-pager {
-        width: 100%;
-        justify-content: flex-end;
-        gap: 10px;
-      }
-
+      .aep-breadcrumb,
       .aep-pager-btn,
       .aep-pager-progress {
         font-size: 13px;
         line-height: 1.35;
       }
 
-      .aep-profile-main {
-        width: 100%;
+      .aepa-question-title {
+        font-size: 18px;
+        line-height: 1.35;
       }
 
-      .aep-header-actions {
-        width: 100%;
-      }
-
-      .aep-edit-btn {
-        flex: 1;
-        justify-content: center;
-      }
-
-      .aep-right-col {
-        grid-template-columns: 1fr;
-        gap: 8px;
-      }
-
-      .aep-content-grid {
-        gap: 8px;
-      }
-
-      .aep-left-col {
-        gap: 8px;
-      }
-
-      .aep-card {
-        padding: 12px;
-      }
-
-      .aep-card--status {
-        min-height: 90px;
-      }
-
-      .aep-level-value,
-      .aep-peer-count {
-        font-size: 28px;
+      .aepa-question-head {
+        padding: 10px 10px 10px 12px;
       }
     }
 
@@ -586,6 +450,11 @@
       .aep-profile-avatar {
         width: 56px;
         height: 56px;
+      }
+
+      .aepa-head-chevron {
+        width: 32px;
+        height: 32px;
       }
     }
   </style>
@@ -603,7 +472,7 @@
       <div class="aep-page-wrap">
         <div class="aep-page-inner">
           <div class="aep-screen-card">
-            <div id="appraisal-employee-profile-root" class="aep-screen"></div>
+            <div id="appraisal-employee-profile-answers-root" class="aep-screen"></div>
           </div>
         </div>
       </div>
@@ -615,6 +484,7 @@
 <script src="performance_evaluation_components.js"></script>
 <script src="performance_evaluation_detail_components.js"></script>
 <script src="appraisal_employee_profile_components.js"></script>
+<script src="appraisal_employee_profile_answers_components.js"></script>
 <script>
 (function() {
   'use strict';
@@ -650,73 +520,60 @@
       { id: 'self-review', label: 'Self review', icon: 'selfReview' },
       { id: 'evaluators', label: 'Evaluators', icon: 'evaluators' }
     ],
-    summary: {
-      level: {
-        label: 'Performance level',
-        value: 'Very good',
-        percent: '82%'
-      },
-      listCards: [
-        {
-          title: 'Key strengths',
-          tone: 'strength',
-          items: [
-            'Exceptional design thinking and user-centered approach',
-            'Strong collaboration and communication with cross-functional teams',
-            'Proactive in mentoring junior designers',
-            'Consistently delivers high-quality work on time'
-          ]
-        },
-        {
-          title: 'Areas for improvement',
-          tone: 'improvement',
-          items: [
-            'Could benefit from deeper involvement in strategic planning sessions',
-            'Opportunity to expand technical skills in prototyping tools'
-          ]
-        }
-      ],
-      conclusion: {
-        title: "Manager's conclusion",
-        text: '"Sarah is a valuable asset to the team and has exceeded expectations this quarter. I recommend her for the senior leadership development program and propose a discussion about expanding her responsibilities in the next quarter."'
-      }
-    },
-    sideCards: [
+    questions: [
       {
-        title: 'Direct manager evaluation',
-        icon: 'evaluators',
-        statusType: 'completed',
-        statusLabel: 'Completed'
+        id: 'q1',
+        title: 'How would you rate the technical competency in their role?',
+        expanded: true,
+        entries: [
+          {
+            icon: 'manager',
+            label: 'Mishari AlSubaie',
+            meta: 'Manager',
+            avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
+            text: 'Sarah is an exceptional designer and colleague. Her attention to detail and user-centered approach have significantly improved our product quality. She is always willing to share her knowledge and help team members grow.'
+          },
+          {
+            icon: 'peers',
+            label: 'Received peer feedback 02',
+            badge: 'Anonymous',
+            text: 'Working with Sarah has been a great experience. She brings creative solutions to complex problems and maintains a positive attitude even under pressure. Her mentorship has been invaluable to my professional development.'
+          },
+          {
+            icon: 'selfReview',
+            label: 'Self review',
+            text: 'I believe I have strong technical skills and am continuously working to improve. I recently completed advanced prototyping courses and have been implementing new techniques in my projects.'
+          }
+        ]
       },
       {
-        title: 'Upward feedback',
-        icon: 'peerFeedback',
-        statusType: 'pending',
-        statusLabel: 'Pending evaluation'
+        id: 'q2',
+        title: 'What support do you need from your manager or the organization?',
+        expanded: false,
+        entries: []
       },
       {
-        title: 'Received peer feedback',
-        icon: 'peerFeedback',
-        type: 'peer',
-        summary: {
-          count: '2/3',
-          avatars: [
-            'https://randomuser.me/api/portraits/men/46.jpg',
-            'https://randomuser.me/api/portraits/men/67.jpg'
-          ]
-        }
-      },
-      {
-        title: 'Self-review evaluation',
-        icon: 'selfReview',
-        statusType: 'pending',
-        statusLabel: 'Pending evaluation'
+        id: 'q3',
+        title: 'How would you rate the technical competency in their role?',
+        expanded: false,
+        entries: []
       }
     ]
   };
 
-  let activeTab = 'summary';
-  const root = document.getElementById('appraisal-employee-profile-root');
+  let activeTab = 'answers';
+  let questions = JSON.parse(JSON.stringify(screenData.questions));
+  const root = document.getElementById('appraisal-employee-profile-answers-root');
+
+  function renderAnswersBody() {
+    if (activeTab !== 'answers') {
+      return '<div class="aepa-empty">This standalone screen focuses on the Answers view.</div>';
+    }
+
+    return AppraisalEmployeeProfileAnswersComponents.AnswersList({
+      questions: questions
+    });
+  }
 
   function render() {
     if (!root) return;
@@ -727,35 +584,39 @@
         tabs: screenData.tabs,
         activeTab: activeTab
       })}
-      <div class="aep-content-grid">
-        <div class="aep-left-col">
-          ${AppraisalEmployeeProfileComponents.PerformanceLevelCard(screenData.summary.level)}
-          ${screenData.summary.listCards.map(function(card) {
-            return AppraisalEmployeeProfileComponents.ListCard(card);
-          }).join('')}
-          ${AppraisalEmployeeProfileComponents.ConclusionCard(screenData.summary.conclusion)}
-        </div>
-        <div class="aep-right-col">
-          ${screenData.sideCards.map(function(card) {
-            return AppraisalEmployeeProfileComponents.StatusCard(card);
-          }).join('')}
-        </div>
-      </div>
+      ${renderAnswersBody()}
     `;
   }
 
+  function toggleQuestion(id) {
+    questions = questions.map(function(question) {
+      if (question.id === id) {
+        return Object.assign({}, question, { expanded: !question.expanded });
+      }
+
+      return Object.assign({}, question, { expanded: false });
+    });
+  }
+
   function bindEvents() {
-    if (!root || root.__appraisalEmployeeProfileBound) return;
+    if (!root || root.__aepAnswersBound) return;
 
     root.addEventListener('click', function(event) {
       const tab = event.target.closest('[data-aep-tab]');
-      if (!tab) return;
+      if (tab) {
+        activeTab = tab.getAttribute('data-aep-tab');
+        render();
+        return;
+      }
 
-      activeTab = tab.getAttribute('data-aep-tab');
+      const toggler = event.target.closest('[data-aepa-toggle]');
+      if (!toggler) return;
+
+      toggleQuestion(toggler.getAttribute('data-aepa-toggle'));
       render();
     });
 
-    root.__appraisalEmployeeProfileBound = true;
+    root.__aepAnswersBound = true;
   }
 
   document.addEventListener('DOMContentLoaded', function() {
