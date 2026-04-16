@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <title>Talento - Create new evaluation</title>
+  <meta name="description" content="Talento HR Platform - Create new evaluation" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared-styles.css" />
+  <script src="design-tokens.js"></script>
+
+  <style>
+    #main-scroll {
+      background: #f6f5f7;
+    }
+
+    .ce-page-wrap {
+      padding: 18px 18px 0;
+      min-height: calc(100vh - 56px);
+    }
+
+    .ce-screen {
+      min-height: calc(100vh - 92px);
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .pe-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .pe-title {
+      font-size: 20px;
+      line-height: 1.3;
+      font-weight: 500;
+      color: #1e1033;
+      letter-spacing: -0.2px;
+    }
+
+    .pe-header-actions:empty {
+      display: none;
+    }
+
+    .ce-flow-stack {
+      width: min(100%, 540px);
+      margin: 0 auto;
+      display: grid;
+      gap: 16px;
+    }
+
+    .ce-stepper-card,
+    .ce-panel-card {
+      background: #ffffff;
+      border: 1px solid #ece9ef;
+      border-radius: 24px;
+      box-shadow: 0 10px 24px rgba(30, 16, 51, 0.04);
+    }
+
+    .ce-stepper-card {
+      padding: 16px 14px;
+    }
+
+    .ce-stepper-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .ce-step-item {
+      position: relative;
+      display: grid;
+      justify-items: center;
+      gap: 10px;
+      text-align: center;
+      min-height: 76px;
+    }
+
+    .ce-step-item::after {
+      content: '';
+      position: absolute;
+      top: 20px;
+      left: calc(50% + 28px);
+      width: calc(100% - 22px);
+      height: 1.5px;
+      background: #ece8f3;
+    }
+
+    .ce-step-item--last::after {
+      display: none;
+    }
+
+    .ce-step-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #9c96aa;
+      background: #f4f2f8;
+      border: 1px solid transparent;
+      z-index: 1;
+    }
+
+    .ce-step-label {
+      font-size: 14px;
+      line-height: 1.45;
+      font-weight: 400;
+      color: #8b8499;
+    }
+
+    .ce-step-item--active .ce-step-icon {
+      color: #8f64f7;
+      background: #f5efff;
+      border-color: #e6d7ff;
+      box-shadow: 0 0 0 4px rgba(143, 100, 247, 0.08);
+    }
+
+    .ce-step-item--active .ce-step-label {
+      color: #1e1033;
+      font-weight: 500;
+    }
+
+    .ce-panel-card {
+      padding: 18px;
+      display: grid;
+      gap: 18px;
+    }
+
+    .ce-panel-head {
+      display: grid;
+      gap: 14px;
+    }
+
+    .ce-panel-title {
+      font-size: 20px;
+      line-height: 1.3;
+      font-weight: 500;
+      color: #1e1033;
+      letter-spacing: -0.2px;
+    }
+
+    .ce-info-banner {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px 14px;
+      border: 1px solid #eadbfd;
+      border-radius: 14px;
+      background: linear-gradient(180deg, #f7f0ff 0%, #f5ecff 100%);
+    }
+
+    .ce-info-banner__icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .ce-info-banner__copy {
+      display: grid;
+      gap: 4px;
+    }
+
+    .ce-info-banner__title,
+    .ce-info-banner__text {
+      font-size: 14px;
+      line-height: 1.45;
+      margin: 0;
+    }
+
+    .ce-info-banner__title {
+      font-weight: 500;
+      color: #1e1033;
+    }
+
+    .ce-info-banner__text {
+      color: #787085;
+    }
+
+    .ce-panel-form {
+      display: grid;
+      gap: 16px;
+    }
+
+    .ce-field,
+    .ce-field-row {
+      display: grid;
+      gap: 8px;
+    }
+
+    .ce-field-row {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .ce-field-label {
+      font-size: 14px;
+      line-height: 1.4;
+      font-weight: 500;
+      color: #4b405c;
+    }
+
+    .ce-field-control {
+      width: 100%;
+      min-height: 40px;
+      border-radius: 10px;
+      border: 1px solid #ece9ef;
+      background: #ffffff;
+      padding: 0 14px;
+      font-family: 'Alexandria', Helvetica, sans-serif;
+      font-size: 14px;
+      line-height: 1.4;
+      color: #1e1033;
+      outline: none;
+      transition: border-color 150ms ease, box-shadow 150ms ease, background 150ms ease;
+      box-sizing: border-box;
+    }
+
+    input.ce-field-control::placeholder,
+    textarea.ce-field-control::placeholder {
+      color: #b0a9bb;
+    }
+
+    input.ce-field-control:focus,
+    textarea.ce-field-control:focus,
+    .ce-field-control--button:focus {
+      border-color: #c9b0fb;
+      box-shadow: 0 0 0 3px rgba(143, 100, 247, 0.12);
+    }
+
+    .ce-field-control--textarea {
+      min-height: 74px;
+      resize: vertical;
+      padding: 12px 14px;
+    }
+
+    .ce-field-control--button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .ce-field-control--muted {
+      color: #b0a9bb;
+    }
+
+    .ce-field-control__lead,
+    .ce-field-control__tail {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .ce-field-control--muted .ce-field-control__tail,
+    .ce-field-control--muted .ce-field-control__lead {
+      color: #a09aab;
+    }
+
+    .ce-footer-shell {
+      margin-top: auto;
+      position: sticky;
+      bottom: 0;
+      z-index: 2;
+    }
+
+    .ce-footer-bar {
+      margin: 0 -18px;
+      padding: 12px 18px 16px;
+      border-top: 1px solid #ece9ef;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(8px);
+    }
+
+    .ce-footer-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .ce-footer-btn {
+      height: 36px;
+      border-radius: 10px;
+      border: 1px solid #e8e7eb;
+      padding: 0 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: 'Alexandria', Helvetica, sans-serif;
+      font-size: 14px;
+      line-height: 1;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 150ms ease, border-color 150ms ease, color 150ms ease;
+      white-space: nowrap;
+    }
+
+    .ce-footer-btn--ghost {
+      background: #ffffff;
+      color: #c0bacb;
+      border-color: #ece9ef;
+    }
+
+    .ce-footer-btn--ghost:hover {
+      background: #f8f7fa;
+      color: #9e97ad;
+    }
+
+    .ce-footer-btn--primary {
+      background: #1e1033;
+      color: #ffffff;
+      border-color: #1e1033;
+    }
+
+    .ce-footer-btn--primary:hover {
+      background: #2b1848;
+    }
+
+    @media (max-width: 900px) {
+      .ce-page-wrap {
+        padding: 16px 14px 0;
+      }
+
+      .ce-stepper-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .ce-step-item::after {
+        display: none;
+      }
+    }
+
+    @media (max-width: 680px) {
+      .ce-screen {
+        gap: 24px;
+      }
+
+      .ce-flow-stack {
+        width: 100%;
+      }
+
+      .ce-stepper-card,
+      .ce-panel-card {
+        border-radius: 20px;
+      }
+
+      .ce-stepper-card {
+        padding: 14px 12px;
+      }
+
+      .ce-panel-card {
+        padding: 16px 14px;
+      }
+
+      .ce-field-row {
+        grid-template-columns: 1fr;
+      }
+
+      .ce-footer-bar {
+        margin: 0 -14px;
+        padding: 12px 14px 16px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .ce-page-wrap {
+        padding: 14px 10px 0;
+      }
+
+      .ce-stepper-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .ce-step-item {
+        justify-items: start;
+        text-align: left;
+        grid-template-columns: 40px 1fr;
+        align-items: center;
+        min-height: unset;
+      }
+
+      .ce-step-label {
+        align-self: center;
+      }
+
+      .ce-info-banner {
+        padding: 12px;
+      }
+
+      .ce-footer-bar {
+        margin: 0 -10px;
+        padding: 12px 10px 16px;
+      }
+
+      .ce-footer-actions {
+        width: 100%;
+        justify-content: stretch;
+      }
+
+      .ce-footer-btn {
+        flex: 1;
+        min-width: 0;
+        padding: 0 10px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+<div id="app">
+  <div id="overlay" aria-hidden="true"></div>
+  <aside id="sidebar" aria-label="Main navigation"></aside>
+
+  <div id="main-col">
+    <header id="navbar" style="display:flex;align-items:center;justify-content:space-between;height:56px;padding:0 16px;background:#fff;border-bottom:1px solid #e8e7eb;flex-shrink:0;min-width:0;"></header>
+
+    <div id="main-scroll">
+      <div class="ce-page-wrap">
+        <div id="create-new-evaluation-root" class="ce-screen"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="layout.js"></script>
+<script src="performance_evaluation_components.js"></script>
+<script src="create_new_evaluation_components.js"></script>
+<script>
+(function() {
+  'use strict';
+
+  const screenData = {
+    title: 'Create new evaluation',
+    steps: [
+      { label: 'Basic information', icon: 'basicInformation', status: 'active' },
+      { label: 'Add employees', icon: 'addEmployees', status: 'upcoming' },
+      { label: 'Evaluators & setup', icon: 'evaluatorsSetup', status: 'upcoming' },
+      { label: 'Review & launch', icon: 'reviewLaunch', status: 'upcoming' }
+    ],
+    section: {
+      title: 'Setup your evaluation cycle',
+      banner: {
+        title: 'Set up a new evaluation cycle for your team',
+        description: 'Define the evaluation type, period, and deadline for employees to complete their assessments.'
+      },
+      fields: [
+        {
+          label: 'Evaluation name',
+          required: true,
+          type: 'text',
+          value: 'Annual Evaluation',
+          placeholder: 'Enter evaluation name'
+        },
+        {
+          label: 'Description (Optional)',
+          type: 'textarea',
+          placeholder: 'Add a short overview of what this evaluation covers'
+        },
+        {
+          layout: 'row',
+          fields: [
+            {
+              label: 'Evaluation period from',
+              required: true,
+              type: 'date',
+              placeholder: 'Select date'
+            },
+            {
+              label: 'Evaluation period to',
+              required: true,
+              type: 'date',
+              placeholder: 'Select date'
+            }
+          ]
+        },
+        {
+          label: 'Frequency (Evaluation Type)',
+          required: true,
+          type: 'select',
+          value: 'Calendar year'
+        }
+      ]
+    },
+    footer: {
+      backLabel: 'Back',
+      nextLabel: 'Next step'
+    }
+  };
+
+  const root = document.getElementById('create-new-evaluation-root');
+
+  function renderScreen() {
+    if (!root) return;
+
+    root.innerHTML = `
+      ${CreateNewEvaluationComponents.PageHeader({ title: screenData.title })}
+      <div class="ce-flow-stack">
+        ${CreateNewEvaluationComponents.Stepper({ steps: screenData.steps })}
+        ${CreateNewEvaluationComponents.SetupCard(screenData.section)}
+      </div>
+      <div class="ce-footer-shell">
+        ${CreateNewEvaluationComponents.FooterActions(screenData.footer)}
+      </div>
+    `;
+  }
+
+  document.addEventListener('DOMContentLoaded', renderScreen);
+})();
+</script>
+</body>
+</html>

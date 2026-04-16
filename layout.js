@@ -25,7 +25,8 @@
     'save-and-publish-survey.html': { navItem: 'team-engagement', submenu: 'surveys' },
     'save-and-publish-survey.xml': { navItem: 'team-engagement', submenu: 'surveys' },
     'create-new-survey-choose-question-type.xml': { navItem: 'team-engagement', submenu: 'surveys' },
-    'performance-evaluation.html': { navItem: 'team-engagement', submenu: 'performance-evaluation' }
+    'performance-evaluation.html': { navItem: 'team-engagement', submenu: 'performance-evaluation' },
+    'create-new-evaluation.html': { navItem: 'team-engagement', submenu: 'performance-evaluation' }
   };
 
   const config = pageConfig[currentPage] || pageConfig['index.html'];
