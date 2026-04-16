@@ -40,7 +40,8 @@ const CreateNewEvaluationFromScratchComponents = (function() {
   }
 
   function ProgressSummary(config) {
-    const stepText = escapeHtml(config.stepText || 'Step 01 of 02');
+    const stepPrimary = escapeHtml(config.stepPrimary || 'Step 01');
+    const stepMuted = escapeHtml(config.stepMuted || 'of 02');
     const ratio = Math.max(0, Math.min(100, Number(config.progress || 50)));
     const title = escapeHtml(config.title || 'What do we evaluate?');
     const line1 = escapeHtml(config.descriptionLine1 || '');
@@ -50,7 +51,7 @@ const CreateNewEvaluationFromScratchComponents = (function() {
     return `
       <section class="fs-summary-card">
         <div class="fs-summary-progress">
-          <p>${stepText}</p>
+          <p><span>${stepPrimary}</span> <span class="fs-step-muted">${stepMuted}</span></p>
           <div class="fs-progress-track"><span style="width:${ratio}%"></span></div>
         </div>
         <div class="fs-intro-card">
@@ -117,30 +118,32 @@ const CreateNewEvaluationFromScratchComponents = (function() {
             <span class="fs-tag">${escapeHtml(type)}</span>
           </div>
         </div>
-        <div class="fs-row">
+        <div class="fs-question-content">
+          <div class="fs-row">
+            <label class="fs-field">
+              <span>Question</span>
+              <input type="text" placeholder="Enter your question" />
+            </label>
+            <label class="fs-field fs-field--importance">
+              <span>Question importance %</span>
+              <input type="text" value="${escapeHtml(config.importance || '')}" />
+            </label>
+          </div>
           <label class="fs-field">
-            <span>Question</span>
-            <input type="text" placeholder="Enter your question" />
+            <span>Description (optional)</span>
+            <input type="text" placeholder="Add description" />
           </label>
-          <label class="fs-field fs-field--importance">
-            <span>Question importance %</span>
-            <input type="text" value="${escapeHtml(config.importance || '')}" />
-          </label>
-        </div>
-        <label class="fs-field">
-          <span>Description (optional)</span>
-          <input type="text" placeholder="Add description" />
-        </label>
-        ${Options(config)}
-        <div class="fs-question-footer">
-          <label class="fs-required">
-            <span class="fs-required-box">${Icons.check}</span>
-            <span>Required question</span>
-          </label>
-          <div class="fs-footer-actions">
-            <button type="button" class="fs-type-btn">${TypeIcon(type)}<span>${escapeHtml(type)}</span>${Icons.chevronDown}</button>
-            <button type="button" class="fs-icon-btn" aria-label="Delete question">${Icons.trash}</button>
-            <button type="button" class="fs-icon-btn" aria-label="Duplicate question">${Icons.duplicate}</button>
+          ${Options(config)}
+          <div class="fs-question-footer">
+            <label class="fs-required">
+              <span class="fs-required-box">${Icons.check}</span>
+              <span>Required question</span>
+            </label>
+            <div class="fs-footer-actions">
+              <button type="button" class="fs-type-btn">${TypeIcon(type)}<span>${escapeHtml(type)}</span>${Icons.chevronDown}</button>
+              <button type="button" class="fs-icon-btn" aria-label="Duplicate question">${Icons.duplicate}</button>
+              <button type="button" class="fs-icon-btn" aria-label="Delete question">${Icons.trash}</button>
+            </div>
           </div>
         </div>
       </article>
