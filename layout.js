@@ -36,7 +36,8 @@
     'create-new-evaluation.html': { navItem: 'team-engagement', submenu: 'performance-evaluation' },
     'create-new-evaluation.xml': { navItem: 'team-engagement', submenu: 'performance-evaluation' },
     'create-new-evaluation-add-employees.html': { navItem: 'team-engagement', submenu: 'performance-evaluation' },
-    'create-new-evaluation-add-employees.xml': { navItem: 'team-engagement', submenu: 'performance-evaluation' }
+    'create-new-evaluation-add-employees.xml': { navItem: 'team-engagement', submenu: 'performance-evaluation' },
+    'create-new-evaluation-evaluators-setup.html': { navItem: 'team-engagement', submenu: 'performance-evaluation' }
   };
 
   const config = pageConfig[currentPage] || pageConfig['index.html'];
