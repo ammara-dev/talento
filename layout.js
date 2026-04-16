@@ -11,6 +11,7 @@
   // Page configuration for active states
   const pageConfig = {
     'index.html': { navItem: 'dashboard', submenu: null },
+    'requests.html': { navItem: 'requests', submenu: null },
     'leave.html': { navItem: 'attendance-leave', submenu: 'leave' },
     'business-missions-trip.html': { navItem: 'business-missions', submenu: 'missions-trip' },
     'air-tickets.html': { navItem: 'business-missions', submenu: 'air-tickets' },
@@ -33,10 +34,16 @@
     'performance-evaluation.html': { navItem: 'team-engagement', submenu: 'performance-evaluation' },
     'performance-evaluation.xml': { navItem: 'team-engagement', submenu: 'performance-evaluation' },
     'performance-evaluation-detail.html': { navItem: 'team-engagement', submenu: 'performance-evaluation' },
+    'performance-evaluation-appraisal-detail.html': { navItem: 'team-engagement', submenu: 'performance-evaluation' },
     'create-new-evaluation.html': { navItem: 'team-engagement', submenu: 'performance-evaluation' },
     'create-new-evaluation.xml': { navItem: 'team-engagement', submenu: 'performance-evaluation' },
     'create-new-evaluation-add-employees.html': { navItem: 'team-engagement', submenu: 'performance-evaluation' },
     'create-new-evaluation-add-employees.xml': { navItem: 'team-engagement', submenu: 'performance-evaluation' },
+    'Appraisal-Employee-profile.html': { navItem: 'team-engagement', submenu: 'performance-evaluation' },
+    'Appraisal-Employee-profile-answers.html': { navItem: 'team-engagement', submenu: 'performance-evaluation' },
+    'Appraisal-Employee-profile-evaluators.html': { navItem: 'team-engagement', submenu: 'performance-evaluation' },
+    'Appraisal Employee profile.html': { navItem: 'team-engagement', submenu: 'performance-evaluation' },
+    'Appraisal%20Employee%20profile.html': { navItem: 'team-engagement', submenu: 'performance-evaluation' }
     'create-new-evaluation-evaluators-setup.html': { navItem: 'team-engagement', submenu: 'performance-evaluation' },
     'create-new-evaluation-from-scratch.html': { navItem: 'team-engagement', submenu: 'performance-evaluation' }
   };
@@ -48,6 +55,7 @@
    */
   function getSidebarHTML() {
     const isDashboardActive = config.navItem === 'dashboard';
+    const isRequestsActive = config.navItem === 'requests';
     const isLeaveActive = config.submenu === 'leave';
     const isAttendanceExpanded = config.navItem === 'attendance-leave';
     const isMissionsTripActive = config.submenu === 'missions-trip';
@@ -94,11 +102,13 @@
         </a>
 
         <!-- Requests -->
-        <button class="nav-item" data-page="Requests"
-          style="display:flex;align-items:center;gap:10px;width:100%;height:40px;border-radius:8px;padding:0 16px;text-align:left;outline:none;">
-          <i class="fa-solid fa-clipboard-list" style="width:20px;font-size:16px;color:#1e1033;flex-shrink:0;"></i>
-          <span class="s-label" style="color:#1e1033;font-size:14px;letter-spacing:-0.14px;line-height:1;white-space:nowrap;flex:1;">Requests</span>
-        </button>
+        <a href="requests.html" style="text-decoration:none;">
+          <button class="nav-item${isRequestsActive ? ' active' : ''}" data-page="Requests"${isRequestsActive ? ' aria-current="page"' : ''}
+            style="display:flex;align-items:center;gap:10px;width:calc(100% - 16px);height:40px;border-radius:8px;padding:0 8px;margin:0 8px;text-align:left;outline:none;">
+            <i class="fa-solid fa-clipboard-list" style="width:20px;font-size:16px;color:#1e1033;flex-shrink:0;"></i>
+            <span class="s-label" style="color:#1e1033;font-size:14px;letter-spacing:-0.14px;line-height:1;white-space:nowrap;flex:1;">Requests</span>
+          </button>
+        </a>
 
         <!-- Attendance & leave (dropdown) -->
         <button class="nav-item" id="attendance-toggle" aria-haspopup="true" aria-expanded="${isAttendanceExpanded}"
