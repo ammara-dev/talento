@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <title>Talento - Create New Salary Scale</title>
+  <meta name="description" content="Talento HR Platform - Create new salary scale" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared-styles.css" />
+  <script src="design-tokens.js"></script>
+
+  <style>
+    #main-scroll { background: #f6f5f7; }
+    .ss2-page-wrap { padding: 16px; min-height: calc(100vh - 56px); }
+    .ss2-page-title {
+      font-size: 20px;
+      line-height: 1.3;
+      color: #1e1033;
+      font-weight: 500;
+      margin-bottom: 12px;
+    }
+
+    .ss2-stepper {
+      max-width: 740px;
+      margin: 0 auto 10px;
+      border: 1px solid #ece9ef;
+      border-radius: 14px;
+      background: #fff;
+      min-height: 56px;
+      padding: 0 16px;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      align-items: center;
+      gap: 28px;
+    }
+
+    .ss2-step {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #9a93a8;
+      font-size: 14px;
+      line-height: 1.3;
+      position: relative;
+      white-space: nowrap;
+    }
+
+    .ss2-step:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      left: calc(100% + 8px);
+      top: 50%;
+      transform: translateY(-50%);
+      width: 20px;
+      height: 1px;
+      background: #ece9ef;
+    }
+
+    .ss2-step.active {
+      color: #1e1033;
+      font-weight: 500;
+    }
+
+    .ss2-step-index {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 1px solid #ece9ef;
+      color: #a19aae;
+      font-size: 10px;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #fff;
+      flex-shrink: 0;
+    }
+
+    .ss2-step.active .ss2-step-index {
+      border-color: #8b64e4;
+      color: #8b64e4;
+      background: #f5f0ff;
+    }
+
+    .ss2-main-panel {
+      max-width: 740px;
+      margin: 0 auto;
+      border: 1px solid #e5e1eb;
+      border-radius: 14px;
+      background: #fff;
+      padding: 16px;
+    }
+
+    .ss2-main-title {
+      font-size: 20px;
+      line-height: 1.3;
+      color: #1e1033;
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+
+    .ss2-main-sub {
+      font-size: 14px;
+      line-height: 1.4;
+      color: #6f6780;
+      margin-bottom: 14px;
+    }
+
+    .ss2-form-card {
+      border: 1px solid #ece9ef;
+      border-radius: 14px;
+      background: #fff;
+      padding: 14px;
+    }
+
+    .ss2-form-title {
+      font-size: 20px;
+      line-height: 1.3;
+      color: #1e1033;
+      font-weight: 500;
+      margin-bottom: 10px;
+    }
+
+    .ss2-fields {
+      display: grid;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .ss2-field {
+      display: grid;
+      gap: 6px;
+    }
+
+    .ss2-field-label {
+      font-size: 14px;
+      line-height: 1.35;
+      color: #6f6780;
+    }
+
+    .ss2-input {
+      width: 100%;
+      min-height: 32px;
+      border: 1px solid #ddd8e6;
+      border-radius: 8px;
+      background: #fff;
+      padding: 0 10px;
+      color: #1e1033;
+      font-size: 14px;
+      line-height: 1.35;
+    }
+
+    .ss2-select {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      text-align: left;
+    }
+
+    .ss2-select-icon {
+      color: #7f7890;
+      font-size: 12px;
+      flex-shrink: 0;
+      margin-left: 8px;
+    }
+
+    .ss2-note {
+      border: 1px solid #e5d7f8;
+      border-radius: 10px;
+      background: #f6efff;
+      padding: 10px;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .ss2-note-icon {
+      color: #8b64e4;
+      font-size: 12px;
+      margin-top: 2px;
+      flex-shrink: 0;
+    }
+
+    .ss2-note-title {
+      font-size: 14px;
+      line-height: 1.35;
+      color: #1e1033;
+      font-weight: 500;
+      margin-bottom: 2px;
+    }
+
+    .ss2-note-text {
+      font-size: 14px;
+      line-height: 1.4;
+      color: #6f6780;
+    }
+
+    .ss2-footer {
+      position: sticky;
+      bottom: 0;
+      margin-top: 12px;
+      padding: 10px 0;
+      background: linear-gradient(180deg, rgba(246,245,247,0) 0%, #f6f5f7 35%);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .ss2-footer-step {
+      font-size: 14px;
+      line-height: 1.35;
+      color: #a19aae;
+      padding-left: 2px;
+    }
+
+    .ss2-footer-actions {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .ss2-btn {
+      min-height: 32px;
+      border-radius: 8px;
+      border: 1px solid #ddd8e6;
+      background: #fff;
+      color: #4b405c;
+      font-size: 14px;
+      line-height: 1;
+      padding: 0 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .ss2-btn-next {
+      background: #1e1033;
+      border-color: #1e1033;
+      color: #fff;
+    }
+
+    .ss2-btn-next span:last-child {
+      color: #2cf7b3;
+    }
+
+    @media (max-width: 760px) {
+      .ss2-stepper {
+        grid-template-columns: 1fr 1fr;
+        row-gap: 10px;
+      }
+
+      .ss2-step:nth-child(2)::after,
+      .ss2-step:nth-child(4)::after {
+        display: none;
+      }
+
+      .ss2-footer {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .ss2-footer-actions {
+        justify-content: flex-end;
+      }
+    }
+  </style>
+</head>
+
+<body>
+<div id="app">
+  <div id="overlay" aria-hidden="true"></div>
+  <aside id="sidebar" aria-label="Main navigation"></aside>
+  <div id="main-col">
+    <header id="navbar" style="display:flex;align-items:center;justify-content:space-between;height:56px;padding:0 16px;background:#fff;border-bottom:1px solid #e8e7eb;flex-shrink:0;min-width:0;"></header>
+    <div id="main-scroll">
+      <div class="ss2-page-wrap">
+        <div id="salary-scale-2-root"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="layout.js"></script>
+<script src="salary_scale_2_components.js"></script>
+<script src="salary-scale-2nd-screen.js"></script>
+</body>
+</html>

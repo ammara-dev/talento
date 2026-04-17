@@ -30,6 +30,7 @@
     'payroll.html': { navItem: 'finance', submenu: 'payroll' },
     'payroll-detail.html': { navItem: 'finance', submenu: 'payroll' },
     'salary-scale.html': { navItem: 'finance', submenu: 'salary-scale' },
+    'salary-scale-2nd-screen.html': { navItem: 'finance', submenu: 'salary-scale' },
     'loans.html': { navItem: 'finance', submenu: 'loans' },
     'loan-installments.html': { navItem: 'finance', submenu: 'loans' },
     'candidate-profile.html': { navItem: 'hiring', submenu: 'job-positions' },
