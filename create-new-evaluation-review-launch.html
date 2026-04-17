@@ -296,13 +296,200 @@
     }
     .rl-btn--primary { background: #1e1033; border-color: #1e1033; color: #fff; box-shadow: 0 8px 18px rgba(53, 22, 89, .25); }
     .rl-btn i { font-size: 12px; }
+    .rl-btn--primary i { color: #2CF7B3; }
     .rl-launch-divider { width: 100%; height: 1px; background: #e6e1ea; margin: 2px 0; }
     .rl-launch-note { color: #8f889e; font-size: 12px; line-height: 1.3; }
+
+    .rl-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(30, 16, 51, 0.28);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 120;
+    }
+    .rl-modal-backdrop.is-open { display: flex; }
+    .rl-modal-card {
+      width: min(100%, 880px);
+      max-height: calc(100vh - 32px);
+      overflow: auto;
+      background: #fff;
+      border: 1px solid #ece9ef;
+      border-radius: 24px;
+      box-shadow: 0 26px 64px rgba(20, 10, 35, 0.2);
+      display: grid;
+    }
+    .rl-modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 18px 18px 14px;
+      border-bottom: 1px solid #efebf3;
+    }
+    .rl-modal-header h2 {
+      margin: 0;
+      color: #1e1033;
+      font-size: 20px;
+      line-height: 1.3;
+      font-weight: 500;
+    }
+    .rl-modal-close {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      border: 1px solid #e8e3ed;
+      background: #fff;
+      color: #6f687d;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+    }
+    .rl-modal-section {
+      padding: 14px 18px;
+      border-bottom: 1px solid #efebf3;
+      display: grid;
+      gap: 12px;
+    }
+    .rl-modal-section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .rl-modal-section-head h3 {
+      margin: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #1e1033;
+      font-size: 14px;
+      line-height: 1.35;
+      font-weight: 500;
+    }
+    .rl-modal-section-head h3 i { color: #61597a; font-size: 12px; }
+    .rl-segmented {
+      display: inline-flex;
+      padding: 3px;
+      border-radius: 999px;
+      background: #f0edf3;
+      border: 1px solid #e8e3ed;
+      gap: 3px;
+    }
+    .rl-segmented-btn {
+      min-width: 68px;
+      height: 30px;
+      border: 0;
+      border-radius: 999px;
+      background: transparent;
+      color: #787085;
+      font-size: 14px;
+      font-family: 'Alexandria', Helvetica, sans-serif;
+      font-weight: 500;
+    }
+    .rl-segmented-btn.is-active {
+      background: #1e1033;
+      color: #fff;
+    }
+    .rl-layout-row {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+    .rl-layout-option {
+      min-height: 40px;
+      border-radius: 10px;
+      border: 1px solid #dfdae5;
+      background: #fff;
+      color: #1e1033;
+      font-size: 14px;
+      font-family: 'Alexandria', Helvetica, sans-serif;
+      display: inline-flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 8px;
+      padding: 0 12px;
+      text-align: left;
+    }
+    .rl-layout-radio {
+      width: 16px;
+      height: 16px;
+      border-radius: 999px;
+      border: 2px solid #bcb6c7;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .rl-layout-radio::after {
+      content: '';
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: transparent;
+    }
+    .rl-layout-option.is-selected {
+      border-color: #c9b0fa;
+      box-shadow: 0 0 0 1px rgba(160, 112, 255, 0.2) inset;
+      background: #f9f6ff;
+    }
+    .rl-layout-option.is-selected .rl-layout-radio { border-color: #a970ff; }
+    .rl-layout-option.is-selected .rl-layout-radio::after { background: #a970ff; }
+    .rl-modal-content-spacer {
+      min-height: 220px;
+      border-bottom: 1px solid #efebf3;
+      background: #fff;
+    }
+    .rl-modal-footer {
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .rl-modal-copy-btn,
+    .rl-modal-btn {
+      min-height: 40px;
+      border-radius: 12px;
+      border: 1px solid #e8e3ed;
+      background: #fff;
+      color: #4b405c;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 0 14px;
+      font-size: 14px;
+      font-family: 'Alexandria', Helvetica, sans-serif;
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .rl-modal-copy-btn {
+      border-color: #c8aff9;
+      color: #1E1033;
+      background: #fff;
+    }
+    .rl-modal-actions { display: inline-flex; gap: 8px; }
+    .rl-modal-btn--primary {
+      background: #1e1033;
+      color: #fff;
+      border-color: #1e1033;
+      box-shadow: 0 8px 18px rgba(53, 22, 89, .25);
+    }
+    .rl-modal-btn--primary i { color: #2CF7B3; }
+    .rl-modal-btn i,
+    .rl-modal-copy-btn i { font-size: 12px; }
 
     @media (max-width: 900px) {
       .ce-page-wrap { padding: 16px 12px 0; }
       .ce-stepper-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
       .ce-step-item::after { display: none; }
+      .rl-layout-row { grid-template-columns: 1fr; }
     }
 
     @media (max-width: 640px) {
@@ -311,6 +498,13 @@
       .ce-step-item { justify-items: start; text-align: left; grid-template-columns: 34px 1fr; min-height: unset; }
       .rl-summary-stats { grid-template-columns: 1fr; }
       .rl-launch-actions { grid-template-columns: 1fr; }
+      .rl-modal-backdrop { padding: 10px; }
+      .rl-modal-header,
+      .rl-modal-section,
+      .rl-modal-footer { padding-left: 12px; padding-right: 12px; }
+      .rl-modal-actions { width: 100%; }
+      .rl-modal-btn { flex: 1; }
+      .rl-modal-copy-btn { width: 100%; }
     }
   </style>
 </head>
@@ -405,6 +599,20 @@
       draftLabel: 'Save as draft',
       launchLabel: 'Launch evaluation',
       note: 'Evaluators will be notified immediately after launch'
+    },
+    saveLaunchForm: {
+      title: 'Save and launch evaluation',
+      acceptingResponses: 'yes',
+      layout: 'all-questions',
+      layoutOptions: [
+        { value: 'all-questions', label: 'One page with all the questions' },
+        { value: 'per-question', label: 'One page per question' },
+        { value: 'per-section', label: 'One page per section' }
+      ],
+      copyLabel: 'Copy responder link',
+      cancelLabel: 'Cancel',
+      publishLabel: 'Save & publish',
+      publishHref: 'create-new-evaluation-launched.html'
     }
   };
 
@@ -423,11 +631,61 @@
           evaluators: screenData.evaluators
         })}
         ${CreateNewEvaluationReviewLaunchComponents.LaunchCard(screenData.launch)}
+        ${CreateNewEvaluationReviewLaunchComponents.SaveLaunchModal(screenData.saveLaunchForm)}
       </div>
     `;
   }
 
-  document.addEventListener('DOMContentLoaded', renderScreen);
+  function bindInteractions() {
+    if (!root || root.dataset.bound === 'true') return;
+    root.dataset.bound = 'true';
+
+    root.addEventListener('click', function(event) {
+      const openBtn = event.target.closest('.js-open-launch-modal');
+      const closeBtn = event.target.closest('.js-close-launch-modal');
+      const modal = root.querySelector('#save-launch-modal');
+      const segmentedBtn = event.target.closest('.rl-segmented-btn');
+      const layoutOption = event.target.closest('.rl-layout-option');
+
+      if (openBtn && modal) {
+        modal.classList.add('is-open');
+        modal.setAttribute('aria-hidden', 'false');
+      }
+
+      if (closeBtn && modal) {
+        modal.classList.remove('is-open');
+        modal.setAttribute('aria-hidden', 'true');
+      }
+
+      if (modal && event.target === modal) {
+        modal.classList.remove('is-open');
+        modal.setAttribute('aria-hidden', 'true');
+      }
+
+      if (segmentedBtn) {
+        const group = segmentedBtn.closest('.rl-segmented');
+        if (group) {
+          group.querySelectorAll('.rl-segmented-btn').forEach(function(btn) {
+            btn.classList.toggle('is-active', btn === segmentedBtn);
+          });
+        }
+      }
+
+      if (layoutOption) {
+        const row = layoutOption.closest('.rl-layout-row');
+        if (row) {
+          row.querySelectorAll('.rl-layout-option').forEach(function(option) {
+            option.classList.toggle('is-selected', option === layoutOption);
+          });
+        }
+      }
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    renderScreen();
+    bindInteractions();
+  });
 })();
 </script>
 </body>
