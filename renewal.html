@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <title>Talento - Renewal</title>
+  <meta name="description" content="Talento HR Platform - Renewal" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared-styles.css" />
+  <script src="design-tokens.js"></script>
+  <style>
+    #main-scroll { background: #f1eff4; }
+    .rn-wrap { padding: 18px; }
+    .rn-page {
+      background: #f6f5f7;
+      border: 1px solid #ece9ef;
+      border-radius: 20px;
+      padding: 16px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .rn-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .rn-head h1 {
+      margin: 0;
+      color: #1e1033;
+      font-size: 20px;
+      line-height: 1.3;
+      font-weight: 500;
+    }
+    .rn-primary-btn {
+      min-height: 36px;
+      border-radius: 12px;
+      border: 1px solid #1e1033;
+      background: #1e1033;
+      color: #fff;
+      font-size: 14px;
+      line-height: 1.3;
+      font-family: 'Alexandria', Helvetica, sans-serif;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 14px;
+      box-shadow: 0 8px 16px rgba(53, 22, 89, .24);
+      font-weight: 500;
+    }
+    .rn-primary-btn i { color: #2CF7B3; font-size: 12px; }
+
+    .rn-tabs {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #e4e0e9;
+    }
+    .rn-tab {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #8a8397;
+      font-size: 14px;
+      line-height: 1.3;
+      font-family: 'Alexandria', Helvetica, sans-serif;
+      font-weight: 400;
+      background: transparent;
+      padding: 0 0 6px;
+      border-bottom: 2px solid transparent;
+    }
+    .rn-tab-icon {
+      width: 12px;
+      color: inherit;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+    }
+    .rn-tab.is-active {
+      color: #1e1033;
+      font-weight: 500;
+      border-bottom-color: #1e1033;
+    }
+
+    .rn-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .rn-toolbar-search { width: min(100%, 390px); }
+    .rn-toolbar-search .search-input-wrap {
+      width: 100% !important;
+      min-height: 34px !important;
+      border-radius: 999px !important;
+      border-color: #ddd8e3 !important;
+    }
+    .rn-toolbar-search .search-input-wrap input {
+      font-size: 14px !important;
+    }
+    .rn-toolbar-actions { display: inline-flex; align-items: center; gap: 8px; }
+    .rn-pill-btn {
+      min-height: 34px;
+      border-radius: 999px;
+      border: 1px solid #ddd8e3;
+      background: #fff;
+      color: #504666;
+      font-size: 14px;
+      line-height: 1.3;
+      font-family: 'Alexandria', Helvetica, sans-serif;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0 12px;
+    }
+    .rn-pill-btn strong { color: #1e1033; font-weight: 500; }
+    .rn-count { color: #787085; }
+    .rn-pill-btn--tight { gap: 4px; }
+    .rn-pill-btn--icon-right i:last-child { font-size: 11px; }
+
+    .rn-table-wrap {
+      border: 1px solid #e6e2ea;
+      border-radius: 16px;
+      overflow: hidden;
+      background: #fff;
+    }
+    .rn-table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 1200px;
+    }
+    .rn-table thead tr { background: #efedf1; border-bottom: 1px solid #e6e2ea; }
+    .rn-table th,
+    .rn-table td {
+      padding: 11px 10px;
+      text-align: left;
+      color: #1e1033;
+      font-size: 14px;
+      line-height: 1.35;
+      white-space: nowrap;
+      vertical-align: middle;
+    }
+    .rn-table th {
+      color: #787085;
+      font-weight: 500;
+    }
+    .rn-table tbody tr { border-bottom: 1px solid #efedf2; }
+    .rn-table tbody tr:last-child { border-bottom: 0; }
+    .rn-sort {
+      color: #8d8798;
+      font-size: 10px;
+      margin-left: 4px;
+      vertical-align: middle;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .rn-employee img { width: 26px !important; height: 26px !important; }
+    .rn-employee p {
+      max-width: 142px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      margin: 0;
+      font-size: 14px !important;
+    }
+
+    .rn-badge {
+      min-height: 20px;
+      border-radius: 999px;
+      padding: 0 9px;
+      display: inline-flex;
+      align-items: center;
+      font-size: 14px;
+      line-height: 1;
+      font-weight: 400;
+    }
+    .rn-badge--approved { color: #187f52; background: #bce8d2; }
+    .rn-badge--review { color: #575066; background: #e4e1e7; }
+    .rn-badge--cancelled { color: #cc3535; background: #f5dddd; }
+
+    .rn-confirm {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #575066;
+      font-size: 14px;
+      line-height: 1.3;
+    }
+    .rn-confirm i { font-size: 13px; }
+    .rn-confirm.is-ok i { color: #22b07d; }
+    .rn-confirm.is-issue i { color: #b4232f; }
+    .rn-expiry {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #2d2540;
+      font-size: 14px;
+      line-height: 1.3;
+    }
+    .rn-expiry i { color: #7c748a; font-size: 13px; }
+
+    .rn-actions-cell { text-align: center; }
+    .rn-more-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: #7f778d;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    @media (max-width: 900px) {
+      .rn-wrap { padding: 14px 12px; }
+    }
+    @media (max-width: 640px) {
+      .rn-wrap { padding: 12px 10px; }
+      .rn-page { padding: 12px; }
+      .rn-primary-btn { width: 100%; justify-content: center; }
+      .rn-toolbar-actions {
+        width: 100%;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .rn-pill-btn {
+        flex: 1 1 calc(50% - 4px);
+        justify-content: center;
+        min-width: 0;
+        white-space: nowrap;
+      }
+      .rn-pill-btn--icon-right { flex-basis: 100%; }
+      .rn-tabs { flex-wrap: wrap; gap: 10px; }
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+  <div id="overlay" aria-hidden="true"></div>
+  <aside id="sidebar" aria-label="Main navigation"></aside>
+  <div id="main-col">
+    <header id="navbar" style="display:flex;align-items:center;justify-content:space-between;height:56px;padding:0 16px;background:#fff;border-bottom:1px solid #e8e7eb;flex-shrink:0;min-width:0;"></header>
+    <div id="main-scroll">
+      <div class="rn-wrap">
+        <div id="renewal-root" class="rn-page"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="layout.js"></script>
+<script src="leave_components.js"></script>
+<script src="renewal_components.js"></script>
+<script>
+(function() {
+  'use strict';
+
+  const contractsRows = [
+    {
+      contractCode: '#LARO0358',
+      employee: { name: 'Mishari AlSubaie', avatar: 'https://i.pravatar.cc/52?img=10' },
+      status: { key: 'approved', label: 'Approved' },
+      jobPosition: 'SMM manager',
+      department: 'Marketing',
+      confirmation: { ok: true, label: '4/4 confirmed' },
+      newContractCost: 'SAR 20,000'
+    },
+    {
+      contractCode: '#LARO0358',
+      employee: { name: 'Mishari AlSubaie', avatar: 'https://i.pravatar.cc/52?img=11' },
+      status: { key: 'review', label: 'In review' },
+      jobPosition: 'Backend developer',
+      department: 'Development',
+      confirmation: { ok: false, label: '1/4 confirmed' },
+      newContractCost: 'SAR 14,520'
+    },
+    {
+      contractCode: '#LARO0358',
+      employee: { name: 'Mishari AlSubaie', avatar: 'https://i.pravatar.cc/52?img=12' },
+      status: { key: 'cancelled', label: 'Cancelled' },
+      jobPosition: 'L2 product designer',
+      department: 'Design',
+      confirmation: { ok: true, label: '4/4 confirmed' },
+      newContractCost: 'SAR 14,520'
+    },
+    {
+      contractCode: '#LARO0358',
+      employee: { name: 'Mishari AlSubaie', avatar: 'https://i.pravatar.cc/52?img=13' },
+      status: { key: 'review', label: 'In review' },
+      jobPosition: 'HR manager',
+      department: 'Top management',
+      confirmation: { ok: false, label: '3/4 confirmed' },
+      newContractCost: 'SAR 20,000'
+    }
+  ];
+
+  while (contractsRows.length < 12) {
+    contractsRows.push({
+      contractCode: '#LARO0358',
+      employee: { name: 'Mishari AlSubaie', avatar: `https://i.pravatar.cc/52?img=${10 + (contractsRows.length % 4)}` },
+      status: { key: 'approved', label: 'Approved' },
+      jobPosition: 'SMM manager',
+      department: 'Marketing',
+      confirmation: { ok: true, label: '4/4 confirmed' },
+      newContractCost: 'SAR 20,000'
+    });
+  }
+
+  const iqamaRows = [
+    {
+      iqamaNumber: '2123123123',
+      employee: { name: 'Mishari AlSubaie', avatar: 'https://i.pravatar.cc/52?img=10' },
+      status: { key: 'approved', label: 'Approved' },
+      jobPosition: 'SMM manager',
+      department: 'Marketing',
+      expiryDate: '12 Dec 2026',
+      renewalCost: 'SAR 20,000'
+    },
+    {
+      iqamaNumber: '2123123123',
+      employee: { name: 'Mishari AlSubaie', avatar: 'https://i.pravatar.cc/52?img=11' },
+      status: { key: 'review', label: 'In review' },
+      jobPosition: 'Backend developer',
+      department: 'Development',
+      expiryDate: '12 Dec 2026',
+      renewalCost: 'SAR 14,520'
+    },
+    {
+      iqamaNumber: '2123123123',
+      employee: { name: 'Mishari AlSubaie', avatar: 'https://i.pravatar.cc/52?img=12' },
+      status: { key: 'cancelled', label: 'Cancelled' },
+      jobPosition: 'L2 product designer',
+      department: 'Design',
+      expiryDate: '12 Dec 2026',
+      renewalCost: 'SAR 14,520'
+    }
+  ];
+
+  const baseScreenData = {
+    header: { title: 'Renewal', actionLabel: 'Create new' },
+    toolbar: {
+      searchPlaceholder: 'Search by name, ID, iqama, title or email',
+      filterCount: '2',
+      sortLabel: 'Name'
+    }
+  };
+
+  let activeTab = 'contracts';
+  const root = document.getElementById('renewal-root');
+
+  function getTabsConfig() {
+    return {
+      tabs: [
+        { key: 'contracts', label: 'Contracts', icon: RenewalComponents.Icons.contracts, active: activeTab === 'contracts' },
+        { key: 'iqama', label: 'Iqama & medical', icon: RenewalComponents.Icons.iqama, active: activeTab === 'iqama' }
+      ]
+    };
+  }
+
+  function getTableConfig() {
+    if (activeTab === 'iqama') {
+      return { variant: 'iqama', rows: iqamaRows };
+    }
+    return { variant: 'contracts', rows: contractsRows };
+  }
+
+  function renderScreen() {
+    if (!root) return;
+    root.innerHTML = `
+      ${RenewalComponents.Header(baseScreenData.header)}
+      ${RenewalComponents.ModuleTabs(getTabsConfig())}
+      ${RenewalComponents.Toolbar(baseScreenData.toolbar)}
+      ${RenewalComponents.RenewalTable(getTableConfig())}
+    `;
+  }
+
+  function bindInteractions() {
+    if (!root || root.dataset.bound === 'true') return;
+    root.dataset.bound = 'true';
+    root.addEventListener('click', function(event) {
+      const tab = event.target.closest('.rn-tab');
+      if (!tab) return;
+      const selected = tab.getAttribute('data-tab');
+      if (!selected || selected === activeTab) return;
+      activeTab = selected;
+      renderScreen();
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    renderScreen();
+    bindInteractions();
+  });
+})();
+</script>
+</body>
+</html>

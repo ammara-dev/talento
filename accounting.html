@@ -1,0 +1,489 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <title>Talento - Accounting dashboard</title>
+  <meta name="description" content="Talento HR Platform - Accounting dashboard" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared-styles.css" />
+  <script src="design-tokens.js"></script>
+  <style>
+    #main-scroll { background: #f6f5f7; }
+    .ac-wrap { padding: 18px; }
+    .ac-page {
+      background: #fff;
+      border: 1px solid #ece9ef;
+      border-radius: 20px;
+      padding: 16px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .ac-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .ac-head h1 {
+      margin: 0;
+      color: #1e1033;
+      font-size: 20px;
+      line-height: 1.3;
+      font-weight: 500;
+    }
+    .ac-head-actions {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    .ac-chip-group {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid #e2dde9;
+      background: #f7f6f9;
+      border-radius: 10px;
+      padding: 3px;
+      gap: 3px;
+    }
+    .ac-chip {
+      min-height: 26px;
+      border-radius: 8px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: #5c546d;
+      font-size: 14px;
+      line-height: 1.3;
+      font-family: 'Alexandria', Helvetica, sans-serif;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0 10px;
+    }
+    .ac-chip.is-active {
+      background: #fff;
+      border-color: #e2dde9;
+      color: #1e1033;
+    }
+    .ac-config-btn {
+      min-height: 34px;
+      border-radius: 10px;
+      border: 1px solid #dfdae5;
+      background: #fff;
+      color: #1e1033;
+      font-size: 14px;
+      line-height: 1.3;
+      font-family: 'Alexandria', Helvetica, sans-serif;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 12px;
+    }
+
+    .ac-tabs {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #e5e1ea;
+    }
+    .ac-tab {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 14px;
+      line-height: 1.3;
+      font-family: 'Alexandria', Helvetica, sans-serif;
+      color: #7b748b;
+      background: transparent;
+      border-bottom: 2px solid transparent;
+      padding: 0 0 8px;
+      white-space: nowrap;
+    }
+    .ac-tab.is-active {
+      color: #1e1033;
+      border-bottom-color: #1e1033;
+      font-weight: 500;
+    }
+    .ac-tab-icon { font-size: 13px; color: inherit; }
+
+    .ac-setup-card {
+      border: 1px solid #e9e5ee;
+      border-radius: 16px;
+      background: #f8f7fa;
+      min-height: 76px;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .ac-setup-main {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+    .ac-progress-circle {
+      width: 50px;
+      height: 50px;
+      border-radius: 999px;
+      background: conic-gradient(#b082f9 0 66%, #ebe5f6 66% 100%);
+      padding: 1px;
+      flex-shrink: 0;
+    }
+    .ac-progress-circle span {
+      width: 100%;
+      height: 100%;
+      border-radius: inherit;
+      background: #fff;
+      color: #1e1033;
+      font-size: 20px;
+      line-height: 1;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transform: scale(.5);
+      transform-origin: center;
+    }
+    .ac-setup-content { min-width: 0; }
+    .ac-setup-top {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .ac-setup-top h2 {
+      margin: 0;
+      color: #1e1033;
+      font-size: 20px;
+      line-height: 1.2;
+      font-weight: 500;
+    }
+    .ac-step-pill {
+      min-height: 24px;
+      border-radius: 999px;
+      background: #ffefcd;
+      color: #9a6e21;
+      font-size: 14px;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      padding: 0 8px;
+    }
+    .ac-setup-content p {
+      margin: 4px 0 0;
+      color: #615a72;
+      font-size: 14px;
+      line-height: 1.35;
+    }
+    .ac-setup-toggle {
+      width: 30px;
+      height: 30px;
+      border-radius: 10px;
+      border: 1px solid #e1dce8;
+      background: #fff;
+      color: #7f778d;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .ac-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .ac-toolbar-search { width: min(100%, 390px); }
+    .ac-toolbar-search .search-input-wrap {
+      width: 100% !important;
+      min-height: 38px !important;
+      border-radius: 999px !important;
+      border-color: #e3dee9 !important;
+    }
+    .ac-toolbar-actions { display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .ac-pill-btn {
+      min-height: 38px;
+      border-radius: 12px;
+      border: 1px solid #dfdae5;
+      background: #fff;
+      color: #4b405c;
+      font-size: 14px;
+      line-height: 1.3;
+      font-family: 'Alexandria', Helvetica, sans-serif;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0 12px;
+    }
+    .ac-pill-btn strong { color: #1e1033; font-weight: 500; }
+    .ac-count { color: #787085; }
+    .ac-primary-btn {
+      min-height: 38px;
+      border-radius: 12px;
+      border: 1px solid #1e1033;
+      background: #1e1033;
+      color: #fff;
+      font-size: 14px;
+      line-height: 1.3;
+      font-family: 'Alexandria', Helvetica, sans-serif;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 14px;
+      box-shadow: 0 8px 18px rgba(53, 22, 89, .2);
+      font-weight: 500;
+    }
+    .ac-primary-btn i { color: #2CF7B3; font-size: 12px; }
+
+    .ac-table-wrap {
+      border: 1px solid #ece9ef;
+      border-radius: 14px;
+      overflow: hidden;
+      background: #fff;
+    }
+    .ac-table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 1180px;
+    }
+    .ac-table thead tr { background: #f6f5f7; border-bottom: 1px solid #ece9ef; }
+    .ac-table th,
+    .ac-table td {
+      padding: 11px 10px;
+      text-align: left;
+      color: #1e1033;
+      font-size: 14px;
+      line-height: 1.35;
+      white-space: nowrap;
+      vertical-align: middle;
+    }
+    .ac-table th {
+      color: #787085;
+      font-weight: 400;
+    }
+    .ac-table tbody tr { border-bottom: 1px solid #f0eef6; }
+    .ac-table tbody tr:last-child { border-bottom: 0; }
+    .ac-sort {
+      color: #a09aab;
+      font-size: 10px;
+      margin-left: 4px;
+      vertical-align: middle;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .ac-badge {
+      min-height: 22px;
+      border-radius: 999px;
+      padding: 0 10px;
+      display: inline-flex;
+      align-items: center;
+      font-size: 14px;
+      line-height: 1;
+      font-weight: 500;
+    }
+    .ac-badge--paid { color: #15803d; background: #d7ffe7; }
+    .ac-badge--review { color: #575066; background: #e4e1e7; }
+    .ac-badge--unpaid { color: #cc3535; background: #f5dddd; }
+
+    .ac-actions-cell { text-align: center; }
+    .ac-more-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: #7f778d;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    @media (max-width: 900px) {
+      .ac-wrap { padding: 14px 12px; }
+      .ac-head-actions { width: 100%; justify-content: flex-start; }
+    }
+    @media (max-width: 640px) {
+      html, body { overflow-x: hidden; }
+      #app, #main-col, #main-scroll { max-width: 100vw; overflow-x: hidden; }
+      .ac-wrap { padding: 12px 10px; }
+      .ac-page {
+        padding: 12px;
+        width: 100%;
+        max-width: 100%;
+        overflow-x: hidden;
+      }
+      .ac-page,
+      .ac-page * { box-sizing: border-box; }
+      .ac-head,
+      .ac-head-actions,
+      .ac-toolbar,
+      .ac-toolbar-search,
+      .ac-toolbar-actions,
+      .ac-setup-card,
+      .ac-setup-main,
+      .ac-setup-content,
+      .ac-tabs,
+      .ac-chip-group {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+      }
+      .ac-chip-group {
+        overflow-x: auto;
+      }
+      .ac-tabs {
+        overflow-x: auto;
+      }
+      .ac-setup-card {
+        overflow: hidden;
+      }
+      .ac-setup-content {
+        overflow: hidden;
+      }
+      .ac-setup-top { display: flex; }
+      .ac-setup-top h2 {
+        min-width: 0;
+        overflow-wrap: anywhere;
+      }
+      .ac-toolbar { min-width: 0; }
+      .ac-toolbar-actions {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+      .ac-pill-btn,
+      .ac-primary-btn {
+        width: 100%;
+        max-width: 100%;
+        justify-content: center;
+        min-width: 0;
+        overflow: hidden;
+      }
+      .ac-setup-card { align-items: flex-start; }
+      .ac-setup-toggle { margin-top: 2px; }
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+  <div id="overlay" aria-hidden="true"></div>
+  <aside id="sidebar" aria-label="Main navigation"></aside>
+  <div id="main-col">
+    <header id="navbar" style="display:flex;align-items:center;justify-content:space-between;height:56px;padding:0 16px;background:#fff;border-bottom:1px solid #e8e7eb;flex-shrink:0;min-width:0;"></header>
+    <div id="main-scroll">
+      <div class="ac-wrap">
+        <div id="accounting-root" class="ac-page"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="layout.js"></script>
+<script src="leave_components.js"></script>
+<script src="accounting_components.js"></script>
+<script>
+(function() {
+  'use strict';
+
+  const screenData = {
+    header: {
+      title: 'Accounting dashboard',
+      chips: [
+        { label: 'Accounting summary', icon: AccountingComponents.Icons.summary, active: false },
+        { label: 'Customers', icon: AccountingComponents.Icons.customers, active: true },
+        { label: 'Vendors', icon: AccountingComponents.Icons.vendors, active: false },
+        { label: 'Journals', icon: AccountingComponents.Icons.journals, active: false },
+        { label: 'Reporting', icon: AccountingComponents.Icons.reporting, active: false }
+      ],
+      configurationLabel: 'Configuration'
+    },
+    tabs: {
+      tabs: [
+        { label: 'Invoices', icon: AccountingComponents.Icons.invoices, active: true },
+        { label: 'Credit Notes', icon: AccountingComponents.Icons.creditNotes, active: false },
+        { label: 'Receipts', icon: AccountingComponents.Icons.receipts, active: false },
+        { label: 'Payments', icon: AccountingComponents.Icons.payments, active: false },
+        { label: 'Follow-up Reports', icon: AccountingComponents.Icons.followUp, active: false },
+        { label: 'Products', icon: AccountingComponents.Icons.products, active: false },
+        { label: 'Customers', icon: AccountingComponents.Icons.customersTab, active: false }
+      ]
+    },
+    setupCard: {
+      progress: '2/3',
+      title: 'Set up your invoices',
+      stepLabel: '1 step left',
+      description: 'One last thing — create your first invoice'
+    },
+    toolbar: {
+      searchPlaceholder: 'Search by name, ID, iqama, title or email',
+      filterCount: '2',
+      sortLabel: 'Name',
+      createLabel: 'Create new'
+    },
+    table: {
+      rows: [
+        {
+          number: '2123123123',
+          customer: 'Name',
+          paymentStatus: { key: 'paid', label: 'Paid' },
+          invoiceDate: 'SMM manager',
+          dueDate: '12 May 2026',
+          taxExcluded: 'SAR 1,000',
+          totalCost: 'SAR 20,000'
+        },
+        {
+          number: '2123123123',
+          customer: 'Name',
+          paymentStatus: { key: 'review', label: 'In review' },
+          invoiceDate: 'Backend developer',
+          dueDate: '12 May 2026',
+          taxExcluded: 'SAR 1,000',
+          totalCost: 'SAR 14,520'
+        },
+        {
+          number: '2123123123',
+          customer: 'Name',
+          paymentStatus: { key: 'unpaid', label: 'Not paid' },
+          invoiceDate: 'L2 product designer',
+          dueDate: '12 May 2026',
+          taxExcluded: 'SAR 1,000',
+          totalCost: 'SAR 14,520'
+        }
+      ]
+    }
+  };
+
+  const root = document.getElementById('accounting-root');
+
+  function renderScreen() {
+    if (!root) return;
+    root.innerHTML = `
+      ${AccountingComponents.Header(screenData.header)}
+      ${AccountingComponents.ModuleTabs(screenData.tabs)}
+      ${AccountingComponents.SetupCard(screenData.setupCard)}
+      ${AccountingComponents.Toolbar(screenData.toolbar)}
+      ${AccountingComponents.AccountingTable(screenData.table)}
+    `;
+  }
+
+  document.addEventListener('DOMContentLoaded', renderScreen);
+})();
+</script>
+</body>
+</html>

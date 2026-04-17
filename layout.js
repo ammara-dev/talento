@@ -34,8 +34,13 @@
     'salary-scale-2nd-component.html': { navItem: 'finance', submenu: 'salary-scale' },
     'loans.html': { navItem: 'finance', submenu: 'loans' },
     'loan-installments.html': { navItem: 'finance', submenu: 'loans' },
+    'accounting.html': { navItem: 'finance', submenu: 'accounting' },
     'candidate-profile.html': { navItem: 'hiring', submenu: 'job-positions' },
+    'all-documents.html': { navItem: 'documents', submenu: 'all-documents' },
+    'contracts.html': { navItem: 'documents', submenu: 'contracts' },
+    'renewal.html': { navItem: 'documents', submenu: 'renewal' },
     'create-new-survey.html': { navItem: 'team-engagement', submenu: 'surveys' },
+    'create-new-survey-start.html': { navItem: 'team-engagement', submenu: 'surveys' },
     'create-new-survey.xml': { navItem: 'team-engagement', submenu: 'surveys' },
     'survey-preview.html': { navItem: 'team-engagement', submenu: 'surveys' },
     'survey-preview.xml': { navItem: 'team-engagement', submenu: 'surveys' },
@@ -61,7 +66,9 @@
     'Appraisal Employee profile.html': { navItem: 'team-engagement', submenu: 'performance-evaluation' },
     'Appraisal%20Employee%20profile.html': { navItem: 'team-engagement', submenu: 'performance-evaluation' },
     'create-new-evaluation-evaluators-setup.html': { navItem: 'team-engagement', submenu: 'performance-evaluation' },
-    'create-new-evaluation-from-scratch.html': { navItem: 'team-engagement', submenu: 'performance-evaluation' }
+    'create-new-evaluation-from-scratch.html': { navItem: 'team-engagement', submenu: 'performance-evaluation' },
+    'create-new-evaluation-scoring.html': { navItem: 'team-engagement', submenu: 'performance-evaluation' },
+    'create-new-evaluation-review-launch.html': { navItem: 'team-engagement', submenu: 'performance-evaluation' }
   };
 
   const config = pageConfig[currentPage] || pageConfig['index.html'];
@@ -80,11 +87,16 @@
     const isPayrollActive = config.submenu === 'payroll';
     const isLoansActive = config.submenu === 'loans';
     const isSalaryScaleActive = config.submenu === 'salary-scale';
+    const isAccountingActive = config.submenu === 'accounting';
     const isFinanceExpanded = config.navItem === 'finance';
     const isJobPositionsActive = config.submenu === 'job-positions';
     const isAllCandidatesActive = config.submenu === 'all-candidates';
     const isHiringReportActive = config.submenu === 'hiring-report';
     const isHiringExpanded = config.navItem === 'hiring';
+    const isAllDocumentsActive = config.submenu === 'all-documents';
+    const isContractsActive = config.submenu === 'contracts';
+    const isRenewalActive = config.submenu === 'renewal';
+    const isDocumentsExpanded = config.navItem === 'documents';
     const isSurveysActive = config.submenu === 'surveys';
     const isPerformanceEvaluationActive = config.submenu === 'performance-evaluation';
     const isTeamEngagementExpanded = config.navItem === 'team-engagement';
@@ -214,12 +226,14 @@
             <i class="fa-solid fa-gift" style="width:16px;font-size:13px;color:#787085;flex-shrink:0;"></i>
             <span class="s-label" style="color:#787085;font-size:13px;letter-spacing:-0.13px;line-height:1;white-space:nowrap;">Rewards</span>
           </button>
-          <!-- Expenses (Accounting) -->
-          <button class="nav-sub-item"
-            style="display:flex;align-items:center;gap:10px;width:calc(100% - 32px);height:36px;padding:0 8px;margin:1px 8px 1px 24px;text-align:left;outline:none;">
-            <i class="fa-solid fa-receipt" style="width:16px;font-size:13px;color:#787085;flex-shrink:0;"></i>
-            <span class="s-label" style="color:#787085;font-size:13px;letter-spacing:-0.13px;line-height:1;white-space:nowrap;">Expenses (Accounting)</span>
-          </button>
+          <!-- Accounting -->
+          <a href="accounting.html" style="text-decoration:none;">
+            <button class="nav-sub-item${isAccountingActive ? ' active' : ''}"${isAccountingActive ? ' aria-current="page"' : ''}
+              style="display:flex;align-items:center;gap:10px;width:calc(100% - 32px);height:36px;padding:0 8px;margin:1px 8px 1px 24px;text-align:left;outline:none;">
+              <i class="fa-solid fa-receipt" style="width:16px;font-size:13px;color:${isAccountingActive ? '#1e1033' : '#787085'};flex-shrink:0;"></i>
+              <span class="s-label" style="color:${isAccountingActive ? '#1e1033' : '#787085'};font-size:13px;${isAccountingActive ? 'font-weight:500;' : ''}letter-spacing:-0.13px;line-height:1;white-space:nowrap;">Accounting</span>
+            </button>
+          </a>
         </div>
 
         <!-- Business missions -->
@@ -289,15 +303,38 @@
           </button>
         </div>
 
-        <!-- Documents -->
-        <button class="nav-item" data-page="Documents" aria-haspopup="true"
+        <!-- Documents (dropdown) -->
+        <button class="nav-item" id="documents-toggle" data-page="Documents" aria-haspopup="true" aria-expanded="${isDocumentsExpanded}"
           style="display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;height:40px;border-radius:8px;padding:0 16px;outline:none;">
           <span style="display:flex;align-items:center;gap:10px;">
             <i class="fa-solid fa-folder-open" style="width:20px;font-size:16px;color:#1e1033;flex-shrink:0;"></i>
             <span class="s-label" style="color:#1e1033;font-size:14px;letter-spacing:-0.14px;white-space:nowrap;">Documents</span>
           </span>
-          <svg class="s-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4b405c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;"><polyline points="6 9 12 15 18 9"/></svg>
+          <svg class="s-arrow" id="documents-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4b405c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;${isDocumentsExpanded ? 'transform:rotate(180deg);' : ''}transition:transform 200ms;"><polyline points="6 9 12 15 18 9"/></svg>
         </button>
+        <div id="documents-submenu" style="display:${isDocumentsExpanded ? 'flex' : 'none'};flex-direction:column;">
+          <a href="all-documents.html" style="text-decoration:none;">
+            <button class="nav-sub-item${isAllDocumentsActive ? ' active' : ''}"${isAllDocumentsActive ? ' aria-current="page"' : ''}
+              style="display:flex;align-items:center;gap:10px;width:calc(100% - 32px);height:36px;padding:0 8px;margin:1px 8px 1px 24px;text-align:left;outline:none;">
+              <i class="fa-solid fa-folder-tree" style="width:16px;font-size:13px;color:${isAllDocumentsActive ? '#1e1033' : '#787085'};flex-shrink:0;"></i>
+              <span class="s-label" style="color:${isAllDocumentsActive ? '#1e1033' : '#787085'};font-size:13px;${isAllDocumentsActive ? 'font-weight:500;' : ''}letter-spacing:-0.13px;line-height:1;white-space:nowrap;">All documents</span>
+            </button>
+          </a>
+          <a href="contracts.html" style="text-decoration:none;">
+            <button class="nav-sub-item${isContractsActive ? ' active' : ''}"${isContractsActive ? ' aria-current="page"' : ''}
+              style="display:flex;align-items:center;gap:10px;width:calc(100% - 32px);height:36px;padding:0 8px;margin:1px 8px 1px 24px;text-align:left;outline:none;">
+              <i class="fa-regular fa-file-lines" style="width:16px;font-size:13px;color:${isContractsActive ? '#1e1033' : '#787085'};flex-shrink:0;"></i>
+              <span class="s-label" style="color:${isContractsActive ? '#1e1033' : '#787085'};font-size:13px;${isContractsActive ? 'font-weight:500;' : ''}letter-spacing:-0.13px;line-height:1;white-space:nowrap;">Contracts</span>
+            </button>
+          </a>
+          <a href="renewal.html" style="text-decoration:none;">
+            <button class="nav-sub-item${isRenewalActive ? ' active' : ''}"${isRenewalActive ? ' aria-current="page"' : ''}
+              style="display:flex;align-items:center;gap:10px;width:calc(100% - 32px);height:36px;padding:0 8px;margin:1px 8px 1px 24px;text-align:left;outline:none;">
+              <i class="fa-solid fa-repeat" style="width:16px;font-size:13px;color:${isRenewalActive ? '#1e1033' : '#787085'};flex-shrink:0;"></i>
+              <span class="s-label" style="color:${isRenewalActive ? '#1e1033' : '#787085'};font-size:13px;${isRenewalActive ? 'font-weight:500;' : ''}letter-spacing:-0.13px;line-height:1;white-space:nowrap;">Renewal</span>
+            </button>
+          </a>
+        </div>
 
         <!-- Team engagement -->
         <button class="nav-item" id="team-engagement-toggle" data-page="Team engagement" aria-haspopup="true" aria-expanded="${isTeamEngagementExpanded}"
@@ -603,6 +640,23 @@
           teamArrow.style.transform = teamOpen ? 'rotate(180deg)' : 'rotate(0deg)';
         }
         teamToggle.setAttribute('aria-expanded', String(teamOpen));
+      });
+    }
+
+    // Documents submenu toggle
+    const documentsToggle = document.getElementById('documents-toggle');
+    const documentsSubmenu = document.getElementById('documents-submenu');
+    const documentsArrow = document.getElementById('documents-arrow');
+    let documentsOpen = config.navItem === 'documents';
+
+    if (documentsToggle && documentsSubmenu) {
+      documentsToggle.addEventListener('click', function() {
+        documentsOpen = !documentsOpen;
+        documentsSubmenu.style.display = documentsOpen ? 'flex' : 'none';
+        if (documentsArrow) {
+          documentsArrow.style.transform = documentsOpen ? 'rotate(180deg)' : 'rotate(0deg)';
+        }
+        documentsToggle.setAttribute('aria-expanded', String(documentsOpen));
       });
     }
   }

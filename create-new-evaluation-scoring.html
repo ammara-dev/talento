@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <title>Talento - Create new evaluation scoring</title>
+  <meta name="description" content="Talento HR Platform - Create new evaluation scoring step" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared-styles.css" />
+  <script src="design-tokens.js"></script>
+  <style>
+    #main-scroll { background: #f6f5f7; }
+    .ce-page-wrap { padding: 18px 18px 0; min-height: calc(100vh - 56px); }
+    .ce-screen { min-height: calc(100vh - 92px); display: flex; flex-direction: column; gap: 14px; }
+    .pe-header-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .pe-title { margin: 0; font-size: 20px; line-height: 1.3; font-weight: 500; color: #1e1033; }
+
+    .ce-flow-stack { width: min(100%, 760px); margin: 0 auto; display: grid; gap: 12px; }
+    .ce-stepper-card { background: #fff; border: 1px solid #ece9ef; border-radius: 20px; box-shadow: 0 10px 24px rgba(30,16,51,.04); padding: 16px 14px; }
+    .ce-stepper-grid { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 12px; }
+    .ce-step-item { position: relative; display: grid; justify-items: center; gap: 10px; text-align: center; min-height: 64px; }
+    .ce-step-item::after { content: ''; position: absolute; top: 18px; left: calc(50% + 24px); right: calc(-50% + 24px); height: 1px; background: #e6e1ea; z-index: 0; }
+    .ce-step-item--last::after { display: none; }
+    .ce-step-icon { width: 30px; height: 30px; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; color: #b7b1c0; background: #f2eef4; box-shadow: inset 0 0 0 1px #ece7f1; z-index: 1; }
+    .ce-step-label { font-size: 12px; line-height: 1.35; font-weight: 400; color: #8b8499; }
+    .ce-step-item--completed .ce-step-icon { color: #7a48de; background: #f0e7ff; box-shadow: inset 0 0 0 1px #e5d7ff; }
+    .ce-step-item--completed .ce-step-label { color: #5e5770; }
+    .ce-step-item--active .ce-step-icon { color: #fff; background: #ab73ff; box-shadow: 0 0 0 4px rgba(171,115,255,.14); }
+    .ce-step-item--active .ce-step-label { color: #1e1033; font-weight: 500; }
+
+    .sc-back-link { border: 0; background: transparent; color: #787085; font-family: 'Alexandria', Helvetica, sans-serif; font-size: 14px; display: inline-flex; align-items: center; gap: 8px; padding: 0; cursor: pointer; justify-self: start; }
+    .sc-back-link svg { color: #625a71; }
+
+    .sc-card { background: #fff; border: 1px solid #ece9ef; border-radius: 16px; padding: 0; box-shadow: 0 8px 20px rgba(30,16,51,.04); overflow: hidden; }
+    .sc-progress-row { display: flex; align-items: center; gap: 14px; margin: 14px 14px 10px; padding: 8px 10px; border-radius: 10px; background: #f4f2f7; }
+    .sc-progress-row p { margin: 0; font-size: 14px; line-height: 1.35; color: #1e1033; white-space: nowrap; }
+    .sc-step-muted { font-size: 14px; line-height: 1.35; color: #8f889e; font-weight: 400; }
+    .sc-progress-track { flex: 1; height: 4px; border-radius: 999px; background: #ebddff; overflow: hidden; }
+    .sc-progress-track span { display: block; height: 100%; background: #8f64f7; border-radius: inherit; }
+
+    .sc-section { margin: 0 14px 10px; border: 1px solid #ece9ef; border-radius: 14px; background: #fff; padding: 14px; display: grid; gap: 10px; }
+    .sc-section--levels { padding-bottom: 0; }
+    .sc-section-title { margin: 0; font-size: 20px; line-height: 1.3; font-weight: 500; color: #1e1033; }
+    .sc-section-text { margin: 0; font-size: 14px; line-height: 1.4; color: #4b405c; }
+
+    .sc-choices-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 10px; }
+    .sc-choice { border: 1px solid #e8e3ed; border-radius: 10px; background: #fff; padding: 10px 12px; display: inline-flex; align-items: flex-start; gap: 8px; text-align: left; }
+    .sc-choice.is-active { border-color: #d6bcff; background: #f8f2ff; }
+    .sc-choice-radio { display: inline-flex; align-items: center; justify-content: center; margin-top: 1px; }
+    .sc-choice-copy { display: grid; gap: 1px; }
+    .sc-choice-title { font-size: 14px; line-height: 1.35; font-weight: 500; color: #1e1033; }
+    .sc-choice-text { font-size: 14px; line-height: 1.35; color: #787085; }
+
+    .sc-warning { display: flex; align-items: flex-start; gap: 8px; border: 1px solid #f0e0c6; border-radius: 10px; background: #faf4ea; padding: 10px 12px; }
+    .sc-warning > span:last-child { display: grid; gap: 2px; }
+    .sc-warning strong { font-size: 14px; line-height: 1.35; color: #7a4f00; font-weight: 500; }
+    .sc-warning span span { font-size: 14px; line-height: 1.35; color: #8f7b5a; }
+
+    .sc-levels-list { display: grid; gap: 0; margin-top: 4px; }
+    .sc-level-item { padding: 12px 0; border-bottom: 1px solid #efebf3; display: grid; grid-template-columns: 16px minmax(0,1fr); column-gap: 12px; align-items: start; }
+    .sc-level-item:last-child { border-bottom: 0; }
+    .sc-level-main { display: grid; gap: 10px; min-width: 0; }
+    .sc-level-field { display: grid; gap: 6px; }
+    .sc-field-label { margin: 0; font-size: 14px; line-height: 1.35; color: #5d546d; font-weight: 500; display: inline-flex; align-items: center; gap: 8px; }
+    .sc-level-color { width: 16px; height: 16px; border-radius: 4px; display: inline-block; flex-shrink: 0; }
+    .sc-level-field input { width: 100%; min-height: 40px; border-radius: 9px; border: 1px solid #e5e0ea; background: #fff; padding: 0 12px; box-sizing: border-box; font-family: 'Alexandria', Helvetica, sans-serif; font-size: 14px; color: #1e1033; outline: none; }
+    .sc-range-input { border: 2px solid #E7D9FF !important; }
+    .sc-range-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px; }
+    .sc-level-actions { display: inline-flex; justify-self: end; align-items: center; gap: 8px; }
+    .sc-icon-btn { width: 28px; height: 28px; border-radius: 8px; border: 1px solid #e8e3ed; background: #fff; color: #8f879e; display: inline-flex; align-items: center; justify-content: center; padding: 0; }
+    .sc-action-btn { min-height: 28px; border-radius: 8px; border: 1px solid #e8e3ed; background: #fff; color: #4b405c; display: inline-flex; align-items: center; justify-content: center; gap: 4px; padding: 0 8px; font-size: 14px; line-height: 1; font-family: 'Alexandria', Helvetica, sans-serif; }
+
+    .sc-add-level { width: calc(100% - 28px); margin: 2px 14px 14px; height: 44px; border-radius: 12px; border: 1px solid #ece9ef; background: #0E121B05; color: #2f2540; display: inline-flex; align-items: center; justify-content: center; gap: 8px; font-family: 'Alexandria', Helvetica, sans-serif; font-size: 14px; }
+
+    .sc-footer { width: min(100%, 760px); margin: 8px auto 0; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-bottom: 12px; }
+    .sc-footer-actions { display: inline-flex; align-items: center; gap: 10px; }
+    .sc-btn { min-height: 36px; border-radius: 10px; border: 1px solid #e8e3ed; padding: 0 14px; font-family: 'Alexandria', Helvetica, sans-serif; font-size: 14px; line-height: 1; display: inline-flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; }
+    .sc-btn--ghost { background: #fff; color: #6f667f; }
+    .sc-btn--soft { background: #fff; color: #6f667f; }
+    .sc-btn--primary { border-color: #1e1033; background: #1e1033; color: #fff; box-shadow: 0 8px 18px rgba(53, 22, 89, .25); }
+
+    @media (max-width: 900px) {
+      .ce-page-wrap { padding: 16px 12px 0; }
+      .ce-stepper-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+      .ce-step-item::after { display: none; }
+      .sc-choices-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 640px) {
+      .ce-page-wrap { padding: 14px 10px 0; }
+      .ce-stepper-grid { grid-template-columns: 1fr; }
+      .ce-step-item { justify-items: start; text-align: left; grid-template-columns: 34px 1fr; min-height: unset; }
+      .sc-section-title { font-size: 20px; }
+      .sc-range-grid { grid-template-columns: 1fr; }
+      .sc-footer { flex-direction: column; align-items: stretch; }
+      .sc-footer-actions { width: 100%; }
+      .sc-btn { flex: 1; }
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+  <div id="overlay" aria-hidden="true"></div>
+  <aside id="sidebar" aria-label="Main navigation"></aside>
+  <div id="main-col">
+    <header id="navbar" style="display:flex;align-items:center;justify-content:space-between;height:56px;padding:0 16px;background:#fff;border-bottom:1px solid #e8e7eb;flex-shrink:0;min-width:0;"></header>
+    <div id="main-scroll">
+      <div class="ce-page-wrap">
+        <div id="create-new-evaluation-scoring-root" class="ce-screen"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="layout.js"></script>
+<script src="performance_evaluation_components.js"></script>
+<script src="create_new_evaluation_components.js"></script>
+<script src="create_new_evaluation_scoring_components.js"></script>
+<script>
+(function() {
+  'use strict';
+
+  const screenData = {
+    title: 'Create new evaluation',
+    steps: [
+      { label: 'Basic information', icon: 'basicInformation', status: 'completed' },
+      { label: 'Add employees', icon: 'addEmployees', status: 'completed' },
+      { label: 'Evaluators & setup', icon: 'evaluatorsSetup', status: 'active' },
+      { label: 'Review & launch', icon: 'reviewLaunch', status: 'upcoming' }
+    ],
+    back: { label: 'Start new evaluation from scratch' },
+    scoringCard: {
+      stepPrimary: 'Step 02',
+      stepMuted: 'of 02',
+      progress: 100,
+      scoring: {
+        title: 'Scoring',
+        description: 'Decide whether this evaluation uses scoring and how results are interpreted.',
+        options: [
+          { title: 'No scoring', description: 'Based on written feedback and observations', selected: false },
+          { title: 'With scoring', description: 'Calculate performance score', selected: true }
+        ]
+      },
+      performanceLevels: {
+        title: 'Performance levels',
+        description: 'Define how total scores are translated into performance levels.',
+        noticeTitle: 'Make sure your ranges:',
+        noticeText: 'Cover the full range from 0 to 100 and don\'t overlap with each other',
+        levels: [
+          { color: '#EF4444', name: 'Poor', from: '01', to: '50' },
+          { color: '#F59E0B', name: 'Good', from: '51', to: '80' },
+          { color: '#10B981', name: 'Excellent', from: '81', to: '100' }
+        ]
+      },
+      addLevelLabel: 'Add another level'
+    },
+    footer: {
+      clearLabel: 'Clear form',
+      backLabel: 'Back',
+      nextLabel: 'Next step',
+      backHref: 'create-new-evaluation-from-scratch.html',
+      nextHref: 'create-new-evaluation-evaluators-setup.html'
+    }
+  };
+
+  const root = document.getElementById('create-new-evaluation-scoring-root');
+
+  function renderScreen() {
+    if (!root) return;
+    root.innerHTML = `
+      ${CreateNewEvaluationComponents.PageHeader({ title: screenData.title })}
+      <div class="ce-flow-stack">
+        ${CreateNewEvaluationComponents.Stepper({ steps: screenData.steps })}
+        ${CreateNewEvaluationScoringComponents.BackLabel(screenData.back)}
+        ${CreateNewEvaluationScoringComponents.ScoringCard(screenData.scoringCard)}
+      </div>
+      ${CreateNewEvaluationScoringComponents.FooterBar(screenData.footer)}
+    `;
+  }
+
+  document.addEventListener('DOMContentLoaded', renderScreen);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <title>Talento - Create new survey start</title>
+  <meta name="description" content="Talento HR Platform - Create new survey start screen" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared-styles.css" />
+  <script src="design-tokens.js"></script>
+  <style>
+    #main-scroll { background: #f6f5f7; }
+
+    .sv-page-wrap {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 18px 8px 28px;
+    }
+
+    .sv-top-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .sv-title {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #1e1033;
+      font-size: 20px;
+      font-weight: 500;
+      letter-spacing: -0.2px;
+      line-height: 1.3;
+    }
+
+    .sv-title svg { color: #787085; flex-shrink: 0; }
+
+    .sv-top-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-left: auto;
+    }
+
+    .sv-secondary-btn,
+    .sv-primary-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      height: 34px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 0 12px;
+      border: 1px solid #e8e7eb;
+      transition: background 150ms ease;
+      white-space: nowrap;
+      text-decoration: none;
+      cursor: pointer;
+      font-family: 'Alexandria', Helvetica, sans-serif;
+    }
+
+    .sv-secondary-btn { color: #1e1033; background: #ffffff; }
+    .sv-secondary-btn:hover { background: #f6f5f7; }
+    .sv-primary-btn { color: #ffffff; background: #1e1033; border-color: #1e1033; }
+    .sv-primary-btn:hover { background: #2a1745; }
+
+    .sv-page-stack {
+      max-width: 700px;
+      margin: 0 auto;
+      display: grid;
+      gap: 12px;
+    }
+
+    .sv-card {
+      background: #ffffff;
+      border: 1px solid #e8e7eb;
+      border-radius: 20px;
+      padding: 14px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .sv-field {
+      display: grid;
+      gap: 6px;
+    }
+
+    .sv-label {
+      color: #4b405c;
+      font-size: 14px;
+      line-height: 1.35;
+      font-weight: 500;
+    }
+
+    .sv-input,
+    .sv-option-input {
+      width: 100%;
+      height: 40px;
+      border-radius: 10px;
+      border: 1px solid #e8e7eb;
+      background: #ffffff;
+      padding: 0 12px;
+      font-size: 14px;
+      color: #1e1033;
+      outline: none;
+      transition: border-color 150ms ease, box-shadow 150ms ease;
+      font-family: 'Alexandria', Helvetica, sans-serif;
+      box-sizing: border-box;
+    }
+
+    .sv-input:focus,
+    .sv-option-input:focus {
+      border-color: #ba8aff;
+      box-shadow: 0 0 0 2px #f0e9ff;
+    }
+
+    .sv-input::placeholder,
+    .sv-option-input::placeholder {
+      color: #a09aab;
+      font-size: 14px;
+    }
+
+    .sv-start-builder-card {
+      justify-items: center;
+      text-align: center;
+      padding-top: 24px;
+      padding-bottom: 20px;
+      border-color: #ece9ef;
+    }
+
+    .sv-start-builder-title {
+      margin: 0;
+      color: #1e1033;
+      font-size: 20px;
+      line-height: 1.3;
+      font-weight: 500;
+      letter-spacing: -0.2px;
+    }
+
+    .sv-start-builder-text {
+      margin: 0;
+      max-width: 460px;
+      color: #6f687d;
+      font-size: 14px;
+      line-height: 1.45;
+      font-weight: 400;
+    }
+
+    .sv-start-builder-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 40px;
+      padding: 0 16px;
+      border-radius: 12px;
+      border: 1px solid #1e1033;
+      background: #1e1033;
+      color: #fff;
+      font-family: 'Alexandria', Helvetica, sans-serif;
+      font-size: 14px;
+      line-height: 1.2;
+      font-weight: 500;
+      box-shadow: 0 8px 18px rgba(53, 22, 89, .25);
+      cursor: pointer;
+    }
+
+    .sv-start-builder-btn-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #2CF7B3;
+    }
+
+    @media (max-width: 900px) {
+      .sv-page-wrap { padding: 16px 12px 24px; }
+      .sv-page-stack { max-width: 100%; }
+    }
+
+    @media (max-width: 640px) {
+      .sv-page-wrap { padding: 14px 10px 20px; }
+      .sv-top-row { margin-bottom: 14px; }
+      .sv-top-actions { width: 100%; justify-content: flex-end; }
+      .sv-secondary-btn, .sv-primary-btn { height: 34px; }
+      .sv-card { border-radius: 16px; }
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+  <div id="overlay" aria-hidden="true"></div>
+  <aside id="sidebar" aria-label="Main navigation"></aside>
+  <div id="main-col">
+    <header id="navbar" style="display:flex;align-items:center;justify-content:space-between;height:56px;padding:0 16px;background:#fff;border-bottom:1px solid #e8e7eb;flex-shrink:0;min-width:0;"></header>
+    <div id="main-scroll">
+      <div class="sv-page-wrap">
+        <div id="create-new-survey-start-root"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="layout.js"></script>
+<script src="survey_components.js"></script>
+<script src="create_new_survey_start_components.js"></script>
+<script>
+(function() {
+  'use strict';
+
+  const screenData = {
+    header: {
+      title: 'Create new survey',
+      showBack: true,
+      previewIcon: 'eye',
+      saveIcon: 'check'
+    },
+    meta: {
+      title: 'Employee satisfaction survey',
+      description: ''
+    },
+    startCard: {
+      title: 'Start building your survey',
+      description: 'Create engaging surveys for your team. Add questions, customize options, and gather valuable feedback.',
+      ctaLabel: 'Add first question'
+    }
+  };
+
+  const root = document.getElementById('create-new-survey-start-root');
+
+  function renderScreen() {
+    if (!root) return;
+    root.innerHTML = `
+      ${SurveyComponents.TopBar(screenData.header)}
+      ${CreateNewSurveyStartComponents.StartPageStack(screenData)}
+    `;
+  }
+
+  document.addEventListener('DOMContentLoaded', renderScreen);
+})();
+</script>
+</body>
+</html>
