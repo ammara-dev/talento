@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <title>Talento - Salary Scale</title>
+  <meta name="description" content="Talento HR Platform - Salary scale" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared-styles.css" />
+  <script src="design-tokens.js"></script>
+
+  <style>
+    #main-scroll { background: #f6f5f7; }
+    .ss-page-wrap { padding: 16px; min-height: calc(100vh - 56px); }
+    .ss-shell {
+      background: #fff;
+      border: 1px solid #ece9ef;
+      border-radius: 14px;
+      min-height: calc(100vh - 88px);
+      padding: 14px;
+    }
+
+    .ss-title {
+      font-size: 20px;
+      line-height: 1.3;
+      color: #1e1033;
+      font-weight: 500;
+      margin-bottom: 10px;
+    }
+
+    .ss-top-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .ss-search {
+      width: min(100%, 420px);
+      height: 32px;
+      border: 1px solid #ddd8e6;
+      border-radius: 999px;
+      background: #fff;
+      padding: 0 10px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .ss-search-icon { color: #8f88a0; font-size: 12px; flex-shrink: 0; }
+    .ss-search input {
+      width: 100%;
+      border: none;
+      background: transparent;
+      font-size: 14px;
+      color: #4b405c;
+      outline: none;
+    }
+    .ss-search input::placeholder { color: #8f88a0; }
+
+    .ss-actions {
+      display: grid;
+      grid-template-columns: auto auto;
+      column-gap: 10px;
+      row-gap: 8px;
+      justify-content: end;
+      align-items: center;
+    }
+
+    .ss-tabs {
+      display: inline-flex;
+      align-items: center;
+      gap: 2px;
+      border: 1px solid #ddd8e6;
+      border-radius: 10px;
+      background: #fff;
+      padding: 2px;
+    }
+
+    .ss-tab {
+      min-height: 24px;
+      border: none;
+      border-radius: 8px;
+      background: transparent;
+      color: #787085;
+      font-size: 14px;
+      line-height: 1;
+      padding: 0 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .ss-tab.active {
+      background: #f3f1f7;
+      color: #1e1033;
+      font-weight: 500;
+    }
+
+    .ss-config-btn,
+    .ss-create-btn {
+      min-height: 28px;
+      border-radius: 8px;
+      border: 1px solid #ddd8e6;
+      background: #fff;
+      color: #4b405c;
+      font-size: 14px;
+      line-height: 1;
+      padding: 0 10px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .ss-create-btn {
+      background: #1e1033;
+      border-color: #1e1033;
+      color: #fff;
+      grid-column: 2;
+      justify-self: end;
+    }
+
+    .ss-create-btn span:last-child { color: #2cf7b3; }
+
+    .ss-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      align-items: stretch;
+    }
+
+    .ss-card {
+      border: 1px solid #e2deea;
+      border-radius: 10px;
+      background: #fff;
+      padding: 8px;
+      display: grid;
+      gap: 8px;
+      min-height: 132px;
+      height: 100%;
+      align-content: start;
+    }
+
+    .ss-card-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .ss-card-code {
+      font-size: 14px;
+      line-height: 1.3;
+      color: #8f88a0;
+    }
+
+    .ss-status {
+      height: 18px;
+      border-radius: 999px;
+      padding: 0 8px;
+      font-size: 12px;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      font-weight: 500;
+    }
+
+    .ss-status.draft { background: #efedf4; color: #6f6780; }
+    .ss-status.active { background: #ddf7e6; color: #1a9a54; }
+
+    .ss-card-title {
+      font-size: 20px;
+      line-height: 1.25;
+      color: #1e1033;
+      font-weight: 500;
+    }
+
+    .ss-metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 6px;
+    }
+
+    .ss-metric {
+      min-height: 42px;
+      border: 1px solid #ece9ef;
+      border-radius: 8px;
+      background: #f9f8fb;
+      padding: 6px 8px;
+    }
+
+    .ss-metric-label {
+      font-size: 12px;
+      line-height: 1.3;
+      color: #8f88a0;
+      margin-bottom: 3px;
+    }
+
+    .ss-metric-value {
+      font-size: 14px;
+      line-height: 1.35;
+      color: #1e1033;
+      font-weight: 500;
+    }
+
+    .ss-open-btn {
+      min-height: 26px;
+      border: 1px solid #ece9ef;
+      border-radius: 8px;
+      background: #fff;
+      color: #4b405c;
+      font-size: 14px;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      width: 100%;
+    }
+
+    .ss-create-card {
+      min-height: 132px;
+      border: 2px dashed #ddd8e6;
+      border-radius: 10px;
+      background: #fff;
+      color: #a19aae;
+      display: grid;
+      place-items: center;
+      gap: 8px;
+      align-content: center;
+      text-align: center;
+    }
+
+    .ss-create-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 1px solid #ece9ef;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+    }
+
+    .ss-create-label {
+      font-size: 14px;
+      line-height: 1.3;
+    }
+
+    @media (max-width: 1180px) {
+      .ss-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 760px) {
+      .ss-grid,
+      .ss-metrics-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+<div id="app">
+  <div id="overlay" aria-hidden="true"></div>
+  <aside id="sidebar" aria-label="Main navigation"></aside>
+  <div id="main-col">
+    <header id="navbar" style="display:flex;align-items:center;justify-content:space-between;height:56px;padding:0 16px;background:#fff;border-bottom:1px solid #e8e7eb;flex-shrink:0;min-width:0;"></header>
+    <div id="main-scroll">
+      <div class="ss-page-wrap">
+        <div class="ss-shell">
+          <div id="salary-scale-root"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="layout.js"></script>
+<script src="salary_scale_components.js"></script>
+<script src="salary_scale_screen.js"></script>
+</body>
+</html>

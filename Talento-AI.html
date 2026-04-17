@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <title>Talento - AI</title>
+  <meta name="description" content="Talento HR Platform - Talento AI Assistant" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared-styles.css" />
+  <script src="design-tokens.js"></script>
+
+  <style>
+    #main-scroll {
+      background: #f6f5f7;
+    }
+
+    .tai-page-wrap {
+      padding: 16px;
+      min-height: calc(100vh - 56px);
+    }
+
+    .tai-frame {
+      min-height: calc(100vh - 88px);
+      border: 2px solid #c9b4f0;
+      border-radius: 14px;
+      background: #fff;
+      display: grid;
+      grid-template-columns: 160px minmax(0, 1fr);
+      overflow: hidden;
+    }
+
+    .tai-sidebar {
+      border-right: 1px solid #ece9ef;
+      padding: 12px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      background: #fff;
+    }
+
+    .tai-sidebar-title,
+    .tai-empty-title {
+      font-size: 20px;
+      line-height: 1.3;
+      font-weight: 500;
+      color: #1e1033;
+    }
+
+    .tai-search {
+      height: 30px;
+      border: 1px solid #ddd8e6;
+      border-radius: 999px;
+      background: #fff;
+      padding: 0 10px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .tai-search-icon {
+      color: #8f88a0;
+      font-size: 12px;
+      flex-shrink: 0;
+    }
+
+    .tai-search input {
+      width: 100%;
+      border: none;
+      background: transparent;
+      font-size: 14px;
+      color: #4b405c;
+      outline: none;
+    }
+
+    .tai-search input::placeholder {
+      color: #8f88a0;
+    }
+
+    .tai-new-chat-btn,
+    .tai-history-item {
+      height: 30px;
+      border: none;
+      border-radius: 8px;
+      background: #f4f1f8;
+      color: #1e1033;
+      font-size: 14px;
+      line-height: 1.3;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 8px;
+      text-align: left;
+      width: 100%;
+    }
+
+    .tai-history-item {
+      background: transparent;
+    }
+
+    .tai-history-title {
+      font-size: 11px;
+      line-height: 1.3;
+      color: #a19aae;
+      font-weight: 500;
+      letter-spacing: .3px;
+      margin-bottom: 4px;
+    }
+
+    .tai-history-list {
+      display: grid;
+      gap: 3px;
+    }
+
+    .tai-history-icon {
+      width: 12px;
+      color: #7f7890;
+      font-size: 11px;
+      flex-shrink: 0;
+      text-align: center;
+    }
+
+    .tai-history-text {
+      font-size: 14px;
+      line-height: 1.3;
+      color: #1e1033;
+      white-space: nowrap;
+    }
+
+    .tai-credit-card {
+      margin-top: auto;
+      border: 1px solid #ded8ea;
+      border-radius: 10px;
+      background: #f7f4fc;
+      padding: 8px;
+    }
+
+    .tai-credit-line {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
+      line-height: 1.3;
+      color: #1e1033;
+      font-weight: 500;
+    }
+
+    .tai-credit-sub {
+      margin-top: 2px;
+      font-size: 14px;
+      line-height: 1.3;
+      color: #787085;
+      margin-bottom: 6px;
+    }
+
+    .tai-credit-btn {
+      width: 100%;
+      height: 30px;
+      border-radius: 8px;
+      border: 1px solid #1e1033;
+      background: #1e1033;
+      color: #fff;
+      font-size: 14px;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .tai-main {
+      display: grid;
+      grid-template-rows: 1fr auto;
+      min-height: 100%;
+    }
+
+    .tai-main-body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+    }
+
+    .tai-empty-state {
+      width: min(540px, 100%);
+      display: grid;
+      gap: 16px;
+      text-align: center;
+    }
+
+    .tai-empty-sub {
+      margin-top: 6px;
+      font-size: 14px;
+      line-height: 1.45;
+      color: #787085;
+    }
+
+    .tai-suggestions {
+      border-top: 1px solid #ece9ef;
+      padding-top: 12px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .tai-suggestions-label {
+      font-size: 14px;
+      line-height: 1.3;
+      color: #8f88a0;
+    }
+
+    .tai-chip-row {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .tai-chip {
+      min-height: 24px;
+      border-radius: 999px;
+      border: 1px solid #ddd8e6;
+      background: #fff;
+      color: #4b405c;
+      font-size: 14px;
+      line-height: 1.2;
+      padding: 0 10px;
+      white-space: nowrap;
+    }
+
+    .tai-composer {
+      border-top: 1px solid #ece9ef;
+      padding: 10px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .tai-composer-input {
+      width: 100%;
+      height: 34px;
+      border: 1px solid #ddd8e6;
+      border-radius: 8px;
+      padding: 0 10px;
+      font-size: 14px;
+      line-height: 1.3;
+      color: #1e1033;
+      outline: none;
+    }
+
+    .tai-composer-input::placeholder {
+      color: #9a93a8;
+    }
+
+    .tai-composer-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .tai-composer-left {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .tai-tool-btn {
+      width: 24px;
+      height: 24px;
+      border: none;
+      background: transparent;
+      color: #7f7890;
+      font-size: 12px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 6px;
+    }
+
+    .tai-source-btn {
+      min-height: 24px;
+      border: none;
+      background: transparent;
+      color: #8f88a0;
+      font-size: 14px;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0 2px;
+    }
+
+    .tai-send-btn {
+      min-height: 24px;
+      border-radius: 8px;
+      border: 1px solid #ece9ef;
+      background: #f3f1f7;
+      color: #a19aae;
+      font-size: 14px;
+      line-height: 1;
+      padding: 0 10px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    @media (max-width: 900px) {
+      .tai-frame {
+        grid-template-columns: 1fr;
+      }
+
+      .tai-sidebar {
+        border-right: none;
+        border-bottom: 1px solid #ece9ef;
+      }
+    }
+  </style>
+</head>
+
+<body>
+<div id="app">
+  <div id="overlay" aria-hidden="true"></div>
+  <aside id="sidebar" aria-label="Main navigation"></aside>
+
+  <div id="main-col">
+    <header id="navbar" style="display:flex;align-items:center;justify-content:space-between;height:56px;padding:0 16px;background:#fff;border-bottom:1px solid #e8e7eb;flex-shrink:0;min-width:0;"></header>
+    <div id="main-scroll">
+      <div class="tai-page-wrap">
+        <div id="talento-ai-root"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="layout.js"></script>
+<script src="talento_ai_components.js"></script>
+<script src="talento_ai_screen.js"></script>
+</body>
+</html>

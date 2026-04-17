@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <title>Talento - Credits</title>
+  <meta name="description" content="Talento HR Platform - Credits and plans" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared-styles.css" />
+  <script src="design-tokens.js"></script>
+
+  <style>
+    #main-scroll { background: #f6f5f7; }
+    .cr-page-wrap { padding: 16px; min-height: calc(100vh - 56px); }
+    .cr-shell {
+      min-height: calc(100vh - 88px);
+      border: 2px solid #c9b4f0;
+      border-radius: 14px;
+      background: #fff;
+      padding: 16px;
+    }
+
+    .cr-breadcrumb {
+      font-size: 14px;
+      line-height: 1.35;
+      color: #8f88a0;
+      margin-bottom: 8px;
+    }
+
+    .cr-title {
+      font-size: 20px;
+      line-height: 1.3;
+      color: #1e1033;
+      font-weight: 500;
+      margin-bottom: 12px;
+    }
+
+    .cr-tabs {
+      display: flex;
+      gap: 8px;
+      border-bottom: 1px solid #ece9ef;
+      margin-bottom: 20px;
+      padding-bottom: 6px;
+    }
+
+    .cr-tab {
+      border: none;
+      background: transparent;
+      color: #8f88a0;
+      font-size: 14px;
+      line-height: 1.3;
+      padding: 0 0 6px;
+      border-bottom: 2px solid transparent;
+    }
+
+    .cr-tab.active {
+      color: #1e1033;
+      border-bottom-color: #1e1033;
+      font-weight: 500;
+    }
+
+    .cr-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      align-items: stretch;
+      margin-top: 4px;
+    }
+
+    .cr-plan-card {
+      border: 1px solid #ddd8e6;
+      border-radius: 16px;
+      background: #fff;
+      padding: 14px;
+      display: grid;
+      gap: 14px;
+      align-content: start;
+    }
+
+    .cr-plan-card.pro {
+      background: linear-gradient(165deg, #e5ddf7 0%, #e4f2fb 100%);
+    }
+
+    .cr-plan-title {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 20px;
+      line-height: 1.3;
+      color: #1e1033;
+      font-weight: 500;
+      margin-bottom: 6px;
+    }
+
+    .cr-plan-title-icon { font-size: 14px; color: #5b4a7b; }
+
+    .cr-plan-desc {
+      font-size: 14px;
+      line-height: 1.45;
+      color: #4b405c;
+      margin-bottom: 12px;
+    }
+
+    .cr-plan-btn {
+      width: 100%;
+      min-height: 32px;
+      border-radius: 9px;
+      border: 1px solid #ddd8e6;
+      background: #fff;
+      color: #1e1033;
+      font-size: 14px;
+      line-height: 1;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .cr-plan-btn.upgrade {
+      background: #1e1033;
+      border-color: #1e1033;
+      color: #fff;
+    }
+
+    .cr-plan-btn.upgrade span:last-child { color: #2cf7b3; }
+
+    .cr-feature-list {
+      display: grid;
+      gap: 10px;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .cr-feature-item {
+      display: grid;
+      grid-template-columns: 14px minmax(0, 1fr);
+      gap: 8px;
+      align-items: start;
+      font-size: 14px;
+      line-height: 1.4;
+      color: #1e1033;
+    }
+
+    .cr-feature-icon {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #4f2e86;
+      color: #ffffff;
+      font-size: 8px;
+      margin-top: 3px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+    }
+
+    .cr-empty {
+      min-height: 220px;
+      border: 1px dashed #ddd8e6;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      font-size: 14px;
+      color: #8f88a0;
+      background: #faf9fc;
+      padding: 16px;
+      text-align: center;
+      margin-top: 4px;
+    }
+
+    @media (max-width: 1080px) {
+      .cr-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+<div id="app">
+  <div id="overlay" aria-hidden="true"></div>
+  <aside id="sidebar" aria-label="Main navigation"></aside>
+  <div id="main-col">
+    <header id="navbar" style="display:flex;align-items:center;justify-content:space-between;height:56px;padding:0 16px;background:#fff;border-bottom:1px solid #e8e7eb;flex-shrink:0;min-width:0;"></header>
+    <div id="main-scroll">
+      <div class="cr-page-wrap">
+        <div id="credits-root"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="layout.js"></script>
+<script src="credits_components.js"></script>
+<script src="credits_screen.js"></script>
+</body>
+</html>

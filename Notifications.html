@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <title>Talento - Notifications</title>
+  <meta name="description" content="Talento HR Platform - Notifications" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared-styles.css" />
+  <script src="design-tokens.js"></script>
+
+  <style>
+    #main-scroll {
+      background: #f6f5f7;
+    }
+
+    .ntf-page-wrap {
+      padding: 16px;
+      min-height: calc(100vh - 56px);
+    }
+
+    .ntf-shell {
+      background: #fff;
+      border: 1px solid #ece9ef;
+      border-radius: 16px;
+      padding: 12px;
+    }
+
+    .ntf-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+    }
+
+    .ntf-title {
+      font-size: 20px;
+      line-height: 1.3;
+      color: #1e1033;
+      font-weight: 500;
+      letter-spacing: -0.2px;
+    }
+
+    .ntf-config-btn {
+      min-height: 30px;
+      border-radius: 8px;
+      border: 1px solid #e7e3ed;
+      background: #fff;
+      color: #4b405c;
+      font-size: 14px;
+      line-height: 1;
+      padding: 0 10px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .ntf-config-icon {
+      font-size: 12px;
+      color: #6f6780;
+    }
+
+    .ntf-list {
+      display: grid;
+      gap: 0;
+    }
+
+    .ntf-item {
+      min-height: 66px;
+      padding: 10px 8px;
+      border-bottom: 1px solid #f0edf6;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .ntf-item:last-child {
+      border-bottom: none;
+    }
+
+    .ntf-item-left {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      min-width: 0;
+      flex: 1;
+    }
+
+    .ntf-item-icon {
+      width: 14px;
+      margin-top: 2px;
+      color: #7f7890;
+      font-size: 12px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .ntf-item-copy {
+      min-width: 0;
+    }
+
+    .ntf-item-meta-row {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-bottom: 2px;
+    }
+
+    .ntf-item-title {
+      font-size: 14px;
+      line-height: 1.35;
+      color: #1e1033;
+      font-weight: 500;
+    }
+
+    .ntf-item-subtitle {
+      font-size: 14px;
+      line-height: 1.35;
+      color: #9a92aa;
+    }
+
+    .ntf-item-text {
+      font-size: 14px;
+      line-height: 1.45;
+      color: #4b405c;
+    }
+
+    .ntf-item-right {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+      white-space: nowrap;
+      margin-top: 2px;
+    }
+
+    .ntf-item-time {
+      font-size: 14px;
+      line-height: 1.3;
+      color: #8b8499;
+    }
+
+    .ntf-item-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 30px;
+      height: 20px;
+      border-radius: 999px;
+      background: #f3f1f7;
+      color: #6f6780;
+      font-size: 12px;
+      font-weight: 500;
+      padding: 0 8px;
+    }
+
+    @media (max-width: 760px) {
+      .ntf-page-wrap {
+        padding: 10px;
+      }
+
+      .ntf-shell {
+        padding: 10px;
+      }
+
+      .ntf-item {
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .ntf-item-right {
+        width: 100%;
+        justify-content: space-between;
+      }
+    }
+  </style>
+</head>
+
+<body>
+<div id="app">
+  <div id="overlay" aria-hidden="true"></div>
+  <aside id="sidebar" aria-label="Main navigation"></aside>
+
+  <div id="main-col">
+    <header id="navbar" style="display:flex;align-items:center;justify-content:space-between;height:56px;padding:0 16px;background:#fff;border-bottom:1px solid #e8e7eb;flex-shrink:0;min-width:0;"></header>
+    <div id="main-scroll">
+      <div class="ntf-page-wrap">
+        <div class="ntf-shell">
+          <div id="notifications-root"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="layout.js"></script>
+<script src="notifications_components.js"></script>
+<script src="notifications_screen.js"></script>
+</body>
+</html>

@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <title>Talento - Appraisal Employee profile self review</title>
+  <meta name="description" content="Talento HR Platform - Appraisal employee profile self review" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared-styles.css" />
+  <script src="design-tokens.js"></script>
+
+  <style>
+    #main-scroll {
+      background: #f6f5f7;
+    }
+
+    .aep-page-wrap {
+      padding: 16px;
+      min-height: calc(100vh - 56px);
+    }
+
+    .aep-page-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .aep-screen-card {
+      background: #ffffff;
+      border: 1px solid #ece9ef;
+      border-radius: 24px;
+      padding: 18px 18px 20px;
+      box-shadow: 0 10px 24px rgba(30, 16, 51, 0.04);
+    }
+
+    .aep-screen {
+      display: grid;
+      gap: 12px;
+      align-content: start;
+    }
+
+    .aep-header {
+      display: grid;
+      gap: 16px;
+      padding-bottom: 2px;
+      align-content: start;
+    }
+
+    .aep-header-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .aep-breadcrumb {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
+      font-size: 14px;
+      line-height: 1.4;
+      color: #787085;
+    }
+
+    .aep-breadcrumb-item--current {
+      color: #4b405c;
+    }
+
+    .aep-breadcrumb-divider {
+      color: #b0a9bb;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .aep-pager {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .aep-pager-btn {
+      border: none;
+      background: transparent;
+      color: #4b405c;
+      font-size: 14px;
+      line-height: 1.4;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0;
+    }
+
+    .aep-pager-progress {
+      font-size: 14px;
+      line-height: 1.4;
+      color: #4b405c;
+      font-weight: 500;
+    }
+
+    .aep-profile-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .aep-profile-main {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+      flex: 1 1 560px;
+    }
+
+    .aep-profile-avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1px solid #e7e1f2;
+      box-shadow: 0 8px 16px rgba(30, 16, 51, 0.1);
+      flex-shrink: 0;
+      background: #f3edf9;
+    }
+
+    .aep-profile-copy {
+      display: grid;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .aep-profile-name {
+      font-size: 20px;
+      line-height: 1.3;
+      font-weight: 500;
+      color: #1e1033;
+      letter-spacing: -0.2px;
+    }
+
+    .aep-profile-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      font-size: 14px;
+      line-height: 1.45;
+      color: #787085;
+    }
+
+    .aep-meta-sep {
+      color: #b0a9bb;
+    }
+
+    .aep-state-pill {
+      display: inline-flex;
+      align-items: center;
+      height: 22px;
+      padding: 0 10px;
+      border-radius: 999px;
+      background: #f3f4f6;
+      color: #6b7280;
+      font-size: 12px;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    .aep-header-actions {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .aep-edit-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 40px;
+      padding: 0 16px;
+      border-radius: 12px;
+      border: 1px solid #1e1033;
+      background: #1e1033;
+      color: #ffffff;
+      font-size: 14px;
+      line-height: 1;
+      font-weight: 500;
+      box-shadow: 0 10px 18px rgba(30, 16, 51, 0.2);
+      white-space: nowrap;
+    }
+
+    .aep-edit-btn svg {
+      stroke: #2cf7b3;
+      color: #2cf7b3;
+    }
+
+    .aep-more-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      border: 1px solid #ece9ef;
+      background: #ffffff;
+      color: #8b8499;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .aep-tabs {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      border-bottom: 1px solid #ece9ef;
+      padding-bottom: 10px;
+    }
+
+    .aep-tab {
+      border: none;
+      background: transparent;
+      color: #787085;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 0 0 9px;
+      border-bottom: 2px solid transparent;
+      font-size: 14px;
+      line-height: 1.4;
+      white-space: nowrap;
+      transition: color 150ms ease, border-color 150ms ease;
+    }
+
+    .aep-tab.active {
+      color: #1e1033;
+      border-bottom-color: #1e1033;
+      font-weight: 500;
+    }
+
+    .aep-tab-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .aepr-self-head {
+      display: grid;
+      gap: 4px;
+      align-content: start;
+      padding-top: 4px;
+    }
+
+    .aepr-self-title {
+      margin: 0;
+      font-size: 20px;
+      line-height: 1.3;
+      font-weight: 500;
+      color: #1e1033;
+      letter-spacing: -0.2px;
+    }
+
+    .aepr-self-subtitle {
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.45;
+      color: #787085;
+    }
+
+    .aepr-question-list {
+      display: grid;
+      gap: 10px;
+      align-content: start;
+    }
+
+    .aepr-question-card {
+      background: #ffffff;
+      border: 1px solid #ece9ef;
+      border-radius: 16px;
+      padding: 14px 16px;
+    }
+
+    .aepr-question-title {
+      margin: 0 0 8px;
+      font-size: 20px;
+      line-height: 1.35;
+      font-weight: 500;
+      color: #1e1033;
+      letter-spacing: -0.2px;
+    }
+
+    .aepr-question-answer {
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.45;
+      color: #4b405c;
+    }
+
+    .aepr-empty {
+      border: 1px dashed #e5e1eb;
+      border-radius: 16px;
+      background: #fbfafd;
+      min-height: 140px;
+      display: grid;
+      place-items: center;
+      padding: 18px;
+      color: #787085;
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    @media (max-width: 900px) {
+      .aep-header-top,
+      .aep-profile-row {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .aep-header-actions {
+        width: 100%;
+      }
+
+      .aep-profile-main {
+        flex: none;
+        width: 100%;
+      }
+
+      .aep-edit-btn {
+        flex: 1;
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .aep-page-wrap {
+        padding: 6px 10px 12px;
+        min-height: auto;
+      }
+
+      .aep-screen-card {
+        border-radius: 20px;
+        padding: 10px;
+      }
+
+      .aep-screen {
+        gap: 8px;
+      }
+
+      .aep-header {
+        gap: 8px;
+        padding-bottom: 0;
+      }
+
+      .aep-breadcrumb,
+      .aep-pager-btn,
+      .aep-pager-progress {
+        font-size: 13px;
+        line-height: 1.35;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .aep-tabs {
+        gap: 12px;
+      }
+
+      .aep-tab {
+        padding-bottom: 7px;
+      }
+
+      .aep-profile-avatar {
+        width: 56px;
+        height: 56px;
+      }
+
+      .aepr-question-title {
+        font-size: 18px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+<div id="app">
+  <div id="overlay" aria-hidden="true"></div>
+  <aside id="sidebar" aria-label="Main navigation"></aside>
+
+  <div id="main-col">
+    <header id="navbar" style="display:flex;align-items:center;justify-content:space-between;height:56px;padding:0 16px;background:#fff;border-bottom:1px solid #e8e7eb;flex-shrink:0;min-width:0;"></header>
+
+    <div id="main-scroll">
+      <div class="aep-page-wrap">
+        <div class="aep-page-inner">
+          <div class="aep-screen-card">
+            <div id="appraisal-employee-profile-self-review-root" class="aep-screen"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="layout.js"></script>
+<script src="performance_evaluation_components.js"></script>
+<script src="performance_evaluation_detail_components.js"></script>
+<script src="appraisal_employee_profile_components.js"></script>
+<script src="appraisal_employee_profile_self_review_components.js"></script>
+<script src="appraisal_employee_profile_self_review_screen.js"></script>
+</body>
+</html>
+

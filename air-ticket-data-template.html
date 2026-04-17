@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <title>Talento - Air Ticket Data Template</title>
+  <meta name="description" content="Talento HR Platform - Air ticket data template" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared-styles.css" />
+  <script src="design-tokens.js"></script>
+
+  <style>
+    #main-scroll {
+      background: #f6f5f7;
+    }
+
+    .atdt-page-wrap {
+      padding: 16px;
+      min-height: calc(100vh - 56px);
+    }
+
+    .atdt-shell {
+      background: #fff;
+      border: 1px solid #ece9f1;
+      border-radius: 20px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .atdt-top-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .atdt-breadcrumb {
+      font-size: 14px;
+      line-height: 1.4;
+      color: #787085;
+    }
+
+    .atdt-pager {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      color: #6f6780;
+      font-size: 14px;
+    }
+
+    .atdt-link-btn {
+      border: none;
+      background: transparent;
+      color: #4b405c;
+      font-size: 14px;
+      line-height: 1.3;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0;
+    }
+
+    .atdt-title-row {
+      align-items: center;
+    }
+
+    .atdt-title {
+      font-size: 20px;
+      line-height: 1.3;
+      font-weight: 500;
+      color: #1e1033;
+      margin-bottom: 6px;
+      letter-spacing: -0.2px;
+    }
+
+    .atdt-meta-row {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      color: #787085;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    .atdt-meta-avatar {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1px solid #e8e3f0;
+      background: #f2edf8;
+      vertical-align: middle;
+      margin: 0 4px;
+    }
+
+    .atdt-state-pill {
+      display: inline-flex;
+      align-items: center;
+      height: 22px;
+      padding: 0 8px;
+      border-radius: 999px;
+      background: #efedf4;
+      color: #5c5270;
+      font-size: 12px;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    .atdt-title-actions,
+    .atdt-action-group {
+      display: inline-flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .atdt-btn {
+      min-height: 32px;
+      border-radius: 8px;
+      padding: 0 12px;
+      border: 1px solid #e2deea;
+      background: #fff;
+      color: #1e1033;
+      font-size: 14px;
+      line-height: 1;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+
+    .atdt-btn-primary {
+      background: #1e1033;
+      border-color: #1e1033;
+      color: #fff;
+    }
+
+    .atdt-btn-primary span,
+    .atdt-btn-primary span i {
+      color: #2cf7b3;
+    }
+
+    .atdt-btn-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      border: 1px solid #e2deea;
+      background: #fff;
+      color: #6f6780;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .atdt-action-strip {
+      background: #f3f1ff;
+      border: 1px solid #ece9f1;
+      border-radius: 12px;
+      min-height: 44px;
+      padding: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .atdt-steps-wrap {
+      border: 1px solid #ece9f1;
+      border-radius: 14px;
+      background: #f6f5f7;
+      padding: 10px 14px;
+      overflow-x: auto;
+    }
+
+    .atdt-steps-track {
+      min-width: 760px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      position: relative;
+      padding-top: 2px;
+      gap: 16px;
+    }
+
+    .atdt-step {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      position: relative;
+      z-index: 2;
+      color: #8a829a;
+      font-size: 14px;
+      line-height: 1.3;
+      white-space: nowrap;
+      background: #f6f5f7;
+    }
+
+    .atdt-step:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      left: calc(100% + 2px);
+      width: 12px;
+      top: 10px;
+      height: 2px;
+      background: #e6e2ee;
+      z-index: -1;
+    }
+
+    .atdt-step-done:not(:last-child)::after {
+      background: #8b64e4;
+    }
+
+    .atdt-step-dot {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 1.5px solid #dfdbe7;
+      background: #fff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 500;
+      color: #aea7bd;
+      flex-shrink: 0;
+    }
+
+    .atdt-step-done .atdt-step-dot {
+      background: #8b64e4;
+      border-color: #8b64e4;
+      color: #fff;
+    }
+
+    .atdt-step-active .atdt-step-dot {
+      border-color: #8b64e4;
+      color: #8b64e4;
+      background: #f6f5f7;
+    }
+
+    .atdt-step-upcoming .atdt-step-dot {
+      background: #f6f5f7;
+    }
+
+    .atdt-step-done .atdt-step-label,
+    .atdt-step-active .atdt-step-label {
+      color: #1e1033;
+      font-weight: 500;
+    }
+
+    .atdt-step-done .atdt-step-label {
+      color: #8b64e4;
+    }
+
+    .atdt-section-card {
+      border: 1px solid #ece9f1;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    .atdt-section-head {
+      min-height: 38px;
+      padding: 0 12px;
+      border-bottom: 1px solid #f0edf6;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .atdt-section-icon {
+      width: 14px;
+      text-align: center;
+      color: #5d5470;
+      flex-shrink: 0;
+    }
+
+    .atdt-section-title {
+      font-size: 20px;
+      line-height: 1.3;
+      color: #1e1033;
+      font-weight: 500;
+    }
+
+    .atdt-section-grid,
+    .atdt-tab-panel {
+      padding: 12px;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px 16px;
+    }
+
+    .atdt-field-cell {
+      min-width: 0;
+    }
+
+    .atdt-field-label {
+      font-size: 14px;
+      line-height: 1.35;
+      color: #9a92aa;
+      margin-bottom: 4px;
+    }
+
+    .atdt-field-value {
+      font-size: 14px;
+      line-height: 1.4;
+      color: #1e1033;
+      font-weight: 500;
+      word-break: break-word;
+    }
+
+    .atdt-tabs-row {
+      border-top: 1px solid #f0edf6;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2px;
+      padding: 0 8px;
+      background: #fbfafe;
+    }
+
+    .atdt-tab-btn {
+      border: none;
+      background: transparent;
+      color: #6e667f;
+      font-size: 14px;
+      height: 36px;
+      padding: 0 10px;
+      border-bottom: 2px solid transparent;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .atdt-tab-btn.active {
+      color: #1e1033;
+      border-bottom-color: #1e1033;
+      font-weight: 500;
+    }
+
+    @media (max-width: 760px) {
+      .atdt-page-wrap {
+        padding: 10px;
+      }
+
+      .atdt-shell {
+        padding: 12px;
+      }
+
+      .atdt-section-grid,
+      .atdt-tab-panel {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+<div id="app">
+  <div id="overlay" aria-hidden="true"></div>
+  <aside id="sidebar" aria-label="Main navigation"></aside>
+
+  <div id="main-col">
+    <header id="navbar" style="display:flex;align-items:center;justify-content:space-between;height:56px;padding:0 16px;background:#fff;border-bottom:1px solid #e8e7eb;flex-shrink:0;min-width:0;"></header>
+    <div id="main-scroll">
+      <div class="atdt-page-wrap">
+        <div id="air-ticket-data-template-root"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="layout.js"></script>
+<script src="air_ticket_data_template_components.js"></script>
+<script src="air_ticket_data_template_screen.js"></script>
+</body>
+</html>

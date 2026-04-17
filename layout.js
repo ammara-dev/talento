@@ -11,13 +11,27 @@
   // Page configuration for active states
   const pageConfig = {
     'index.html': { navItem: 'dashboard', submenu: null },
+    'Notifications.html': { navItem: 'dashboard', submenu: null },
+    'Messages.html': { navItem: 'dashboard', submenu: null },
+    'Messages-chat.html': { navItem: 'dashboard', submenu: null },
+    'Talento-AI.html': { navItem: 'dashboard', submenu: null },
+    'Talento-AI-Conversation.html': { navItem: 'dashboard', submenu: null },
+    'Credits.html': { navItem: 'dashboard', submenu: null },
+    'Credits-packs.html': { navItem: 'dashboard', submenu: null },
+    'manage-your-apps.html': { navItem: 'apps', submenu: null },
     'requests.html': { navItem: 'requests', submenu: null },
+    'request2.html': { navItem: 'requests', submenu: null },
+    'create-new-request.html': { navItem: 'requests', submenu: null },
     'leave.html': { navItem: 'attendance-leave', submenu: 'leave' },
     'business-missions-trip.html': { navItem: 'business-missions', submenu: 'missions-trip' },
     'air-tickets.html': { navItem: 'business-missions', submenu: 'air-tickets' },
     'air-ticket-request.html': { navItem: 'business-missions', submenu: 'air-tickets' },
+    'air-ticket-data-template.html': { navItem: 'requests', submenu: null },
     'payroll.html': { navItem: 'finance', submenu: 'payroll' },
     'payroll-detail.html': { navItem: 'finance', submenu: 'payroll' },
+    'salary-scale.html': { navItem: 'finance', submenu: 'salary-scale' },
+    'salary-scale-2nd-screen.html': { navItem: 'finance', submenu: 'salary-scale' },
+    'salary-scale-2nd-component.html': { navItem: 'finance', submenu: 'salary-scale' },
     'loans.html': { navItem: 'finance', submenu: 'loans' },
     'loan-installments.html': { navItem: 'finance', submenu: 'loans' },
     'accounting.html': { navItem: 'finance', submenu: 'accounting' },
@@ -47,6 +61,8 @@
     'Appraisal-Employee-profile.html': { navItem: 'team-engagement', submenu: 'performance-evaluation' },
     'Appraisal-Employee-profile-answers.html': { navItem: 'team-engagement', submenu: 'performance-evaluation' },
     'Appraisal-Employee-profile-evaluators.html': { navItem: 'team-engagement', submenu: 'performance-evaluation' },
+    'Appraisal-Employee-profile-peer-feedback.html': { navItem: 'team-engagement', submenu: 'performance-evaluation' },
+    'Appraisal-Employee-profile-self-review.html': { navItem: 'team-engagement', submenu: 'performance-evaluation' },
     'Appraisal Employee profile.html': { navItem: 'team-engagement', submenu: 'performance-evaluation' },
     'Appraisal%20Employee%20profile.html': { navItem: 'team-engagement', submenu: 'performance-evaluation' },
     'create-new-evaluation-evaluators-setup.html': { navItem: 'team-engagement', submenu: 'performance-evaluation' },
@@ -70,6 +86,7 @@
     const isBusinessMissionsExpanded = config.navItem === 'business-missions';
     const isPayrollActive = config.submenu === 'payroll';
     const isLoansActive = config.submenu === 'loans';
+    const isSalaryScaleActive = config.submenu === 'salary-scale';
     const isAccountingActive = config.submenu === 'accounting';
     const isFinanceExpanded = config.navItem === 'finance';
     const isJobPositionsActive = config.submenu === 'job-positions';
@@ -83,6 +100,7 @@
     const isSurveysActive = config.submenu === 'surveys';
     const isPerformanceEvaluationActive = config.submenu === 'performance-evaluation';
     const isTeamEngagementExpanded = config.navItem === 'team-engagement';
+    const isAppsActive = config.navItem === 'apps';
 
     return `
     <!-- Logo + Collapse -->
@@ -189,11 +207,13 @@
             </button>
           </a>
           <!-- Salary scale -->
-          <button class="nav-sub-item"
-            style="display:flex;align-items:center;gap:10px;width:calc(100% - 32px);height:36px;padding:0 8px;margin:1px 8px 1px 24px;text-align:left;outline:none;">
-            <i class="fa-solid fa-chart-line" style="width:16px;font-size:13px;color:#787085;flex-shrink:0;"></i>
-            <span class="s-label" style="color:#787085;font-size:13px;letter-spacing:-0.13px;line-height:1;white-space:nowrap;">Salary scale</span>
-          </button>
+          <a href="salary-scale.html" style="text-decoration:none;">
+            <button class="nav-sub-item${isSalaryScaleActive ? ' active' : ''}"${isSalaryScaleActive ? ' aria-current="page"' : ''}
+              style="display:flex;align-items:center;gap:10px;width:calc(100% - 32px);height:36px;padding:0 8px;margin:1px 8px 1px 24px;text-align:left;outline:none;">
+              <i class="fa-solid fa-chart-line" style="width:16px;font-size:13px;color:${isSalaryScaleActive ? '#1e1033' : '#787085'};flex-shrink:0;"></i>
+              <span class="s-label" style="color:${isSalaryScaleActive ? '#1e1033' : '#787085'};font-size:13px;${isSalaryScaleActive ? 'font-weight:500;' : ''}letter-spacing:-0.13px;line-height:1;white-space:nowrap;">Salary scale</span>
+            </button>
+          </a>
           <!-- Deductions & Violations -->
           <button class="nav-sub-item"
             style="display:flex;align-items:center;gap:10px;width:calc(100% - 32px);height:36px;padding:0 8px;margin:1px 8px 1px 24px;text-align:left;outline:none;">
@@ -360,11 +380,13 @@
         </button>
 
         <!-- Apps -->
-        <button class="nav-item" data-page="Apps"
-          style="display:flex;align-items:center;gap:10px;width:100%;height:40px;border-radius:8px;padding:0 16px;text-align:left;outline:none;">
-          <i class="fa-solid fa-grip" style="width:20px;font-size:16px;color:#1e1033;flex-shrink:0;"></i>
-          <span class="s-label" style="color:#1e1033;font-size:14px;letter-spacing:-0.14px;white-space:nowrap;">Apps</span>
-        </button>
+        <a href="manage-your-apps.html" style="text-decoration:none;">
+          <button class="nav-item${isAppsActive ? ' active' : ''}" data-page="Apps"${isAppsActive ? ' aria-current="page"' : ''}
+            style="display:flex;align-items:center;gap:10px;width:100%;height:40px;border-radius:8px;padding:0 16px;text-align:left;outline:none;">
+            <i class="fa-solid fa-grip" style="width:20px;font-size:16px;color:#1e1033;flex-shrink:0;"></i>
+            <span class="s-label" style="color:#1e1033;font-size:14px;letter-spacing:-0.14px;white-space:nowrap;">Apps</span>
+          </button>
+        </a>
 
       </nav>
     </div>
