@@ -13,6 +13,7 @@
     'index.html': { navItem: 'dashboard', submenu: null },
     'requests.html': { navItem: 'requests', submenu: null },
     'request2.html': { navItem: 'requests', submenu: null },
+    'create-new-request.html': { navItem: 'requests', submenu: null },
     'leave.html': { navItem: 'attendance-leave', submenu: 'leave' },
     'business-missions-trip.html': { navItem: 'business-missions', submenu: 'missions-trip' },
     'air-tickets.html': { navItem: 'business-missions', submenu: 'air-tickets' },

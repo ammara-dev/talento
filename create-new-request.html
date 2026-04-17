@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <title>Talento - Create New Request</title>
+  <meta name="description" content="Talento HR Platform - Create new request" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared-styles.css" />
+  <script src="design-tokens.js"></script>
+
+  <style>
+    #main-scroll {
+      background: #f6f5f7;
+    }
+
+    .cnr-page-wrap {
+      padding: 16px;
+      min-height: calc(100vh - 56px);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .cnr-shell {
+      max-width: 1440px;
+      width: 100%;
+      margin: 0 auto;
+      min-width: 0;
+    }
+
+    .cnr-title {
+      font-size: 20px;
+      font-weight: 500;
+      line-height: 1.3;
+      color: #1e1033;
+      margin-bottom: 14px;
+      letter-spacing: -0.2px;
+    }
+
+    .cnr-layout {
+      display: grid;
+      grid-template-columns: 170px minmax(0, 1fr) 230px;
+      gap: 12px;
+      align-items: start;
+    }
+
+    .cnr-left-col,
+    .cnr-main-col,
+    .cnr-right-col {
+      min-width: 0;
+    }
+
+    .cnr-steps {
+      display: grid;
+      gap: 10px;
+      padding-top: 8px;
+    }
+
+    .cnr-step-item {
+      border: none;
+      background: transparent;
+      text-align: left;
+      padding: 0 0 0 10px;
+      border-left: 2px solid transparent;
+      color: #787085;
+      font-size: 14px;
+      line-height: 1.4;
+      min-height: 18px;
+    }
+
+    .cnr-step-item.active {
+      color: #1e1033;
+      border-left-color: #8b64e4;
+      font-weight: 500;
+    }
+
+    .cnr-main-col {
+      display: grid;
+      gap: 12px;
+    }
+
+    .cnr-section {
+      background: #fff;
+      border-radius: 14px;
+      border: 1px solid #ece9ef;
+      padding: 18px;
+    }
+
+    .cnr-section-title {
+      font-size: 20px;
+      line-height: 1.3;
+      color: #1e1033;
+      font-weight: 500;
+      margin: 0 0 12px;
+      letter-spacing: -0.2px;
+    }
+
+    .cnr-section-body {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .cnr-section-body .cnr-field:has(.cnr-input-textarea),
+    .cnr-section-body .cnr-field:has(.cnr-input-attachment) {
+      grid-column: 1 / -1;
+    }
+
+    .cnr-field {
+      display: grid;
+      gap: 6px;
+    }
+
+    .cnr-field-label,
+    .cnr-field-helper {
+      font-size: 14px;
+      line-height: 1.35;
+      color: #787085;
+    }
+
+    .cnr-input {
+      width: 100%;
+      height: 40px;
+      border: 1px solid #e7e3ed;
+      border-radius: 8px;
+      background: #fff;
+      padding: 0 12px;
+      color: #1e1033;
+      font-size: 14px;
+      line-height: 1.3;
+    }
+
+    .cnr-input::placeholder {
+      color: #b0a9bb;
+    }
+
+    .cnr-input-select,
+    .cnr-input-attachment {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      text-align: left;
+      padding-right: 12px;
+    }
+
+    .cnr-input-content {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .cnr-input-value {
+      font-size: 14px;
+      color: #1e1033;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .cnr-input-value-muted {
+      color: #9a93a8;
+    }
+
+    .cnr-input-tail {
+      color: #6f6780;
+      font-size: 13px;
+      flex-shrink: 0;
+    }
+
+    .cnr-avatar {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1px solid #e8e3f0;
+      background: #f2edf8;
+      flex-shrink: 0;
+    }
+
+    .cnr-dot {
+      color: #5a516d;
+      font-size: 9px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .cnr-input-textarea {
+      height: 58px;
+      resize: none;
+      padding-top: 10px;
+      padding-bottom: 10px;
+    }
+
+    .cnr-tip-card {
+      border: 1px solid #ece9ef;
+      border-radius: 14px;
+      background: #fff;
+      padding: 14px;
+    }
+
+    .cnr-tip-title {
+      font-size: 14px;
+      line-height: 1.35;
+      color: #1e1033;
+      margin: 0 0 8px;
+      font-weight: 500;
+    }
+
+    .cnr-tip-text {
+      font-size: 14px;
+      line-height: 1.45;
+      color: #787085;
+      margin: 0;
+    }
+
+    .cnr-footer {
+      position: sticky;
+      bottom: 0;
+      z-index: 3;
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      background: linear-gradient(180deg, rgba(246, 245, 247, 0) 0%, #f6f5f7 32%);
+      padding-top: 14px;
+      margin-top: 14px;
+    }
+
+    .cnr-btn {
+      min-height: 40px;
+      border-radius: 10px;
+      border: 1px solid transparent;
+      padding: 0 14px;
+      font-size: 14px;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    .cnr-btn-ghost {
+      border-color: #ddd8e6;
+      background: #fff;
+      color: #4b405c;
+    }
+
+    .cnr-btn-primary {
+      border-color: #1e1033;
+      background: #1e1033;
+      color: #fff;
+    }
+
+    @media (max-width: 1180px) {
+      .cnr-layout {
+        grid-template-columns: 170px minmax(0, 1fr);
+      }
+
+      .cnr-right-col {
+        grid-column: 2;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .cnr-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .cnr-right-col {
+        grid-column: auto;
+      }
+
+      .cnr-steps {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .cnr-step-item {
+        border-left: none;
+        border-bottom: 2px solid transparent;
+        padding: 0 0 4px;
+      }
+
+      .cnr-step-item.active {
+        border-bottom-color: #8b64e4;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .cnr-page-wrap {
+        padding: 10px;
+      }
+
+      .cnr-section {
+        padding: 14px;
+      }
+
+      .cnr-section-body {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .cnr-footer {
+        justify-content: stretch;
+      }
+
+      .cnr-btn {
+        flex: 1;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+<div id="app">
+  <div id="overlay" aria-hidden="true"></div>
+  <aside id="sidebar" aria-label="Main navigation"></aside>
+
+  <div id="main-col">
+    <header id="navbar" style="display:flex;align-items:center;justify-content:space-between;height:56px;padding:0 16px;background:#fff;border-bottom:1px solid #e8e7eb;flex-shrink:0;min-width:0;"></header>
+
+    <div id="main-scroll">
+      <div class="cnr-page-wrap">
+        <div class="cnr-shell">
+          <div id="create-new-request-root"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="layout.js"></script>
+<script src="create_new_request_components.js"></script>
+<script src="create_new_request_screen.js"></script>
+</body>
+</html>
