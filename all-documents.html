@@ -192,6 +192,7 @@
       grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 10px;
     }
+    .ad-doc-grid > * { min-width: 0; }
     .ad-doc-grid.is-list { grid-template-columns: 1fr; }
     .ad-doc-card {
       background: #fff;
@@ -200,13 +201,17 @@
       padding: 10px;
       display: grid;
       gap: 10px;
+      min-width: 0;
+      overflow: hidden;
     }
     .ad-doc-head {
       display: grid;
       grid-template-columns: auto 1fr auto;
       gap: 8px;
       align-items: start;
+      min-width: 0;
     }
+    .ad-doc-meta { min-width: 0; }
     .ad-doc-type {
       min-width: 36px;
       height: 24px;
@@ -231,6 +236,8 @@
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
       overflow: hidden;
+      overflow-wrap: anywhere;
+      word-break: break-word;
     }
     .ad-doc-meta p {
       margin: 4px 0 0;
