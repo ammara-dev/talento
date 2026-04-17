@@ -18,6 +18,7 @@
     'Talento-AI-Conversation.html': { navItem: 'dashboard', submenu: null },
     'Credits.html': { navItem: 'dashboard', submenu: null },
     'Credits-packs.html': { navItem: 'dashboard', submenu: null },
+    'manage-your-apps.html': { navItem: 'apps', submenu: null },
     'requests.html': { navItem: 'requests', submenu: null },
     'request2.html': { navItem: 'requests', submenu: null },
     'create-new-request.html': { navItem: 'requests', submenu: null },
@@ -83,6 +84,7 @@
     const isSurveysActive = config.submenu === 'surveys';
     const isPerformanceEvaluationActive = config.submenu === 'performance-evaluation';
     const isTeamEngagementExpanded = config.navItem === 'team-engagement';
+    const isAppsActive = config.navItem === 'apps';
 
     return `
     <!-- Logo + Collapse -->
@@ -335,11 +337,13 @@
         </button>
 
         <!-- Apps -->
-        <button class="nav-item" data-page="Apps"
-          style="display:flex;align-items:center;gap:10px;width:100%;height:40px;border-radius:8px;padding:0 16px;text-align:left;outline:none;">
-          <i class="fa-solid fa-grip" style="width:20px;font-size:16px;color:#1e1033;flex-shrink:0;"></i>
-          <span class="s-label" style="color:#1e1033;font-size:14px;letter-spacing:-0.14px;white-space:nowrap;">Apps</span>
-        </button>
+        <a href="manage-your-apps.html" style="text-decoration:none;">
+          <button class="nav-item${isAppsActive ? ' active' : ''}" data-page="Apps"${isAppsActive ? ' aria-current="page"' : ''}
+            style="display:flex;align-items:center;gap:10px;width:100%;height:40px;border-radius:8px;padding:0 16px;text-align:left;outline:none;">
+            <i class="fa-solid fa-grip" style="width:20px;font-size:16px;color:#1e1033;flex-shrink:0;"></i>
+            <span class="s-label" style="color:#1e1033;font-size:14px;letter-spacing:-0.14px;white-space:nowrap;">Apps</span>
+          </button>
+        </a>
 
       </nav>
     </div>
