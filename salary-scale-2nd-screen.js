@@ -24,12 +24,13 @@
           { type: 'select', label: 'Currency', value: 'SAR - Saudi Riyal' }
         ],
         noteTitle: 'What happens next',
-        noteText: 'You will define salary levels (eg. Executive, Senior..) with a starting salary and per-degree increment. Degrees are auto-generated from your inputs'
+        noteText: "You'll define salary levels (eg. Executive, Senior..) with a starting salary and per-degree increment. Degrees are auto-generated from your inputs."
       }
     },
     footer: {
       stepLabel: 'Step 01 of 04',
       backLabel: 'Back',
+      backDisabled: true,
       nextLabel: 'Next step'
     }
   };
@@ -39,9 +40,13 @@
     if (!root) return;
 
     root.innerHTML = `
-      ${SalaryScale2Components.PageHeading(screenData.heading)}
-      ${SalaryScale2Components.Stepper({ steps: screenData.steps })}
-      ${SalaryScale2Components.MainPanel(screenData.mainPanel)}
+      <div class="ss2-flow-stack">
+        ${SalaryScale2Components.PageHeading(screenData.heading)}
+        <div class="ss2-wizard-shell">
+          ${SalaryScale2Components.Stepper({ steps: screenData.steps })}
+          ${SalaryScale2Components.MainPanel(screenData.mainPanel)}
+        </div>
+      </div>
       ${SalaryScale2Components.FooterBar(screenData.footer)}
     `;
   }

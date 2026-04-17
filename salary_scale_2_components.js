@@ -28,14 +28,16 @@ const SalaryScale2Components = (function() {
   function Stepper(config) {
     const steps = config && Array.isArray(config.steps) ? config.steps : [];
     return `
-      <section class="ss2-stepper">
+      <section class="ss2-stepper" aria-label="Progress">
         ${steps.map(function(step, index) {
           const activeClass = step.active ? ' active' : '';
+          const line = index < steps.length - 1 ? '<span class="ss2-step-line" aria-hidden="true"></span>' : '';
           return `
             <div class="ss2-step${activeClass}">
               <span class="ss2-step-index">${index + 1}</span>
               <span class="ss2-step-label">${escapeHtml(step.label)}</span>
             </div>
+            ${line}
           `;
         }).join('')}
       </section>
@@ -98,12 +100,19 @@ const SalaryScale2Components = (function() {
   }
 
   function FooterBar(config) {
+    const backDisabled = config && config.backDisabled ? ' disabled' : '';
     return `
       <footer class="ss2-footer">
         <p class="ss2-footer-step">${escapeHtml(config.stepLabel || '')}</p>
         <div class="ss2-footer-actions">
-          <button type="button" class="ss2-btn ss2-btn-back">${Icons.chevronLeft}<span>${escapeHtml(config.backLabel || 'Back')}</span></button>
-          <button type="button" class="ss2-btn ss2-btn-next"><span>${escapeHtml(config.nextLabel || 'Next step')}</span>${Icons.chevronRight}</button>
+          <button type="button" class="ss2-btn ss2-btn-back"${backDisabled}>
+            <span class="ss2-btn-icon" aria-hidden="true">${Icons.chevronLeft}</span>
+            <span>${escapeHtml(config.backLabel || 'Back')}</span>
+          </button>
+          <button type="button" class="ss2-btn ss2-btn-next">
+            <span>${escapeHtml(config.nextLabel || 'Next step')}</span>
+            <span class="ss2-btn-icon" aria-hidden="true">${Icons.chevronRight}</span>
+          </button>
         </div>
       </footer>
     `;
