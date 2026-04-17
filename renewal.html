@@ -199,6 +199,15 @@
     .rn-confirm i { font-size: 13px; }
     .rn-confirm.is-ok i { color: #22b07d; }
     .rn-confirm.is-issue i { color: #b4232f; }
+    .rn-expiry {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #2d2540;
+      font-size: 14px;
+      line-height: 1.3;
+    }
+    .rn-expiry i { color: #7c748a; font-size: 13px; }
 
     .rn-actions-cell { text-align: center; }
     .rn-more-btn {
@@ -258,7 +267,7 @@
 (function() {
   'use strict';
 
-  const rows = [
+  const contractsRows = [
     {
       contractCode: '#LARO0358',
       employee: { name: 'Mishari AlSubaie', avatar: 'https://i.pravatar.cc/52?img=10' },
@@ -297,10 +306,10 @@
     }
   ];
 
-  while (rows.length < 12) {
-    rows.push({
+  while (contractsRows.length < 12) {
+    contractsRows.push({
       contractCode: '#LARO0358',
-      employee: { name: 'Mishari AlSubaie', avatar: `https://i.pravatar.cc/52?img=${10 + (rows.length % 4)}` },
+      employee: { name: 'Mishari AlSubaie', avatar: `https://i.pravatar.cc/52?img=${10 + (contractsRows.length % 4)}` },
       status: { key: 'approved', label: 'Approved' },
       jobPosition: 'SMM manager',
       department: 'Marketing',
@@ -309,35 +318,91 @@
     });
   }
 
-  const screenData = {
-    header: { title: 'Renewal', actionLabel: 'Create new' },
-    tabs: {
-      tabs: [
-        { label: 'Contracts', icon: RenewalComponents.Icons.contracts, active: true },
-        { label: 'Iqama & medical', icon: RenewalComponents.Icons.iqama, active: false }
-      ]
+  const iqamaRows = [
+    {
+      iqamaNumber: '2123123123',
+      employee: { name: 'Mishari AlSubaie', avatar: 'https://i.pravatar.cc/52?img=10' },
+      status: { key: 'approved', label: 'Approved' },
+      jobPosition: 'SMM manager',
+      department: 'Marketing',
+      expiryDate: '12 Dec 2026',
+      renewalCost: 'SAR 20,000'
     },
+    {
+      iqamaNumber: '2123123123',
+      employee: { name: 'Mishari AlSubaie', avatar: 'https://i.pravatar.cc/52?img=11' },
+      status: { key: 'review', label: 'In review' },
+      jobPosition: 'Backend developer',
+      department: 'Development',
+      expiryDate: '12 Dec 2026',
+      renewalCost: 'SAR 14,520'
+    },
+    {
+      iqamaNumber: '2123123123',
+      employee: { name: 'Mishari AlSubaie', avatar: 'https://i.pravatar.cc/52?img=12' },
+      status: { key: 'cancelled', label: 'Cancelled' },
+      jobPosition: 'L2 product designer',
+      department: 'Design',
+      expiryDate: '12 Dec 2026',
+      renewalCost: 'SAR 14,520'
+    }
+  ];
+
+  const baseScreenData = {
+    header: { title: 'Renewal', actionLabel: 'Create new' },
     toolbar: {
       searchPlaceholder: 'Search by name, ID, iqama, title or email',
       filterCount: '2',
       sortLabel: 'Name'
-    },
-    table: { rows: rows }
+    }
   };
 
+  let activeTab = 'contracts';
   const root = document.getElementById('renewal-root');
+
+  function getTabsConfig() {
+    return {
+      tabs: [
+        { key: 'contracts', label: 'Contracts', icon: RenewalComponents.Icons.contracts, active: activeTab === 'contracts' },
+        { key: 'iqama', label: 'Iqama & medical', icon: RenewalComponents.Icons.iqama, active: activeTab === 'iqama' }
+      ]
+    };
+  }
+
+  function getTableConfig() {
+    if (activeTab === 'iqama') {
+      return { variant: 'iqama', rows: iqamaRows };
+    }
+    return { variant: 'contracts', rows: contractsRows };
+  }
 
   function renderScreen() {
     if (!root) return;
     root.innerHTML = `
-      ${RenewalComponents.Header(screenData.header)}
-      ${RenewalComponents.ModuleTabs(screenData.tabs)}
-      ${RenewalComponents.Toolbar(screenData.toolbar)}
-      ${RenewalComponents.RenewalTable(screenData.table)}
+      ${RenewalComponents.Header(baseScreenData.header)}
+      ${RenewalComponents.ModuleTabs(getTabsConfig())}
+      ${RenewalComponents.Toolbar(baseScreenData.toolbar)}
+      ${RenewalComponents.RenewalTable(getTableConfig())}
     `;
   }
 
-  document.addEventListener('DOMContentLoaded', renderScreen);
+  function bindInteractions() {
+    if (!root || root.dataset.bound === 'true') return;
+    root.dataset.bound = 'true';
+    root.addEventListener('click', function(event) {
+      const tab = event.target.closest('.rn-tab');
+      if (!tab) return;
+      const selected = tab.getAttribute('data-tab');
+      if (!selected || selected === activeTab) return;
+      activeTab = selected;
+      renderScreen();
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    renderScreen();
+    bindInteractions();
+  });
 })();
 </script>
 </body>

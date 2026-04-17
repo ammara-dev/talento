@@ -19,7 +19,8 @@ const RenewalComponents = (function() {
       </svg>
     `,
     ok: '<i class="fa-solid fa-circle-check" aria-hidden="true"></i>',
-    issue: '<i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i>'
+    issue: '<i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i>',
+    expiry: '<i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>'
   };
 
   function escapeHtml(value) {
@@ -49,7 +50,7 @@ const RenewalComponents = (function() {
       <div class="rn-tabs">
         ${tabs.map(function(tab) {
           return `
-            <button type="button" class="rn-tab${tab.active ? ' is-active' : ''}">
+            <button type="button" class="rn-tab${tab.active ? ' is-active' : ''}" data-tab="${escapeHtml(tab.key || '')}">
               <span class="rn-tab-icon">${tab.icon || ''}</span>
               <span>${escapeHtml(tab.label || '')}</span>
             </button>
@@ -115,7 +116,27 @@ const RenewalComponents = (function() {
     return `<th>${escapeHtml(label)} ${sortable ? `<span class="rn-sort">${Icons.sort}</span>` : ''}</th>`;
   }
 
-  function DataRow(item) {
+  function ExpiryCell(value) {
+    return `<span class="rn-expiry">${Icons.expiry} ${escapeHtml(value || '')}</span>`;
+  }
+
+  function DataRow(item, variant) {
+    if (variant === 'iqama') {
+      return `
+        <tr>
+          <td><input type="checkbox" class="table-checkbox" /></td>
+          <td>${escapeHtml(item.iqamaNumber || '')}</td>
+          <td>${EmployeeCell(item.employee || {})}</td>
+          <td>${StatusBadge(item.status || {})}</td>
+          <td>${escapeHtml(item.jobPosition || '')}</td>
+          <td>${escapeHtml(item.department || '')}</td>
+          <td>${ExpiryCell(item.expiryDate || '')}</td>
+          <td>${escapeHtml(item.renewalCost || '')}</td>
+          <td class="rn-actions-cell"><button type="button" class="rn-more-btn" aria-label="More actions"><i class="fa-solid fa-ellipsis-vertical"></i></button></td>
+        </tr>
+      `;
+    }
+
     return `
       <tr>
         <td><input type="checkbox" class="table-checkbox" /></td>
@@ -133,6 +154,27 @@ const RenewalComponents = (function() {
 
   function RenewalTable(config) {
     const rows = Array.isArray(config.rows) ? config.rows : [];
+    const variant = config.variant || 'contracts';
+    const headers = variant === 'iqama'
+      ? `
+        ${rowCell('Igama Number', true)}
+        ${rowCell('Employee name', true)}
+        ${rowCell('Status', true)}
+        ${rowCell('Job position', true)}
+        ${rowCell('Department', true)}
+        ${rowCell('Expiry Date', true)}
+        ${rowCell('Renewal cost', true)}
+      `
+      : `
+        ${rowCell('Code', true)}
+        ${rowCell('Employee name', true)}
+        ${rowCell('Status', true)}
+        ${rowCell('Job position', true)}
+        ${rowCell('Department', true)}
+        ${rowCell('Received confirmation', true)}
+        ${rowCell('New contract cost', true)}
+      `;
+
     return `
       <section class="rn-table-wrap">
         <div class="table-scroll-wrap">
@@ -140,17 +182,11 @@ const RenewalComponents = (function() {
             <thead>
               <tr>
                 <th><input type="checkbox" class="table-checkbox" /></th>
-                ${rowCell('Code', true)}
-                ${rowCell('Employee name', true)}
-                ${rowCell('Status', true)}
-                ${rowCell('Job position', true)}
-                ${rowCell('Department', true)}
-                ${rowCell('Received confirmation', true)}
-                ${rowCell('New contract cost', true)}
+                ${headers}
                 <th></th>
               </tr>
             </thead>
-            <tbody>${rows.map(DataRow).join('')}</tbody>
+            <tbody>${rows.map(function(row) { return DataRow(row, variant); }).join('')}</tbody>
           </table>
         </div>
       </section>
