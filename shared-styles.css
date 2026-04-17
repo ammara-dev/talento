@@ -76,6 +76,7 @@ html, body { height: 100%; overflow: hidden; background: #fff; }
 #sidebar.collapsed #business-missions-submenu,
 #sidebar.collapsed #finance-submenu,
 #sidebar.collapsed #hiring-submenu,
+#sidebar.collapsed #documents-submenu,
 #sidebar.collapsed #team-engagement-submenu { display: none !important; }
 #sidebar:not(.collapsed) .logo-icon-only { display: none !important; }
 #sidebar.collapsed .logo-icon-only { display: flex !important; }

@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <title>Talento - All documents</title>
+  <meta name="description" content="Talento HR Platform - All documents" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared-styles.css" />
+  <script src="design-tokens.js"></script>
+  <style>
+    #main-scroll { background: #f6f5f7; }
+    .ad-wrap { padding: 18px; }
+    .ad-page {
+      background: #fff;
+      border: 1px solid #ece9ef;
+      border-radius: 20px;
+      padding: 16px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .ad-page-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .ad-page-head h1 {
+      margin: 0;
+      color: #1e1033;
+      font-size: 20px;
+      line-height: 1.3;
+      font-weight: 500;
+    }
+    .ad-primary-btn {
+      min-height: 40px;
+      border-radius: 12px;
+      border: 1px solid #1e1033;
+      background: #1e1033;
+      color: #fff;
+      font-size: 14px;
+      line-height: 1.3;
+      font-family: 'Alexandria', Helvetica, sans-serif;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 14px;
+      box-shadow: 0 8px 18px rgba(53, 22, 89, .2);
+    }
+    .ad-primary-btn i { color: #2CF7B3; font-size: 12px; }
+
+    .ad-card {
+      background: #f6f5f7;
+      border: 1px solid #ece9ef;
+      border-radius: 16px;
+      padding: 12px;
+      display: grid;
+      gap: 10px;
+    }
+    .ad-section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .ad-section-head h2 {
+      margin: 0;
+      color: #1e1033;
+      font-size: 20px;
+      line-height: 1.3;
+      font-weight: 500;
+    }
+    .ad-section-actions { display: inline-flex; gap: 8px; flex-wrap: wrap; }
+    .ad-pill-btn,
+    .ad-icon-btn {
+      min-height: 34px;
+      border-radius: 10px;
+      border: 1px solid #dfdae5;
+      background: #fff;
+      color: #4b405c;
+      font-size: 14px;
+      line-height: 1.3;
+      font-family: 'Alexandria', Helvetica, sans-serif;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0 12px;
+    }
+    .ad-icon-btn { width: 34px; padding: 0; justify-content: center; }
+
+    .ad-categories-row {
+      display: grid;
+      grid-template-columns: repeat(8, minmax(140px, 1fr));
+      gap: 10px;
+      overflow-x: auto;
+      padding-bottom: 2px;
+    }
+    .ad-category-card {
+      background: #fff;
+      border: 1px solid #ece9ef;
+      border-radius: 14px;
+      min-height: 130px;
+      padding: 12px;
+      text-align: center;
+      display: grid;
+      align-content: center;
+      gap: 4px;
+    }
+    .ad-category-icon {
+      width: 72px;
+      height: 72px;
+      border-radius: 16px;
+      margin: 0 auto;
+      background: linear-gradient(180deg, #f2e9ff 0%, #ddd1f8 100%);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #9a7ed9;
+      font-size: 28px;
+    }
+    .ad-category-name {
+      margin: 0;
+      color: #1e1033;
+      font-size: 14px;
+      line-height: 1.35;
+      font-weight: 500;
+    }
+    .ad-category-count {
+      margin: 0;
+      color: #787085;
+      font-size: 14px;
+      line-height: 1.35;
+    }
+
+    .ad-documents-block { display: grid; gap: 10px; }
+    .ad-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .ad-toolbar-search { width: min(100%, 390px); }
+    .ad-toolbar-search .search-input-wrap {
+      width: 100% !important;
+      min-height: 38px !important;
+      border-radius: 999px !important;
+      border-color: #e3dee9 !important;
+    }
+    .ad-toolbar-controls { display: inline-flex; align-items: center; gap: 8px; }
+    .ad-sort-btn {
+      min-height: 38px;
+      border-radius: 12px;
+      border: 1px solid #dfdae5;
+      background: #fff;
+      color: #4b405c;
+      font-size: 14px;
+      line-height: 1.3;
+      font-family: 'Alexandria', Helvetica, sans-serif;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0 12px;
+    }
+    .ad-sort-btn strong { color: #1e1033; font-weight: 500; }
+    .ad-view-toggle {
+      display: inline-flex;
+      border: 1px solid #dfdae5;
+      border-radius: 12px;
+      background: #fff;
+      padding: 2px;
+      gap: 2px;
+    }
+    .ad-view-btn {
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      color: #7f778d;
+      background: transparent;
+    }
+    .ad-view-btn.is-active { background: #f0edf4; color: #1e1033; }
+
+    .ad-doc-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .ad-doc-grid.is-list { grid-template-columns: 1fr; }
+    .ad-doc-card {
+      background: #fff;
+      border: 1px solid #e8e3ed;
+      border-radius: 16px;
+      padding: 10px;
+      display: grid;
+      gap: 10px;
+    }
+    .ad-doc-head {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 8px;
+      align-items: start;
+    }
+    .ad-doc-type {
+      min-width: 36px;
+      height: 24px;
+      border-radius: 6px;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .ad-doc-type--pdf { background: #ef476f; }
+    .ad-doc-type--doc { background: #3b82f6; }
+    .ad-doc-meta h3 {
+      margin: 0;
+      color: #1e1033;
+      font-size: 14px;
+      line-height: 1.35;
+      font-weight: 500;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .ad-doc-meta p {
+      margin: 4px 0 0;
+      color: #787085;
+      font-size: 14px;
+      line-height: 1.35;
+    }
+    .ad-doc-more {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      border: 1px solid #e3dee9;
+      background: #fff;
+      color: #7f778d;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .ad-doc-link {
+      min-height: 34px;
+      border-radius: 10px;
+      border: 1px solid #dfdae5;
+      background: #fff;
+      color: #1e1033;
+      font-size: 14px;
+      line-height: 1.3;
+      font-family: 'Alexandria', Helvetica, sans-serif;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 0 10px;
+    }
+
+    @media (max-width: 1200px) {
+      .ad-doc-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
+    @media (max-width: 900px) {
+      .ad-wrap { padding: 14px 12px; }
+      .ad-doc-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .ad-categories-row { grid-template-columns: repeat(8, minmax(150px, 1fr)); }
+    }
+    @media (max-width: 640px) {
+      .ad-wrap { padding: 12px 10px; }
+      .ad-page { padding: 12px; }
+      .ad-doc-grid { grid-template-columns: 1fr; }
+      .ad-toolbar-controls { width: 100%; justify-content: space-between; }
+      .ad-sort-btn { flex: 1; justify-content: center; }
+      .ad-primary-btn { width: 100%; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+  <div id="overlay" aria-hidden="true"></div>
+  <aside id="sidebar" aria-label="Main navigation"></aside>
+  <div id="main-col">
+    <header id="navbar" style="display:flex;align-items:center;justify-content:space-between;height:56px;padding:0 16px;background:#fff;border-bottom:1px solid #e8e7eb;flex-shrink:0;min-width:0;"></header>
+    <div id="main-scroll">
+      <div class="ad-wrap">
+        <div id="all-documents-root" class="ad-page"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="layout.js"></script>
+<script src="leave_components.js"></script>
+<script src="all_documents_components.js"></script>
+<script>
+(function() {
+  'use strict';
+
+  const screenData = {
+    header: { title: 'All documents', actionLabel: 'Add new document' },
+    categories: {
+      title: 'Categories',
+      items: [
+        { name: 'Categorie name', count: '23 Files' },
+        { name: 'Categorie name', count: '23 Files' },
+        { name: 'Categorie name', count: '23 Files' },
+        { name: 'Categorie name', count: '23 Files' },
+        { name: 'Categorie name', count: '23 Files' },
+        { name: 'Categorie name', count: '23 Files' },
+        { name: 'Categorie name', count: '23 Files' },
+        { name: 'Categorie name', count: '23 Files' }
+      ]
+    },
+    documents: {
+      toolbar: {
+        searchPlaceholder: 'Search by name, ID, iqama, title or email',
+        sortLabel: 'Name'
+      },
+      items: [
+        { type: 'pdf', title: 'Request for a service Service_Request_183.pdf', size: '62 MB', date: '3 Dec 2025' },
+        { type: 'doc', title: 'Request for a service Service_Request_181.doc', size: '124 MB', date: '12 Dec 2025' },
+        { type: 'pdf', title: 'Discussion Channel Employee_Contract_jou_@...', size: '47 MB', date: '04 Jan 2026' },
+        { type: 'pdf', title: 'Request for a service Service_Request_171.pdf', size: '73 MB', date: '23 Jan 2026' },
+        { type: 'pdf', title: 'Request for a service Service_Request_183.pdf', size: '62 MB', date: '3 Dec 2025' },
+        { type: 'pdf', title: 'Discussion Channel Employee_Contract_jou_@...', size: '47 MB', date: '04 Jan 2026' },
+        { type: 'pdf', title: 'Request for a service Service_Request_171.pdf', size: '73 MB', date: '23 Jan 2026' },
+        { type: 'doc', title: 'Request for a service Service_Request_181.doc', size: '124 MB', date: '12 Dec 2025' },
+        { type: 'pdf', title: 'Request for a service Service_Request_183.pdf', size: '62 MB', date: '3 Dec 2025' },
+        { type: 'doc', title: 'Request for a service Service_Request_181.doc', size: '124 MB', date: '12 Dec 2025' },
+        { type: 'pdf', title: 'Discussion Channel Employee_Contract_jou_@...', size: '47 MB', date: '04 Jan 2026' },
+        { type: 'pdf', title: 'Request for a service Service_Request_171.pdf', size: '73 MB', date: '23 Jan 2026' }
+      ]
+    }
+  };
+
+  const root = document.getElementById('all-documents-root');
+
+  function renderScreen() {
+    if (!root) return;
+    root.innerHTML = `
+      ${AllDocumentsComponents.Header(screenData.header)}
+      ${AllDocumentsComponents.CategoriesSection(screenData.categories)}
+      ${AllDocumentsComponents.DocumentsSection(screenData.documents)}
+    `;
+  }
+
+  function bindInteractions() {
+    if (!root || root.dataset.bound === 'true') return;
+    root.dataset.bound = 'true';
+
+    root.addEventListener('click', function(event) {
+      const viewBtn = event.target.closest('.ad-view-btn');
+      if (!viewBtn) return;
+
+      const view = viewBtn.getAttribute('data-view');
+      const grid = root.querySelector('.ad-doc-grid');
+      if (!grid) return;
+
+      root.querySelectorAll('.ad-view-btn').forEach(function(btn) {
+        btn.classList.toggle('is-active', btn === viewBtn);
+      });
+      grid.classList.toggle('is-list', view === 'list');
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    renderScreen();
+    bindInteractions();
+  });
+})();
+</script>
+</body>
+</html>
