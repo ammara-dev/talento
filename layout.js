@@ -45,7 +45,8 @@
     'Appraisal Employee profile.html': { navItem: 'team-engagement', submenu: 'performance-evaluation' },
     'Appraisal%20Employee%20profile.html': { navItem: 'team-engagement', submenu: 'performance-evaluation' },
     'create-new-evaluation-evaluators-setup.html': { navItem: 'team-engagement', submenu: 'performance-evaluation' },
-    'create-new-evaluation-from-scratch.html': { navItem: 'team-engagement', submenu: 'performance-evaluation' }
+    'create-new-evaluation-from-scratch.html': { navItem: 'team-engagement', submenu: 'performance-evaluation' },
+    'create-new-evaluation-scoring.html': { navItem: 'team-engagement', submenu: 'performance-evaluation' }
   };
 
   const config = pageConfig[currentPage] || pageConfig['index.html'];

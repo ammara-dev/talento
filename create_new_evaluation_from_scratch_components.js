@@ -167,10 +167,15 @@ const CreateNewEvaluationFromScratchComponents = (function() {
   }
 
   function FooterBar(config) {
+    const nextHref = config.nextHref ? escapeHtml(config.nextHref) : '';
+    const nextControl = nextHref
+      ? `<a class="fs-btn fs-btn--primary" href="${nextHref}">${escapeHtml(config.nextLabel || 'Next step')} ${Icons.chevronRightAccent}</a>`
+      : `<button type="button" class="fs-btn fs-btn--primary">${escapeHtml(config.nextLabel || 'Next step')} ${Icons.chevronRightAccent}</button>`;
+
     return `
       <div class="fs-footer-bar">
         <button type="button" class="fs-btn fs-btn--ghost">${escapeHtml(config.clearLabel || 'Clear form')} ${Icons.refresh}</button>
-        <button type="button" class="fs-btn fs-btn--primary">${escapeHtml(config.nextLabel || 'Next step')} ${Icons.chevronRightAccent}</button>
+        ${nextControl}
       </div>
     `;
   }
