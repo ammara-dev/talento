@@ -88,8 +88,8 @@
     .ct-summary-value {
       margin: 0;
       color: #1e1033;
-      font-size: 36px;
-      line-height: 1;
+      font-size: 20px;
+      line-height: 1.2;
       font-weight: 500;
     }
     .ct-summary-value--expiring { color: #a16207; }
@@ -157,9 +157,12 @@
     .ct-table tbody tr:last-child { border-bottom: 0; }
     .ct-sort {
       color: #a09aab;
-      font-size: 11px;
+      font-size: 10px;
       margin-left: 4px;
       vertical-align: middle;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
     }
     .ct-employee { min-width: 0; }
     .ct-employee img { width: 26px !important; height: 26px !important; }
@@ -272,10 +275,10 @@
       { key: 'active', label: 'Active' }
     ];
     const durationCycle = [
-      { term: '2 years', range: '23 Jun 2025 - 23 Jun 2027', state: 'active', progress: '52%' },
-      { term: '1 year', range: '02 Dec 2025 - 02 Dec 2026', state: 'expiring', progress: '90%' },
+      { term: '2 years', range: '23 Jun 2025 - 23 Jun 2027', state: 'active', progress: '42%' },
+      { term: '1 year', range: '02 Dec 2025 - 02 Dec 2026', state: 'expiring', progress: '74%' },
       { term: '1 year', range: '02 Dec 2025 - 02 Dec 2026', state: 'expired', progress: '100%' },
-      { term: '2 years', range: '23 Jun 2025 - 23 Jun 2027', state: 'active', progress: '52%' }
+      { term: '2 years', range: '23 Jun 2025 - 23 Jun 2027', state: 'active', progress: '42%' }
     ];
     const status = statusCycle[index % statusCycle.length];
     const duration = durationCycle[index % durationCycle.length];

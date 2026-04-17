@@ -9,11 +9,22 @@ const ContractsComponents = (function() {
     active: '<i class="fa-regular fa-file-lines" aria-hidden="true"></i>',
     expiring: '<i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>',
     drafts: '<i class="fa-solid fa-file-pen" aria-hidden="true"></i>',
-    expired: '<i class="fa-regular fa-file-circle-xmark" aria-hidden="true"></i>',
+    expired: `
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8l-5-5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+        <path d="M14 3v5h5" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+        <path d="m10.2 11.2 4.6 4.6M14.8 11.2l-4.6 4.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>
+    `,
     external: '<i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>',
     filter: '<i class="fa-solid fa-sliders" aria-hidden="true"></i>',
     chevronDown: '<i class="fa-solid fa-chevron-down" aria-hidden="true"></i>',
-    sort: '<i class="fa-solid fa-sort" aria-hidden="true"></i>',
+    sort: `
+      <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
+        <path d="M2.2 4 5 1.8 7.8 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M2.2 6 5 8.2 7.8 6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    `,
     plus: '<i class="fa-solid fa-plus" aria-hidden="true"></i>'
   };
 
