@@ -16,6 +16,7 @@
     'Messages-chat.html': { navItem: 'dashboard', submenu: null },
     'Talento-AI.html': { navItem: 'dashboard', submenu: null },
     'Talento-AI-Conversation.html': { navItem: 'dashboard', submenu: null },
+    'Credits.html': { navItem: 'dashboard', submenu: null },
     'requests.html': { navItem: 'requests', submenu: null },
     'request2.html': { navItem: 'requests', submenu: null },
     'create-new-request.html': { navItem: 'requests', submenu: null },
