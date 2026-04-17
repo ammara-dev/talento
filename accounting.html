@@ -318,14 +318,64 @@
       .ac-head-actions { width: 100%; justify-content: flex-start; }
     }
     @media (max-width: 640px) {
+      html, body { overflow-x: hidden; }
+      #app, #main-col, #main-scroll { max-width: 100vw; overflow-x: hidden; }
       .ac-wrap { padding: 12px 10px; }
-      .ac-page { padding: 12px; }
-      .ac-chip-group { width: 100%; overflow-x: auto; }
-      .ac-toolbar-actions { width: 100%; }
-      .ac-pill-btn { flex: 1 1 calc(50% - 4px); justify-content: center; min-width: 0; }
-      .ac-primary-btn { flex: 1 1 100%; justify-content: center; }
+      .ac-page {
+        padding: 12px;
+        width: 100%;
+        max-width: 100%;
+        overflow-x: hidden;
+      }
+      .ac-page,
+      .ac-page * { box-sizing: border-box; }
+      .ac-head,
+      .ac-head-actions,
+      .ac-toolbar,
+      .ac-toolbar-search,
+      .ac-toolbar-actions,
+      .ac-setup-card,
+      .ac-setup-main,
+      .ac-setup-content,
+      .ac-tabs,
+      .ac-chip-group {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+      }
+      .ac-chip-group {
+        overflow-x: auto;
+      }
+      .ac-tabs {
+        overflow-x: auto;
+      }
+      .ac-setup-card {
+        overflow: hidden;
+      }
+      .ac-setup-content {
+        overflow: hidden;
+      }
+      .ac-setup-top { display: flex; }
+      .ac-setup-top h2 {
+        min-width: 0;
+        overflow-wrap: anywhere;
+      }
+      .ac-toolbar { min-width: 0; }
+      .ac-toolbar-actions {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+      .ac-pill-btn,
+      .ac-primary-btn {
+        width: 100%;
+        max-width: 100%;
+        justify-content: center;
+        min-width: 0;
+        overflow: hidden;
+      }
       .ac-setup-card { align-items: flex-start; }
-      .ac-setup-main { width: 100%; }
       .ac-setup-toggle { margin-top: 2px; }
     }
   </style>
