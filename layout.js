@@ -32,6 +32,7 @@
     'salary-scale.html': { navItem: 'finance', submenu: 'salary-scale' },
     'salary-scale-details-screen.html': { navItem: 'finance', submenu: 'salary-scale' },
     'salary-scale-2nd-screen.html': { navItem: 'finance', submenu: 'salary-scale' },
+    'salary-scale-allowances-screen.html': { navItem: 'finance', submenu: 'salary-scale' },
     'salary-scale-2nd-component.html': { navItem: 'finance', submenu: 'salary-scale' },
     'loans.html': { navItem: 'finance', submenu: 'loans' },
     'loan-installments.html': { navItem: 'finance', submenu: 'loans' },

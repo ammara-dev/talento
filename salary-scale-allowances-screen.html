@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <title>Talento - Salary Scale Allowances</title>
+  <meta name="description" content="Talento HR Platform - Salary scale allowances" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared-styles.css" />
+  <script src="design-tokens.js"></script>
+
+  <style>
+    #main-scroll { background: #f6f5f7; }
+
+    .ssa-page-wrap { padding: 18px 18px 0; min-height: calc(100vh - 56px); }
+    .ssa-flow-stack { width: min(100%, 980px); margin: 0 auto; display: grid; gap: 14px; }
+
+    .ssa-page-title {
+      margin: 0;
+      font-size: 20px;
+      line-height: 1.3;
+      font-weight: 500;
+      color: #1e1033;
+    }
+
+    .ssa-stepper {
+      border: 1px solid #ece9ef;
+      border-radius: 20px;
+      background: #fff;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      min-width: 0;
+      box-shadow: 0 10px 24px rgba(30,16,51,.04);
+      gap: 0;
+    }
+
+    .ssa-step {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #9a93a8;
+      font-size: 14px;
+      line-height: 1.3;
+      white-space: nowrap;
+      flex-shrink: 0;
+      padding: 6px 10px;
+      border-radius: 999px;
+    }
+
+    .ssa-step-line {
+      flex: 1 1 22px;
+      min-width: 16px;
+      height: 1px;
+      background: #ece9ef;
+      margin: 0 8px;
+    }
+
+    .ssa-step-dot {
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      border: 1px solid #dcd6e6;
+      color: #a19aae;
+      font-size: 10px;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #fff;
+      flex-shrink: 0;
+    }
+
+    .ssa-step.is-completed,
+    .ssa-step.is-active {
+      color: #8b64e4;
+      font-weight: 500;
+      background: #f5f0ff;
+    }
+
+    .ssa-step.is-completed .ssa-step-dot {
+      border-color: #8b64e4;
+      color: #fff;
+      background: #ab73ff;
+    }
+
+    .ssa-step.is-active .ssa-step-dot {
+      border-color: #8b64e4;
+      color: #8b64e4;
+      background: #fff;
+    }
+
+    .ssa-main-panel {
+      border: 1px solid #ece9ef;
+      border-radius: 20px;
+      background: #fff;
+      padding: 16px;
+      box-shadow: 0 10px 24px rgba(30,16,51,.04);
+    }
+
+    .ssa-main-title {
+      margin: 0;
+      color: #1e1033;
+      font-size: 32px;
+      line-height: 1.3;
+      font-weight: 500;
+    }
+
+    .ssa-main-sub {
+      margin: 4px 0 14px;
+      color: #6f6780;
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .ssa-main-grid {
+      display: grid;
+      grid-template-columns: 220px minmax(0, 1fr);
+      gap: 14px;
+      align-items: start;
+    }
+
+    .ssa-level-list { display: grid; gap: 8px; }
+
+    .ssa-level-item {
+      border: 1px solid transparent;
+      border-radius: 12px;
+      padding: 8px;
+      display: grid;
+      grid-template-columns: 18px 1fr;
+      gap: 8px;
+      align-items: start;
+      background: transparent;
+    }
+
+    .ssa-level-item.is-active {
+      border-color: #d9c3fb;
+      background: #fbf8ff;
+    }
+
+    .ssa-level-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 3px;
+      background: #3685c9;
+      margin-top: 2px;
+    }
+
+    .ssa-level-title {
+      margin: 0;
+      color: #1e1033;
+      font-size: 28px;
+      line-height: 1.3;
+      font-weight: 500;
+    }
+
+    .ssa-level-sub {
+      margin: 2px 0 0;
+      color: #9b93a9;
+      font-size: 12px;
+      line-height: 1.3;
+    }
+
+    .ssa-period-stack { display: grid; gap: 12px; }
+
+    .ssa-period-card {
+      border: 1px solid #ece9ef;
+      border-radius: 16px;
+      background: #fff;
+      padding: 12px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .ssa-period-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .ssa-period-title {
+      margin: 0;
+      color: #1e1033;
+      font-size: 18px;
+      line-height: 1.3;
+      font-weight: 500;
+    }
+
+    .ssa-period-total {
+      color: #7d748f;
+      font-size: 28px;
+      line-height: 1;
+      font-weight: 500;
+    }
+
+    .ssa-grid-2 { display: grid; grid-template-columns: minmax(0,1fr) 144px; gap: 10px; }
+
+    .ssa-field-label {
+      display: inline-flex;
+      margin: 0 0 6px;
+      color: #6f6780;
+      font-size: 13px;
+      line-height: 1.3;
+    }
+
+    .ssa-input,
+    .ssa-select {
+      width: 100%;
+      height: 40px;
+      border: 1px solid #e8e3ed;
+      border-radius: 10px;
+      background: #fff;
+      padding: 0 12px;
+      color: #1e1033;
+      font-size: 14px;
+      line-height: 1.2;
+      font-family: 'Alexandria', Helvetica, sans-serif;
+      outline: none;
+    }
+
+    .ssa-select {
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .ssa-muted-card {
+      border: 1px solid #ece9ef;
+      border-radius: 12px;
+      background: #fcfbfe;
+      padding: 10px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .ssa-row-between {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .ssa-small-title {
+      margin: 0;
+      color: #1e1033;
+      font-size: 14px;
+      line-height: 1.3;
+      font-weight: 500;
+    }
+
+    .ssa-switch {
+      width: 30px;
+      height: 18px;
+      border-radius: 999px;
+      background: #1e1033;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .ssa-switch::after {
+      content: '';
+      position: absolute;
+      right: 2px;
+      top: 2px;
+      width: 14px;
+      height: 14px;
+      border-radius: 999px;
+      background: #fff;
+    }
+
+    .ssa-other-row {
+      display: grid;
+      grid-template-columns: minmax(0,1fr) 144px 20px;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .ssa-icon-x {
+      width: 20px;
+      height: 20px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #9d95ab;
+      font-size: 12px;
+    }
+
+    .ssa-add-link {
+      border: 0;
+      background: transparent;
+      color: #8b64e4;
+      font-size: 14px;
+      line-height: 1.2;
+      padding: 0;
+      text-align: left;
+      font-family: 'Alexandria', Helvetica, sans-serif;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .ssa-footer {
+      position: sticky;
+      bottom: 0;
+      width: min(100%, 980px);
+      margin: 0 auto;
+      padding: 10px 0 14px;
+      background: #f6f5f7;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .ssa-footer-step {
+      color: #b1aabf;
+      font-size: 14px;
+      line-height: 1.35;
+    }
+
+    .ssa-footer-actions {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px;
+      border-radius: 14px;
+      border: 1px solid #e8e7eb;
+      background: #fff;
+      box-shadow: 0 10px 24px rgba(30,16,51,.04);
+    }
+
+    .ssa-btn {
+      height: 36px;
+      border-radius: 10px;
+      border: 1px solid #e8e3ed;
+      background: #fff;
+      color: #6f6780;
+      font-size: 14px;
+      line-height: 1;
+      padding: 0 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+    }
+
+    .ssa-btn.is-primary {
+      background: #1e1033;
+      border-color: #1e1033;
+      color: #fff;
+      box-shadow: 0 8px 18px rgba(53,22,89,.25);
+    }
+
+    .ssa-btn.is-primary i { color: #2cf7b3; }
+
+    @media (max-width: 960px) {
+      .ssa-main-grid { grid-template-columns: 1fr; }
+      .ssa-level-list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 760px) {
+      .ssa-page-wrap { padding: 14px 10px 0; }
+      .ssa-stepper { flex-wrap: wrap; row-gap: 10px; }
+      .ssa-step-line { display: none; }
+      .ssa-main-title { font-size: 24px; }
+      .ssa-level-title { font-size: 20px; }
+      .ssa-level-list { grid-template-columns: 1fr; }
+      .ssa-grid-2 { grid-template-columns: 1fr; }
+      .ssa-other-row { grid-template-columns: 1fr; }
+      .ssa-icon-x { display: none; }
+      .ssa-footer { flex-direction: column; align-items: stretch; }
+      .ssa-footer-actions { width: 100%; justify-content: flex-end; }
+    }
+  </style>
+</head>
+
+<body>
+<div id="app">
+  <div id="overlay" aria-hidden="true"></div>
+  <aside id="sidebar" aria-label="Main navigation"></aside>
+  <div id="main-col">
+    <header id="navbar" style="display:flex;align-items:center;justify-content:space-between;height:56px;padding:0 16px;background:#fff;border-bottom:1px solid #e8e7eb;flex-shrink:0;min-width:0;"></header>
+    <div id="main-scroll">
+      <div class="ssa-page-wrap">
+        <div id="salary-scale-allowances-root"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="layout.js"></script>
+<script src="salary_scale_allowances_components.js"></script>
+<script src="salary-scale-allowances-screen.js"></script>
+</body>
+</html>
