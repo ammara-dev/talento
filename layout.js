@@ -19,6 +19,7 @@
     'Credits.html': { navItem: 'dashboard', submenu: null },
     'Credits-packs.html': { navItem: 'dashboard', submenu: null },
     'manage-your-apps.html': { navItem: 'apps', submenu: null },
+    'app-details-screen.html': { navItem: 'apps', submenu: null },
     'requests.html': { navItem: 'requests', submenu: null },
     'request2.html': { navItem: 'requests', submenu: null },
     'create-new-request.html': { navItem: 'requests', submenu: null },

@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <title>Talento - App Details</title>
+  <meta name="description" content="Talento HR Platform - App details screen" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared-styles.css" />
+  <script src="design-tokens.js"></script>
+  <style>
+    #main-scroll { background: #f6f5f7; }
+
+    .ad-wrap {
+      padding: 18px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .ad-page {
+      width: min(100%, 840px);
+      background: #fff;
+      border: 1px solid #ece9ef;
+      border-radius: 20px;
+      padding: 28px 30px 26px;
+      display: grid;
+      gap: 18px;
+    }
+
+    .ad-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .ad-breadcrumb {
+      color: #787085;
+      font-size: 14px;
+      line-height: 1.35;
+      margin-right: auto;
+    }
+
+    .ad-pager {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      color: #4b405c;
+      font-size: 14px;
+      line-height: 1.3;
+    }
+
+    .ad-nav-btn {
+      border: none;
+      background: transparent;
+      color: #1e1033;
+      font-size: 14px;
+      line-height: 1.3;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0;
+      cursor: pointer;
+      font-family: 'Alexandria', Helvetica, sans-serif;
+    }
+
+    .ad-hero {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .ad-app-head {
+      display: inline-flex;
+      align-items: flex-start;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .ad-app-logo-wrap {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      border: 1px solid #ece9ef;
+      background: #fff;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .ad-app-logo-svg,
+    .ad-app-logo-svg svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .ad-app-copy h1 {
+      margin: 0;
+      color: #1e1033;
+      font-size: 20px;
+      line-height: 1.2;
+      font-weight: 500;
+    }
+
+    .ad-app-copy p {
+      margin: 3px 0 0;
+      color: #787085;
+      font-size: 14px;
+      line-height: 1.35;
+    }
+
+    .ad-rating-row {
+      margin-top: 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #4b405c;
+      font-size: 14px;
+      line-height: 1.2;
+    }
+
+    .ad-rating-star {
+      color: #1e1033;
+      font-size: 12px;
+    }
+
+    .ad-install-btn {
+      min-height: 38px;
+      border-radius: 12px;
+      border: 1px solid #1e1033;
+      background: #1e1033;
+      color: #fff;
+      font-size: 14px;
+      line-height: 1.3;
+      font-family: 'Alexandria', Helvetica, sans-serif;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 16px;
+      cursor: pointer;
+    }
+
+    .ad-install-btn i {
+      color: #2CF7B3;
+      font-size: 12px;
+    }
+
+    .ad-workflow-card {
+      border-radius: 16px;
+      background: #eaf0f1;
+      border: 1px solid #e2e8eb;
+      padding: 14px;
+    }
+
+    .ad-workflow-card img {
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+      display: block;
+    }
+
+    .ad-overview h2 {
+      margin: 0;
+      color: #1e1033;
+      font-size: 20px;
+      line-height: 1.2;
+      font-weight: 500;
+    }
+
+    .ad-overview-body {
+      margin-top: 10px;
+      color: #5f586f;
+      font-size: 14px;
+      line-height: 1.35;
+    }
+
+    .ad-overview-body p {
+      margin: 0;
+    }
+
+    .ad-overview-body ul {
+      margin: 2px 0 0 18px;
+      padding: 0;
+    }
+
+    @media (max-width: 900px) {
+      .ad-wrap { padding: 14px; }
+      .ad-page { padding: 18px 16px; }
+    }
+
+    @media (max-width: 640px) {
+      .ad-wrap { padding: 10px; }
+      .ad-page { padding: 14px 12px; border-radius: 14px; }
+      .ad-hero { flex-direction: column; align-items: stretch; }
+      .ad-install-btn { width: 100%; justify-content: center; }
+      .ad-pager { width: 100%; justify-content: flex-start; }
+      .ad-breadcrumb { font-size: 14px; }
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+  <div id="overlay" aria-hidden="true"></div>
+  <aside id="sidebar" aria-label="Main navigation"></aside>
+  <div id="main-col">
+    <header id="navbar" style="display:flex;align-items:center;justify-content:space-between;height:56px;padding:0 16px;background:#fff;border-bottom:1px solid #e8e7eb;flex-shrink:0;min-width:0;"></header>
+    <div id="main-scroll">
+      <div class="ad-wrap">
+        <div id="app-details-root" class="ad-page"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="layout.js"></script>
+<script src="app_details_components.js"></script>
+<script src="app-details-screen.js"></script>
+</body>
+</html>
