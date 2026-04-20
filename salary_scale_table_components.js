@@ -81,7 +81,7 @@ const SalaryScaleTableComponents = (function() {
             </div>
           </div>
         </td>
-        <td class="sst-td"><span class="sst-salary">${escapeHtml(row.scale || '')}</span></td>
+        <td class="sst-td sst-scale-col"><span class="sst-scale-text">${escapeHtml(row.scale || '')}</span></td>
         <td class="sst-td"><span class="sst-salary">${escapeHtml(row.minSalary || '')}</span></td>
         <td class="sst-td"><span class="sst-salary max">${escapeHtml(row.maxSalary || '')}</span></td>
         <td class="sst-td">${allowancesCell(row)}</td>

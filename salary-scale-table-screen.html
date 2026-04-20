@@ -14,8 +14,8 @@
   <script src="design-tokens.js"></script>
 
   <style>
-    #main-scroll { background: #f6f5f7; }
-    .sst-page-wrap { padding: 16px; min-height: calc(100vh - 56px); }
+    #main-scroll { background: #F6F5F7; }
+    .sst-page-wrap { padding: 16px; min-height: calc(100vh - 56px); background: #F6F5F7; }
     .sst-shell {
       border: 1px solid #ece9ef;
       border-radius: 16px;
@@ -24,7 +24,7 @@
       padding: 16px;
     }
 
-    .ss-title { margin-bottom: 12px; font-size: 24px; }
+    .ss-title { margin-bottom: 12px; font-size: 24px; font-weight: 400; }
 
     .sst-head-row {
       display: flex;
@@ -63,7 +63,7 @@
     .sst-tab.active {
       background: #fff;
       color: #1e1033;
-      font-weight: 500;
+      font-weight: 400;
     }
 
     .sst-config-btn {
@@ -89,6 +89,8 @@
     }
 
     .sst-table-scroll { overflow-x: auto; }
+    .sst-table-scroll::-webkit-scrollbar { height: 4px; }
+    .sst-table-scroll::-webkit-scrollbar-thumb { background: #d2cfd6; border-radius: 4px; }
     .sst-table {
       width: 100%;
       min-width: 1120px;
@@ -149,6 +151,14 @@
 
     .sst-salary { font-size: 14px; font-weight: 500; color: #1e1033; }
     .sst-salary.max { color: #23609E; }
+    .sst-scale-col { white-space: nowrap; }
+    .sst-scale-text {
+      font-size: 14px;
+      font-weight: 400;
+      color: #787085;
+      white-space: nowrap;
+      display: inline-block;
+    }
 
     .sst-allowances {
       display: inline-flex;
