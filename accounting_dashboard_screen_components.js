@@ -42,11 +42,12 @@ const AccountingDashboardScreenComponents = (function() {
   }
 
   function Sparkline(line) {
+    const markerY = line.markerY != null ? line.markerY : 28;
     return `
       <svg class="acd-sparkline" viewBox="0 0 320 72" preserveAspectRatio="none" aria-hidden="true">
         <path d="${escapeHtml(line.path || 'M0 40 C70 10, 130 60, 200 30 S300 48, 320 36')}" fill="none" stroke="${escapeHtml(line.color || '#C8C5CF')}" stroke-width="2" stroke-linecap="round"></path>
-        ${line.markerX != null ? `<line x1="${escapeHtml(line.markerX)}" y1="28" x2="${escapeHtml(line.markerX)}" y2="72" stroke="#D9D6DE" stroke-dasharray="4 4"></line>` : ''}
-        ${line.markerX != null ? `<circle cx="${escapeHtml(line.markerX)}" cy="28" r="6.5" fill="#fff" stroke="${escapeHtml(line.color || '#C8C5CF')}" stroke-width="3"></circle>` : ''}
+        ${line.markerX != null ? `<line x1="${escapeHtml(line.markerX)}" y1="${escapeHtml(markerY)}" x2="${escapeHtml(line.markerX)}" y2="72" stroke="#D9D6DE" stroke-dasharray="4 4"></line>` : ''}
+        ${line.markerX != null ? `<circle cx="${escapeHtml(line.markerX)}" cy="${escapeHtml(markerY)}" r="6.5" fill="#fff" stroke="${escapeHtml(line.color || '#C8C5CF')}" stroke-width="3"></circle>` : ''}
       </svg>
     `;
   }
