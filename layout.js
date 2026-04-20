@@ -32,6 +32,7 @@
     'salary-scale.html': { navItem: 'finance', submenu: 'salary-scale' },
     'salary-scale-details-screen.html': { navItem: 'finance', submenu: 'salary-scale' },
     'salary-scale-table-screen.html': { navItem: 'finance', submenu: 'salary-scale' },
+    'salary-scale-degree-matrix-screen.html': { navItem: 'finance', submenu: 'salary-scale' },
     'salary-scale-2nd-screen.html': { navItem: 'finance', submenu: 'salary-scale' },
     'salary-scale-allowances-screen.html': { navItem: 'finance', submenu: 'salary-scale' },
     'salary-scale-review-launch-screen.html': { navItem: 'finance', submenu: 'salary-scale' },

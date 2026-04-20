@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <title>Talento - Salary Scale Degree Matrix</title>
+  <meta name="description" content="Talento HR Platform - Salary scale degree matrix view" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared-styles.css" />
+  <script src="design-tokens.js"></script>
+
+  <style>
+    #main-scroll { background: #F6F5F7; }
+    .ssdm-page-wrap { padding: 16px; min-height: calc(100vh - 56px); background: #F6F5F7; }
+    .ssdm-shell {
+      border: 1px solid #ece9ef;
+      border-radius: 16px;
+      background: #fff;
+      min-height: calc(100vh - 88px);
+      padding: 16px;
+    }
+
+    .ss-title { margin-bottom: 12px; font-size: 20px; font-weight: 500; }
+
+    .sst-head-row {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-bottom: 10px;
+      flex-wrap: wrap;
+    }
+
+    .sst-tabs {
+      display: inline-flex;
+      align-items: center;
+      gap: 2px;
+      border: 1px solid #3623531F;
+      border-radius: 10px;
+      background: #0E121B05;
+      padding: 2px;
+    }
+
+    .sst-tab {
+      min-height: 30px;
+      border: none;
+      border-radius: 8px;
+      background: transparent;
+      color: #787085;
+      font-size: 14px;
+      line-height: 1;
+      padding: 0 10px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+
+    .sst-tab.active {
+      background: #fff;
+      color: #1e1033;
+      font-weight: 400;
+    }
+
+    .sst-config-btn {
+      min-height: 30px;
+      border-radius: 10px;
+      border: 1px solid #3623531F;
+      background: #fff;
+      color: #4b405c;
+      font-size: 14px;
+      line-height: 1;
+      padding: 0 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      cursor: pointer;
+    }
+
+    .ssdm-table-wrap {
+      border: 1px solid #e1dde7;
+      border-radius: 16px;
+      background: #fff;
+      overflow: hidden;
+    }
+
+    .ssdm-table-scroll { overflow-x: auto; }
+    .ssdm-table-scroll::-webkit-scrollbar { height: 4px; }
+    .ssdm-table-scroll::-webkit-scrollbar-thumb { background: #d2cfd6; border-radius: 4px; }
+
+    .ssdm-table {
+      width: 100%;
+      min-width: 1220px;
+      border-collapse: collapse;
+    }
+
+    .ssdm-th {
+      text-align: left;
+      font-size: 14px;
+      font-weight: 400;
+      color: #625a71;
+      padding: 12px 10px;
+      border-bottom: 1px solid #d8d5dd;
+      border-right: 1px solid #e5e1e8;
+      white-space: nowrap;
+      background: #F7F6F9;
+    }
+
+    .ssdm-level-head { min-width: 210px; }
+    .ssdm-th:last-child { border-right: none; }
+
+    .ssdm-th-sort {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .ssdm-sort-icon {
+      display: inline-block;
+      vertical-align: middle;
+      margin-left: 3px;
+    }
+
+    .ssdm-td {
+      font-size: 14px;
+      color: #1e1033;
+      padding: 10px;
+      border-right: 1px solid #e5e1e8;
+      border-bottom: 1px solid #e5e1e8;
+      background: #FCFCFD;
+      text-align: center;
+      font-weight: 500;
+    }
+
+    .ssdm-table tbody tr:last-child .ssdm-td { border-bottom: none; }
+    .ssdm-table tbody .ssdm-td:last-child { border-right: none; }
+
+    .ssdm-level-col {
+      text-align: left;
+      min-width: 210px;
+      background: #fff;
+      font-weight: 400;
+    }
+
+    .ssdm-level-wrap {
+      display: grid;
+      grid-template-columns: 20px minmax(0, 1fr);
+      align-items: center;
+      gap: 10px;
+    }
+
+    .ssdm-level-dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 4px;
+      background: #234B72;
+      box-shadow: 0 2px 4px rgba(20, 16, 35, 0.1);
+    }
+
+    .ssdm-level-name {
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.35;
+      color: #1e1033;
+      font-weight: 500;
+    }
+
+    .ssdm-level-code {
+      margin: 2px 0 0;
+      font-size: 14px;
+      line-height: 1.3;
+      color: #8f88a0;
+      font-weight: 400;
+    }
+
+    .ssdm-degree-cell { min-width: 86px; }
+    .ssdm-tone-soft { background: #F1F4FA; }
+    .ssdm-tone-light { background: #EAF0F8; }
+    .ssdm-tone-medium { background: #DCE6F4; }
+    .ssdm-tone-dark { background: #CDE0F4; }
+
+    @media (max-width: 760px) {
+      .ssdm-page-wrap { padding: 16px; }
+      .ssdm-shell { padding: 16px; }
+      .sst-head-row { justify-content: flex-start; }
+      .sst-tabs { padding: 3px; }
+      .sst-tab { min-height: 32px; padding: 0 12px; }
+      .sst-tab.active { background: #ffffff; }
+    }
+  </style>
+</head>
+
+<body>
+<div id="app">
+  <div id="overlay" aria-hidden="true"></div>
+  <aside id="sidebar" aria-label="Main navigation"></aside>
+  <div id="main-col">
+    <header id="navbar" style="display:flex;align-items:center;justify-content:space-between;height:56px;padding:0 16px;background:#fff;border-bottom:1px solid #e8e7eb;flex-shrink:0;min-width:0;"></header>
+    <div id="main-scroll">
+      <div class="ssdm-page-wrap">
+        <div class="ssdm-shell">
+          <div id="salary-scale-degree-matrix-root"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="layout.js"></script>
+<script src="salary_scale_components.js"></script>
+<script src="salary_scale_table_components.js"></script>
+<script src="salary_scale_degree_matrix_components.js"></script>
+<script src="salary-scale-degree-matrix-screen.js"></script>
+</body>
+</html>
