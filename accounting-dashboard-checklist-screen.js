@@ -71,6 +71,7 @@
           sparkline: { path: 'M0 58 C56 58, 102 56, 154 44 C208 32, 248 48, 292 40 C306 38, 314 34, 320 30', color: '#4CBFBE', markerX: 255, markerY: 44 },
           balanceLabel: '',
           balance: '12,226.00 SAR',
+          currencyColor: '#787085',
           viewLabel: 'View',
           addLabel: 'Add new'
         },
@@ -80,6 +81,7 @@
           sparkline: { path: 'M0 28 C48 48, 92 52, 142 34 C186 20, 224 50, 262 44 C286 41, 304 45, 320 48', color: '#BEBBC4', markerX: 280, markerY: 45 },
           balanceLabel: '',
           balance: '-12,226.00 SAR',
+          currencyColor: '#787085',
           viewLabel: 'View',
           addLabel: 'Add new'
         },
@@ -89,6 +91,7 @@
           sparkline: { path: 'M0 28 C64 32, 110 54, 148 60 C186 64, 220 42, 258 54 C282 60, 302 58, 320 56', color: '#C3C0C9', markerX: 275, markerY: 59 },
           balanceLabel: '',
           balance: '84,226.00 SAR',
+          currencyColor: '#787085',
           viewLabel: 'View',
           addLabel: 'Add new'
         }
