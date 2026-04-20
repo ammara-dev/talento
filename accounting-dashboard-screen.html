@@ -203,6 +203,9 @@
       padding: 14px 14px 12px;
       position: relative;
       overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      min-height: 220px;
     }
 
     .acd-card.is-bank {
@@ -230,7 +233,7 @@
     .acd-card-title {
       margin: 0;
       color: #1e1033;
-      font-size: 20px;
+      font-size: 18px;
       line-height: 1.2;
       font-weight: 500;
       padding-right: 24px;
@@ -281,6 +284,7 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 8px;
+      margin-top: auto;
     }
 
     .acd-card-actions-single { grid-template-columns: 1fr; }
@@ -360,6 +364,7 @@
 
     .acd-purchase-card {
       grid-column: 2 / span 2;
+      min-height: 184px;
     }
 
     @media (max-width: 1150px) {
@@ -379,16 +384,26 @@
       #app, #main-col, #main-scroll { max-width: 100vw; overflow-x: hidden; }
       .acd-wrap { padding: 12px 10px; }
       .acd-page { padding: 12px; width: 100%; max-width: 100%; overflow-x: hidden; }
+      .ac-head { width: 100%; overflow: hidden; }
+      .ac-head-actions {
+        width: 100%;
+        min-width: 0;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 8px;
+        justify-content: stretch;
+      }
       .acd-grid { grid-template-columns: 1fr; }
-      .ac-chip-group { overflow-x: auto; flex-wrap: nowrap; width: 100%; }
+      .ac-chip-group { overflow-x: auto; flex-wrap: nowrap; width: 100%; max-width: 100%; }
       .ac-chip { white-space: nowrap; }
+      .ac-config-btn { width: max-content; max-width: 100%; }
       .acd-card-actions { grid-template-columns: 1fr; }
       .acd-balance-value { font-size: 34px; }
       .acd-card.is-bank .acd-balance-value { font-size: 28px; }
       .acd-setup-main { width: 100%; min-width: 0; }
       .acd-setup-copy { min-width: 0; flex: 1; }
-      .acd-setup-top { display: flex; min-width: 0; }
-      .acd-setup-copy h2 { min-width: 0; overflow-wrap: anywhere; }
+      .acd-setup-top { display: flex; min-width: 0; width: 100%; }
+      .acd-setup-copy h2 { min-width: 0; overflow-wrap: anywhere; word-break: break-word; }
       .acd-setup-copy h2 { font-size: 20px; }
     }
   </style>
