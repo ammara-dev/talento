@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <title>Talento - Salary Scale Details</title>
+  <meta name="description" content="Talento HR Platform - Salary scale details" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared-styles.css" />
+  <script src="design-tokens.js"></script>
+
+  <style>
+    #main-scroll { background: #f6f5f7; }
+
+    .ssd-page-wrap { padding: 16px; min-height: calc(100vh - 56px); }
+
+    .ssd-shell {
+      width: 100%;
+      min-height: calc(100vh - 88px);
+      border: 1px solid #ece9ef;
+      border-radius: 16px;
+      background: #fff;
+      padding: 14px;
+    }
+
+    .ssd-root { color: #1e1033; font-size: 14px; line-height: 1.35; }
+
+    .ssd-header-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .ssd-breadcrumb { color: #6f6780; font-size: 14px; }
+
+    .ssd-pager {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: #4b405c;
+      font-size: 14px;
+    }
+
+    .ssd-icon-btn {
+      width: 30px;
+      height: 30px;
+      border: 1px solid #ece9ef;
+      border-radius: 9px;
+      background: #fff;
+      color: #4b405c;
+      font-size: 12px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .ssd-title-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+
+    .ssd-title {
+      margin: 0 0 6px;
+      font-size: 20px;
+      line-height: 1.3;
+      font-weight: 500;
+      color: #1e1033;
+    }
+
+    .ssd-meta {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      color: #6f6780;
+      font-size: 14px;
+    }
+
+    .ssd-meta-sep { color: #c0b9cb; }
+
+    .ssd-status {
+      height: 22px;
+      border-radius: 999px;
+      padding: 0 9px;
+      background: #efedf4;
+      color: #6f6780;
+      font-size: 12px;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .ssd-title-actions {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .ssd-action-btn {
+      height: 34px;
+      border: 1px solid #e8e3ed;
+      border-radius: 10px;
+      background: #fff;
+      color: #4b405c;
+      font-size: 14px;
+      padding: 0 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+    }
+
+    .ssd-level-tabs {
+      width: 100%;
+      display: inline-flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      border-bottom: 1px solid #ece9ef;
+      padding-bottom: 10px;
+      margin-bottom: 12px;
+    }
+
+    .ssd-level-tab {
+      background: transparent;
+      border: none;
+      color: #787085;
+      font-size: 14px;
+      line-height: 1.2;
+      padding: 0 0 8px;
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+    }
+
+    .ssd-level-tab.active {
+      color: #1e1033;
+      font-weight: 500;
+      border-bottom-color: #1e1033;
+    }
+
+    .ssd-section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+
+    .ssd-section-title {
+      margin: 0;
+      font-size: 20px;
+      line-height: 1.3;
+      font-weight: 400;
+      color: #4b405c;
+    }
+
+    .ssd-toggle-group {
+      border: 1px solid #ece9ef;
+      border-radius: 10px;
+      background: #fff;
+      padding: 2px;
+      display: inline-flex;
+      gap: 2px;
+    }
+
+    .ssd-toggle-btn {
+      height: 28px;
+      border: none;
+      border-radius: 8px;
+      background: transparent;
+      color: #6f6780;
+      font-size: 14px;
+      padding: 0 10px;
+      cursor: pointer;
+    }
+
+    .ssd-toggle-btn.active {
+      background: #f3f1f7;
+      color: #1e1033;
+      font-weight: 500;
+    }
+
+    .ssd-period-list { display: grid; gap: 12px; }
+
+    .ssd-period-card {
+      border: 1px solid #ece9ef;
+      border-radius: 16px;
+      background: #fff;
+      padding: 10px;
+    }
+
+    .ssd-period-header {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 20px;
+      line-height: 1.3;
+      font-weight: 400;
+      margin-bottom: 8px;
+      color: #1e1033;
+    }
+
+    .ssd-period-icon {
+      width: 24px;
+      height: 24px;
+      border: 1px solid #ece9ef;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      color: #4b405c;
+      flex-shrink: 0;
+    }
+
+    .ssd-period-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      border-top: 1px solid #f0edf4;
+      padding-top: 10px;
+    }
+
+    .ssd-period-col { display: grid; gap: 9px; }
+
+    .ssd-period-col-left {
+      border-right: 1px solid #f0edf4;
+      padding-right: 14px;
+    }
+
+    .ssd-allowance-label {
+      font-size: 14px;
+      color: #8f88a0;
+      margin-bottom: 2px;
+    }
+
+    .ssd-allowance-value {
+      font-size: 14px;
+      line-height: 1.35;
+      font-weight: 500;
+      color: #1e1033;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .ssd-covered-icon { font-size: 12px; color: #1e1033; }
+
+    @media (max-width: 760px) {
+      .ssd-page-wrap { padding: 12px; }
+      .ssd-shell { padding: 12px; }
+      .ssd-pager,
+      .ssd-title-actions { width: 100%; justify-content: flex-end; }
+      .ssd-period-grid { grid-template-columns: 1fr; gap: 10px; }
+      .ssd-period-col-left {
+        border-right: none;
+        padding-right: 0;
+        border-bottom: 1px solid #f0edf4;
+        padding-bottom: 10px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+<div id="app">
+  <div id="overlay" aria-hidden="true"></div>
+  <aside id="sidebar" aria-label="Main navigation"></aside>
+  <div id="main-col">
+    <header id="navbar" style="display:flex;align-items:center;justify-content:space-between;height:56px;padding:0 16px;background:#fff;border-bottom:1px solid #e8e7eb;flex-shrink:0;min-width:0;"></header>
+    <div id="main-scroll">
+      <div class="ssd-page-wrap">
+        <div class="ssd-shell">
+          <div id="salary-scale-details-root" class="ssd-root"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="layout.js"></script>
+<script src="salary_scale_details_components.js"></script>
+<script src="salary_scale_details_screen.js"></script>
+</body>
+</html>
