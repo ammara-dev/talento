@@ -31,6 +31,7 @@
     'payroll-detail.html': { navItem: 'finance', submenu: 'payroll' },
     'salary-scale.html': { navItem: 'finance', submenu: 'salary-scale' },
     'salary-scale-details-screen.html': { navItem: 'finance', submenu: 'salary-scale' },
+    'salary-scale-details-degrees-screen.html': { navItem: 'finance', submenu: 'salary-scale' },
     'salary-scale-table-screen.html': { navItem: 'finance', submenu: 'salary-scale' },
     'salary-scale-degree-matrix-screen.html': { navItem: 'finance', submenu: 'salary-scale' },
     'salary-scale-add-levels-screen.html': { navItem: 'finance', submenu: 'salary-scale' },
