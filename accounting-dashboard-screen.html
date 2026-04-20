@@ -202,6 +202,7 @@
       background: #fff;
       padding: 14px 14px 12px;
       position: relative;
+      overflow: hidden;
     }
 
     .acd-card.is-bank {
@@ -263,7 +264,11 @@
       font-weight: 500;
     }
 
-    .acd-card.is-bank .acd-balance-value { color: #f7ffff; }
+    .acd-card.is-bank .acd-balance-value {
+      color: #FFFFFF99;
+      font-size: 28px;
+      line-height: 1.15;
+    }
 
     .acd-sparkline {
       width: calc(100% + 28px);
@@ -309,16 +314,20 @@
     .acd-btn-primary i { color: #2CF7B3; font-size: 12px; }
 
     .acd-progress-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr 1fr;
+      display: flex;
+      align-items: center;
       gap: 2px;
+      height: 14px;
       margin: 14px 0 12px;
+      border-radius: 4px;
+      background: #D8D5DC;
+      overflow: hidden;
     }
 
     .acd-progress-segment {
-      height: 16px;
-      border-radius: 4px;
+      height: 100%;
       display: block;
+      flex: 0 0 auto;
     }
 
     .acd-legend-row {
@@ -366,13 +375,20 @@
     }
 
     @media (max-width: 640px) {
+      html, body { overflow-x: hidden; }
+      #app, #main-col, #main-scroll { max-width: 100vw; overflow-x: hidden; }
       .acd-wrap { padding: 12px 10px; }
-      .acd-page { padding: 12px; }
+      .acd-page { padding: 12px; width: 100%; max-width: 100%; overflow-x: hidden; }
       .acd-grid { grid-template-columns: 1fr; }
       .ac-chip-group { overflow-x: auto; flex-wrap: nowrap; width: 100%; }
       .ac-chip { white-space: nowrap; }
       .acd-card-actions { grid-template-columns: 1fr; }
       .acd-balance-value { font-size: 34px; }
+      .acd-card.is-bank .acd-balance-value { font-size: 28px; }
+      .acd-setup-main { width: 100%; min-width: 0; }
+      .acd-setup-copy { min-width: 0; flex: 1; }
+      .acd-setup-top { display: flex; min-width: 0; }
+      .acd-setup-copy h2 { min-width: 0; overflow-wrap: anywhere; }
       .acd-setup-copy h2 { font-size: 20px; }
     }
   </style>
