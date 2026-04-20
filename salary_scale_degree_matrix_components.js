@@ -41,8 +41,10 @@ const SalaryScaleDegreeMatrixComponents = (function() {
   }
 
   function degreeCell(cell) {
+    const bgColor = normalizeHexColor(cell && cell.bgColor);
     const toneClass = cell && cell.tone ? ` ssdm-tone-${escapeHtml(cell.tone)}` : '';
-    return `<td class="ssdm-td ssdm-degree-cell${toneClass}">${escapeHtml(cell && cell.value ? cell.value : '')}</td>`;
+    const styleAttr = bgColor ? ` style="background:${bgColor};"` : '';
+    return `<td class="ssdm-td ssdm-degree-cell${toneClass}"${styleAttr}>${escapeHtml(cell && cell.value ? cell.value : '')}</td>`;
   }
 
   function matrixRow(row, degreeHeaders) {
