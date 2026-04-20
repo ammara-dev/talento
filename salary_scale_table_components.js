@@ -69,14 +69,21 @@ const SalaryScaleTableComponents = (function() {
     `;
   }
 
+  function normalizeHexColor(value) {
+    return /^#[0-9A-Fa-f]{6,8}$/.test(value || '') ? value : '';
+  }
+
   function tableRow(row) {
+    const accentColor = normalizeHexColor(row.levelAccentColor);
+    const dotStyle = accentColor ? ` style="background:${accentColor};"` : '';
+    const levelNameStyle = accentColor ? ` style="color:${accentColor};"` : '';
     return `
       <tr>
         <td class="sst-td">
           <div class="sst-level-cell">
-            <span class="sst-level-dot" aria-hidden="true"></span>
+            <span class="sst-level-dot" aria-hidden="true"${dotStyle}></span>
             <div>
-              <p class="sst-level-name">${escapeHtml(row.levelName || '')}</p>
+              <p class="sst-level-name"${levelNameStyle}>${escapeHtml(row.levelName || '')}</p>
               <p class="sst-level-code">${escapeHtml(row.levelCode || '')}</p>
             </div>
           </div>

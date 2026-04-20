@@ -16,6 +16,7 @@
       configLabel: 'Configuration'
     },
     table: {
+      levelAccentColors: ['#234B72', '#346BA3', '#4784BC', '#70ABDD', '#92C0E5'],
       columns: ['Level', 'Scale', 'Minimal salary', 'Max salary', 'Allowances', 'Medical insurance', 'Status'],
       rows: [
         {
@@ -84,11 +85,18 @@
   function render() {
     const root = document.getElementById('salary-scale-table-root');
     if (!root) return;
+    const accentColors = Array.isArray(screenData.table.levelAccentColors) ? screenData.table.levelAccentColors : [];
+    const rowsWithAccent = (screenData.table.rows || []).map(function(row, index) {
+      return Object.assign({}, row, {
+        levelAccentColor: accentColors[index] || accentColors[accentColors.length - 1]
+      });
+    });
+    const tableConfig = Object.assign({}, screenData.table, { rows: rowsWithAccent });
 
     root.innerHTML = `
       ${SalaryScaleComponents.Header({ title: screenData.title })}
       ${SalaryScaleTableComponents.TopControls(screenData.controls)}
-      ${SalaryScaleTableComponents.SalaryTable(screenData.table)}
+      ${SalaryScaleTableComponents.SalaryTable(tableConfig)}
     `;
   }
 
