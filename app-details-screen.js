@@ -27,7 +27,7 @@
       }
     },
     workflow: {
-      imageSrc: 'file:///C:/Users/HH%20Traders/Downloads/6e7f5244b0841833f3869c4a8be15b3c6d4254fe.png',
+      imageSrc: 'app details.png',
       alt: 'Automation of Order Workflow'
     },
     overview: {
