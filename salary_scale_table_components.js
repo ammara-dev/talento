@@ -10,7 +10,7 @@ const SalaryScaleTableComponents = (function() {
     overview: '<i class="fa-solid fa-arrows-down-to-people" aria-hidden="true"></i>',
     matrix: '<i class="fa-solid fa-sliders" aria-hidden="true"></i>',
     gear: '<i class="fa-solid fa-gear" aria-hidden="true"></i>',
-    sort: '<i class="fa-solid fa-sort" aria-hidden="true"></i>',
+    sort: '<svg class="sst-sort-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#787085" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="8 10 12 6 16 10"></polyline><polyline points="8 14 12 18 16 14"></polyline></svg>',
     arrow: '<i class="fa-solid fa-arrow-right" aria-hidden="true"></i>',
     check: '<i class="fa-solid fa-circle-check" aria-hidden="true"></i>',
     x: '<i class="fa-solid fa-circle-xmark" aria-hidden="true"></i>',
