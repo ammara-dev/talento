@@ -29,12 +29,14 @@ const SalaryScaleAllowancesComponents = (function() {
 
   function Stepper(config) {
     const steps = Array.isArray(config.steps) ? config.steps : [];
+    const activeIndex = steps.findIndex(function(step) { return step.status === 'active'; });
     return `
       <section class="ssa-stepper" aria-label="Progress">
         ${steps.map(function(step, index) {
           const statusClass = step.status === 'completed' ? ' is-completed' : step.status === 'active' ? ' is-active' : '';
           const badge = step.status === 'completed' ? Icons.check : String(index + 1);
-          const line = index < steps.length - 1 ? '<span class="ssa-step-line" aria-hidden="true"></span>' : '';
+          const lineClass = index < activeIndex ? ' is-complete' : '';
+          const line = index < steps.length - 1 ? `<span class="ssa-step-line${lineClass}" aria-hidden="true"></span>` : '';
           return `
             <div class="ssa-step${statusClass}">
               <span class="ssa-step-dot">${badge}</span>
