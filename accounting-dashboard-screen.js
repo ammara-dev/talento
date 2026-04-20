@@ -30,6 +30,7 @@
           subtitle: 'BE15001559627230',
           balanceLabel: 'Available balance',
           balance: '34,226.00 SAR',
+          currencyColor: '#787085',
           singleAction: true,
           viewLabel: 'View',
           variant: 'bank'
@@ -40,6 +41,7 @@
           sparkline: { path: 'M0 22 C55 42, 100 40, 150 28 C205 16, 238 42, 320 32', color: '#AB273B', markerX: 255, markerY: 34 },
           balanceLabel: '',
           balance: '-12,226.00 SAR',
+          currencyColor: '#787085',
           viewLabel: 'View',
           addLabel: 'Add new'
         },
@@ -49,6 +51,7 @@
           sparkline: { path: 'M0 22 C50 42, 96 44, 140 26 C186 10, 224 40, 270 34 C295 30, 306 34, 320 33', color: '#BEBBC4', markerX: 280, markerY: 33 },
           balanceLabel: '',
           balance: '-12,226.00 SAR',
+          currencyColor: '#787085',
           viewLabel: 'View',
           addLabel: 'Add new'
         },
@@ -58,6 +61,7 @@
           sparkline: { path: 'M0 26 C70 34, 112 54, 150 58 C180 60, 206 42, 236 46 C262 49, 285 62, 320 56', color: '#C3C0C9', markerX: 275, markerY: 58 },
           balanceLabel: '',
           balance: '84,226.00 SAR',
+          currencyColor: '#787085',
           viewLabel: 'View',
           addLabel: 'Add new'
         }
