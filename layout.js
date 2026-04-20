@@ -43,6 +43,7 @@
     'loan-installments.html': { navItem: 'finance', submenu: 'loans' },
     'accounting.html': { navItem: 'finance', submenu: 'accounting' },
     'accounting-dashboard-screen.html': { navItem: 'finance', submenu: 'accounting' },
+    'accounting-dashboard-checklist-screen.html': { navItem: 'finance', submenu: 'accounting' },
     'candidate-profile.html': { navItem: 'hiring', submenu: 'job-positions' },
     'all-documents.html': { navItem: 'documents', submenu: 'all-documents' },
     'contracts.html': { navItem: 'documents', submenu: 'contracts' },

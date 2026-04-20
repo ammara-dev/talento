@@ -1,0 +1,534 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <title>Talento - Accounting Dashboard Checklist</title>
+  <meta name="description" content="Talento HR Platform - Accounting dashboard checklist screen" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared-styles.css" />
+  <script src="design-tokens.js"></script>
+  <style>
+    #main-scroll { background: #f6f5f7; }
+    .acdc-wrap { padding: 18px; }
+    .acdc-page {
+      background: #fff;
+      border: 1px solid #ece9ef;
+      border-radius: 20px;
+      padding: 16px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .ac-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .ac-head h1 {
+      margin: 0;
+      color: #1e1033;
+      font-size: 20px;
+      line-height: 1.3;
+      font-weight: 500;
+    }
+
+    .ac-head-actions {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .ac-chip-group {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid #e2dde9;
+      background: #f7f6f9;
+      border-radius: 10px;
+      padding: 3px;
+      gap: 3px;
+      flex-wrap: wrap;
+    }
+
+    .ac-chip {
+      min-height: 26px;
+      border-radius: 8px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: #5c546d;
+      font-size: 14px;
+      line-height: 1.3;
+      font-family: 'Alexandria', Helvetica, sans-serif;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0 10px;
+      cursor: pointer;
+    }
+
+    .ac-chip.is-active {
+      background: #fff;
+      border-color: #e2dde9;
+      color: #1e1033;
+    }
+
+    .ac-config-btn {
+      min-height: 34px;
+      border-radius: 10px;
+      border: 1px solid #dfdae5;
+      background: #fff;
+      color: #1e1033;
+      font-size: 14px;
+      line-height: 1.3;
+      font-family: 'Alexandria', Helvetica, sans-serif;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 12px;
+      cursor: pointer;
+    }
+
+    .acdc-setup-panel {
+      border: 1px solid #e9e5ee;
+      border-radius: 16px;
+      background: #f8f7fa;
+      padding: 12px 14px 14px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .acdc-setup-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .acdc-setup-main {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+    }
+
+    .acdc-progress-circle {
+      width: 46px;
+      height: 46px;
+      border-radius: 999px;
+      background: conic-gradient(#b082f9 0 75%, #ebe5f6 75% 100%);
+      padding: 4px;
+      flex-shrink: 0;
+    }
+
+    .acdc-progress-circle span {
+      width: 100%;
+      height: 100%;
+      border-radius: inherit;
+      background: #fff;
+      color: #1e1033;
+      font-size: 20px;
+      line-height: 1;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transform: scale(.52);
+      transform-origin: center;
+    }
+
+    .acdc-setup-title-row {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .acdc-setup-copy h2 {
+      margin: 0;
+      color: #1e1033;
+      font-size: 20px;
+      line-height: 1.2;
+      font-weight: 500;
+    }
+
+    .acdc-step-pill {
+      min-height: 24px;
+      border-radius: 999px;
+      background: #ffefcd;
+      color: #9a6e21;
+      font-size: 14px;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      padding: 0 8px;
+    }
+
+    .acdc-setup-copy p {
+      margin: 4px 0 0;
+      color: #615a72;
+      font-size: 14px;
+      line-height: 1.35;
+    }
+
+    .acdc-toggle-btn {
+      width: 30px;
+      height: 30px;
+      border-radius: 10px;
+      border: 1px solid #e1dce8;
+      background: #fff;
+      color: #7f778d;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .acdc-steps-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .acdc-step-card {
+      border: 1px solid #e3dfea;
+      border-radius: 14px;
+      background: #fff;
+      padding: 10px 10px 9px;
+      display: grid;
+      gap: 6px;
+    }
+
+    .acdc-step-card.is-active {
+      background: #f4effa;
+      border-color: #dbc9f4;
+    }
+
+    .acdc-step-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .acdc-step-head h3 {
+      margin: 0;
+      color: #1e1033;
+      font-size: 20px;
+      line-height: 1.2;
+      font-weight: 500;
+    }
+
+    .acdc-step-status {
+      width: 16px;
+      height: 16px;
+      border-radius: 999px;
+      border: 1px solid #dfdbe6;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: transparent;
+      flex-shrink: 0;
+    }
+
+    .acdc-step-status.is-done {
+      border-color: #d2b8fa;
+      background: #b082f9;
+      color: #fff;
+      font-size: 9px;
+    }
+
+    .acdc-step-card p {
+      margin: 0;
+      color: #6a6378;
+      font-size: 14px;
+      line-height: 1.35;
+    }
+
+    .acdc-step-action {
+      min-height: 32px;
+      border-radius: 10px;
+      font-family: 'Alexandria', Helvetica, sans-serif;
+      font-size: 14px;
+      line-height: 1.3;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      padding: 0 12px;
+      border: 1px solid #ded9e6;
+    }
+
+    .acdc-step-action.is-light {
+      background: #fff;
+      color: #1e1033;
+    }
+
+    .acdc-step-action.is-primary {
+      color: #fff;
+      border-color: #1e1033;
+      background: #1e1033;
+    }
+
+    .acdc-step-action.is-primary i {
+      color: #2CF7B3;
+      font-size: 12px;
+    }
+
+    .acd-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px;
+    }
+
+    .acd-card,
+    .acd-purchase-card {
+      border: 1px solid #ece9ef;
+      border-radius: 16px;
+      background: #fff;
+      padding: 14px 14px 12px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      min-height: 220px;
+    }
+
+    .acd-card.is-bank {
+      color: #fff;
+      background: radial-gradient(120px 90px at 82% 36%, rgba(255,255,255,.12) 0%, rgba(255,255,255,0) 90%), linear-gradient(120deg, #0d6f75 0%, #04505b 100%);
+      box-shadow: 0 8px 18px rgba(20, 86, 100, .25);
+    }
+
+    .acd-card-more {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 26px;
+      height: 26px;
+      border-radius: 8px;
+      border: 1px solid #e1dce8;
+      background: #fff;
+      color: #7f778d;
+      font-size: 11px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .acd-card.is-bank .acd-card-more {
+      background: rgba(4, 65, 76, .58);
+      border-color: rgba(173, 235, 240, .2);
+      color: #d9f4f6;
+    }
+
+    .acd-card-title {
+      margin: 0;
+      color: #1e1033;
+      font-size: 20px;
+      line-height: 1.2;
+      font-weight: 500;
+      padding-right: 24px;
+    }
+
+    .acd-card.is-bank .acd-card-title { color: #f4ffff; }
+
+    .acd-card-sub {
+      margin: 3px 0 12px;
+      color: #6f6780;
+      font-size: 14px;
+      line-height: 1.3;
+    }
+
+    .acd-card.is-bank .acd-card-sub {
+      color: #b7e7eb;
+      margin-bottom: 41px;
+    }
+
+    .acd-balance-label {
+      margin: 0;
+      color: #6f6780;
+      font-size: 14px;
+      line-height: 1.3;
+    }
+
+    .acd-card.is-bank .acd-balance-label { color: #97d8de; }
+
+    .acd-balance-value {
+      margin: 2px 0 12px;
+      color: #1e1033;
+      font-size: 28px;
+      line-height: 1.15;
+      font-weight: 500;
+    }
+
+    .acd-card.is-bank .acd-balance-value {
+      color: #FFFFFF99;
+      font-size: 28px;
+      line-height: 1.15;
+    }
+
+    .acd-sparkline {
+      width: calc(100% + 28px);
+      margin: 0 -14px 2px;
+      height: 72px;
+      display: block;
+    }
+
+    .acd-card-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: auto;
+    }
+
+    .acd-card-actions-single { grid-template-columns: 1fr; }
+
+    .acd-btn {
+      min-height: 40px;
+      border-radius: 12px;
+      border: 1px solid #ded9e6;
+      font-family: 'Alexandria', Helvetica, sans-serif;
+      font-size: 14px;
+      line-height: 1.3;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      padding: 0 12px;
+    }
+
+    .acd-btn-light {
+      color: #1e1033;
+      background: #fff;
+    }
+
+    .acd-btn-primary {
+      color: #fff;
+      border-color: #1e1033;
+      background: #1e1033;
+    }
+
+    .acd-btn-primary i { color: #2CF7B3; font-size: 12px; }
+
+    .acd-progress-row {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      height: 14px;
+      margin: 14px 0 12px;
+      border-radius: 4px;
+      background: #D8D5DC;
+      overflow: hidden;
+    }
+
+    .acd-progress-segment {
+      height: 100%;
+      display: block;
+      flex: 0 0 auto;
+    }
+
+    .acd-legend-row {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px 14px;
+      margin-bottom: 12px;
+    }
+
+    .acd-legend-item {
+      color: #5f586f;
+      font-size: 14px;
+      line-height: 1.3;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+
+    .acd-legend-item strong { color: #1e1033; font-weight: 500; }
+
+    .acd-legend-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+
+    .acd-purchase-card {
+      grid-column: 2 / span 2;
+      min-height: 184px;
+    }
+
+    @media (max-width: 1220px) {
+      .acdc-steps-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 1150px) {
+      .acd-grid { grid-template-columns: 1fr 1fr; }
+      .acd-purchase-card { grid-column: auto; }
+    }
+
+    @media (max-width: 860px) {
+      .acdc-wrap { padding: 14px 12px; }
+      .ac-head-actions { width: 100%; justify-content: flex-start; }
+    }
+
+    @media (max-width: 640px) {
+      html, body { overflow-x: hidden; }
+      #app, #main-col, #main-scroll { max-width: 100vw; overflow-x: hidden; }
+      .acdc-wrap { padding: 12px 10px; }
+      .acdc-page { padding: 12px; width: 100%; max-width: 100%; overflow-x: hidden; }
+      .ac-head { width: 100%; overflow: hidden; }
+      .ac-head-actions {
+        width: 100%;
+        min-width: 0;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+      .ac-chip-group { overflow-x: auto; flex-wrap: nowrap; width: 100%; max-width: 100%; }
+      .ac-chip { white-space: nowrap; }
+      .ac-config-btn { width: max-content; max-width: 100%; }
+      .acdc-setup-main { width: 100%; min-width: 0; align-items: flex-start; }
+      .acdc-setup-copy { min-width: 0; flex: 1; }
+      .acdc-setup-copy p { overflow-wrap: anywhere; word-break: break-word; }
+      .acdc-steps-grid,
+      .acd-grid { grid-template-columns: 1fr; }
+      .acd-card-actions { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+  <div id="overlay" aria-hidden="true"></div>
+  <aside id="sidebar" aria-label="Main navigation"></aside>
+  <div id="main-col">
+    <header id="navbar" style="display:flex;align-items:center;justify-content:space-between;height:56px;padding:0 16px;background:#fff;border-bottom:1px solid #e8e7eb;flex-shrink:0;min-width:0;"></header>
+    <div id="main-scroll">
+      <div class="acdc-wrap">
+        <div id="accounting-dashboard-checklist-root" class="acdc-page"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="layout.js"></script>
+<script src="accounting_components.js"></script>
+<script src="accounting_dashboard_screen_components.js"></script>
+<script src="accounting_dashboard_checklist_components.js"></script>
+<script src="accounting-dashboard-checklist-screen.js"></script>
+</body>
+</html>
