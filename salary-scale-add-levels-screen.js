@@ -41,6 +41,7 @@
         nameField: {
           label: 'Level name',
           required: true,
+          inputClass: 'is-plain',
           value: '',
           placeholder: 'e.g. Senior Manager'
         },

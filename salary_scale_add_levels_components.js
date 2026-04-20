@@ -51,11 +51,12 @@ const SalaryScaleAddLevelsComponents = (function() {
   }
 
   function FormField(field) {
+    const inputClass = field && field.inputClass ? ` ${escapeHtml(field.inputClass)}` : '';
     if (field.type === 'select') {
       return `
         <label class="ssal-field">
           <span class="ssal-label">${escapeHtml(field.label || '')}${field.required ? '*' : ''}</span>
-          <button type="button" class="ssal-input ssal-select">
+          <button type="button" class="ssal-input ssal-select${inputClass}">
             <span>${escapeHtml(field.value || '')}</span>
             <span>${Icons.chevronDown}</span>
           </button>
@@ -66,7 +67,7 @@ const SalaryScaleAddLevelsComponents = (function() {
     return `
       <label class="ssal-field">
         <span class="ssal-label">${escapeHtml(field.label || '')}${field.required ? '*' : ''}</span>
-        <input type="text" class="ssal-input" value="${escapeHtml(field.value || '')}" placeholder="${escapeHtml(field.placeholder || '')}" />
+        <input type="text" class="ssal-input${inputClass}" value="${escapeHtml(field.value || '')}" placeholder="${escapeHtml(field.placeholder || '')}" />
       </label>
     `;
   }
