@@ -9,8 +9,8 @@
     title: 'Salary scale',
     controls: {
       tabs: [
-        { id: 'salary', label: 'Salary scale', active: true },
-        { id: 'overview', label: 'Level overview', active: false },
+        { id: 'salary', label: 'Salary scale', active: false },
+        { id: 'overview', label: 'Level overview', active: true },
         { id: 'matrix', label: 'Degree matrix', active: false }
       ],
       configLabel: 'Configuration'
