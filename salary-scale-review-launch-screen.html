@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <title>Talento - Salary Scale Review & Launch</title>
+  <meta name="description" content="Talento HR Platform - Salary scale review and launch" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared-styles.css" />
+  <script src="design-tokens.js"></script>
+
+  <style>
+    #main-scroll { background: #f6f5f7; }
+    .ssr-page-wrap { padding: 18px 18px 0; min-height: calc(100vh - 56px); }
+    .ssr-flow-stack { width: min(100%, 980px); margin: 0 auto; display: grid; gap: 14px; }
+
+    .ssa-page-title { margin: 0; font-size: 20px; line-height: 1.3; font-weight: 500; color: #1e1033; }
+    .ssa-stepper {
+      border: 2px solid #fff;
+      border-radius: 20px;
+      background: #0E121B05;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      min-width: 0;
+      gap: 0;
+      box-shadow: 0 10px 24px rgba(30,16,51,.04);
+    }
+    .ssa-step {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #9a93a8;
+      font-size: 14px;
+      line-height: 1.3;
+      white-space: nowrap;
+      flex-shrink: 0;
+      padding: 6px 10px;
+    }
+    .ssa-step-dot {
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      border: 1px solid #dcd6e6;
+      color: #a19aae;
+      font-size: 10px;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #fff;
+      flex-shrink: 0;
+    }
+    .ssa-step-line { flex: 1 1 22px; min-width: 16px; height: 1px; background: #cfc8da; margin: 0 8px; }
+    .ssa-step-line.is-complete { background: #c8a8ff; }
+    .ssa-step.is-completed, .ssa-step.is-active { color: #8b64e4; font-weight: 500; }
+    .ssa-step.is-completed .ssa-step-dot { border-color: #8b64e4; color: #fff; background: #ab73ff; }
+    .ssa-step.is-active .ssa-step-dot { border-color: #8b64e4; color: #8b64e4; background: #fff; }
+
+    .ssr-main-panel {
+      border: 2px solid #fff;
+      border-radius: 20px;
+      background: #0E121B05;
+      padding: 16px;
+      box-shadow: 0 10px 24px rgba(30,16,51,.04);
+    }
+
+    .ssr-title { margin: 0 0 14px; font-size: 20px; line-height: 1.3; color: #1e1033; font-weight: 500; }
+
+    .ssr-hero {
+      border-radius: 20px;
+      padding: 16px;
+      background: linear-gradient(110deg, #1e1033 10%, #3f2465 52%, #9568da 100%);
+      color: #fff;
+      margin-bottom: 14px;
+      box-shadow: 0 10px 24px rgba(30,16,51,.2);
+    }
+
+    .ssr-hero-name { margin: 0 0 2px; font-size: 20px; line-height: 1.3; font-weight: 500; }
+    .ssr-hero-sub { margin: 0 0 14px; font-size: 14px; line-height: 1.35; color: rgba(255,255,255,.88); }
+    .ssr-metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+    .ssr-metric {
+      border: 1px solid rgba(255,255,255,.22);
+      border-radius: 16px;
+      background: rgba(255,255,255,.08);
+      padding: 10px 12px;
+    }
+    .ssr-metric-value { margin: 0 0 2px; font-size: 40px; line-height: 1.2; font-weight: 500; }
+    .ssr-metric-label { margin: 0; font-size: 14px; line-height: 1.35; color: rgba(255,255,255,.9); }
+
+    .ssr-level-list { display: grid; gap: 10px; }
+    .ssr-level-card {
+      border: 1px solid #e8e3ed;
+      border-radius: 16px;
+      background: #f6f5f9;
+      padding: 10px;
+    }
+    .ssr-level-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 34px;
+      gap: 10px;
+      align-items: start;
+    }
+    .ssr-level-main { display: grid; grid-template-columns: 18px minmax(0,1fr); gap: 10px; }
+    .ssr-level-dot { width: 14px; height: 14px; border-radius: 3px; background: #3685c9; margin-top: 3px; }
+    .ssr-level-title { margin: 0; color: #1e1033; font-size: 18px; line-height: 1.3; font-weight: 500; }
+    .ssr-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+    .ssr-chip {
+      height: 24px;
+      border-radius: 999px;
+      border: 1px solid #e4deef;
+      background: #eeebf3;
+      color: #5f5672;
+      font-size: 14px;
+      padding: 0 10px;
+      display: inline-flex;
+      align-items: center;
+      line-height: 1;
+    }
+    .ssr-toggle {
+      width: 34px;
+      height: 34px;
+      border-radius: 11px;
+      border: 1px solid #d8d2e4;
+      background: #fff;
+      color: #584f68;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+    }
+
+    .ssr-level-body {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px dashed #ddd7e8;
+      display: grid;
+      gap: 8px;
+    }
+    .ssr-row {
+      display: grid;
+      grid-template-columns: 140px minmax(0,1fr);
+      gap: 8px;
+      align-items: center;
+    }
+    .ssr-row-label { color: #6c637e; font-size: 14px; line-height: 1.35; }
+    .ssr-row-values { display: flex; flex-wrap: wrap; gap: 6px; }
+    .ssr-pill {
+      height: 30px;
+      border-radius: 10px;
+      border: 1px solid #d9d3e6;
+      background: #fff;
+      color: #2c2340;
+      font-size: 14px;
+      padding: 0 10px;
+      display: inline-flex;
+      align-items: center;
+      line-height: 1;
+    }
+
+    .ssa-footer {
+      position: sticky;
+      bottom: 0;
+      width: min(100%, 980px);
+      margin: 0 auto;
+      padding: 10px 0 14px;
+      background: #f6f5f7;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .ssa-footer-step { color: #b1aabf; font-size: 14px; line-height: 1.35; }
+    .ssa-footer-actions { display: inline-flex; align-items: center; gap: 8px; }
+    .ssa-btn {
+      height: 48px;
+      border-radius: 14px;
+      border: 1px solid #e8e3ed;
+      background: #fff;
+      color: #6f6780;
+      font-size: 14px;
+      line-height: 1;
+      padding: 0 16px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+    }
+    .ssa-btn.is-primary {
+      border-color: #1e1033;
+      background: #1e1033;
+      color: #fff;
+      box-shadow: 0 8px 18px rgba(53,22,89,.25);
+    }
+    .ssa-btn.is-primary i { color: #2cf7b3; }
+
+    @media (max-width: 960px) {
+      .ssr-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .ssa-btn { font-size: 14px; }
+    }
+
+    @media (max-width: 760px) {
+      .ssr-page-wrap { padding: 14px 10px 0; }
+      .ssa-stepper { flex-wrap: wrap; row-gap: 10px; }
+      .ssa-step-line { display: none; }
+      .ssr-hero-name, .ssr-title { font-size: 20px; }
+      .ssr-metric-value { font-size: 24px; }
+      .ssr-level-title { font-size: 20px; }
+      .ssr-row { grid-template-columns: 1fr; }
+      .ssa-footer { flex-direction: column; align-items: stretch; }
+      .ssa-footer-actions { width: 100%; justify-content: flex-end; }
+    }
+  </style>
+</head>
+
+<body>
+<div id="app">
+  <div id="overlay" aria-hidden="true"></div>
+  <aside id="sidebar" aria-label="Main navigation"></aside>
+  <div id="main-col">
+    <header id="navbar" style="display:flex;align-items:center;justify-content:space-between;height:56px;padding:0 16px;background:#fff;border-bottom:1px solid #e8e7eb;flex-shrink:0;min-width:0;"></header>
+    <div id="main-scroll">
+      <div class="ssr-page-wrap">
+        <div id="salary-scale-review-launch-root"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="layout.js"></script>
+<script src="salary_scale_allowances_components.js"></script>
+<script src="salary_scale_review_launch_components.js"></script>
+<script src="salary-scale-review-launch-screen.js"></script>
+</body>
+</html>
