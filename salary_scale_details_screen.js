@@ -9,7 +9,7 @@
     header: {
       breadcrumb: 'Salary scale list/ Salary scale name',
       title: 'Salary scale name',
-      pager: { position: '1 of 2' },
+      pager: { backLabel: 'Back', position: '1 of 2', nextLabel: 'Next' },
       meta: {
         items: ['10 degrees', '3,000 - 6,600 SAR', 'Starting: 3,000.00', 'SC3921'],
         status: 'Draft'

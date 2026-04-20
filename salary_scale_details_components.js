@@ -37,14 +37,21 @@ const SalaryScaleDetailsComponents = (function() {
   }
 
   function Header(config) {
+    const pager = config.pager || {};
     return `
       <section>
         <div class="ssd-header-top">
           <p class="ssd-breadcrumb">${escapeHtml(config.breadcrumb || '')}</p>
           <div class="ssd-pager" aria-label="Pager">
-            <button type="button" class="ssd-icon-btn" aria-label="Previous">${Icons.back}</button>
-            <span>${escapeHtml((config.pager || {}).position || '')}</span>
-            <button type="button" class="ssd-icon-btn" aria-label="Next">${Icons.next}</button>
+            <button type="button" class="ssd-pager-nav" aria-label="Previous">
+              <span class="ssd-pager-icon" aria-hidden="true">${Icons.back}</span>
+              <span>${escapeHtml(pager.backLabel || 'Back')}</span>
+            </button>
+            <span class="ssd-pager-count">${escapeHtml(pager.position || '')}</span>
+            <button type="button" class="ssd-pager-nav" aria-label="Next">
+              <span>${escapeHtml(pager.nextLabel || 'Next')}</span>
+              <span class="ssd-pager-icon" aria-hidden="true">${Icons.next}</span>
+            </button>
           </div>
         </div>
 
