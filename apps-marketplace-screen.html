@@ -1,0 +1,366 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <title>Talento - Apps Marketplace</title>
+  <meta name="description" content="Talento HR Platform - Apps marketplace screen" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared-styles.css" />
+  <script src="design-tokens.js"></script>
+  <style>
+    #main-scroll { background: #f6f5f7; }
+    .amp-wrap { padding: 16px; }
+    .amp-page {
+      background: #fff;
+      border: 1px solid #ece9ef;
+      border-radius: 20px;
+      padding: 16px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .amp-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .amp-head h1 {
+      margin: 0;
+      color: #1e1033;
+      font-size: 20px;
+      line-height: 1.2;
+      font-weight: 500;
+    }
+
+    .amp-head-actions {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .amp-btn {
+      min-height: 38px;
+      border-radius: 12px;
+      border: 1px solid #ded9e6;
+      background: #fff;
+      color: #1e1033;
+      font-size: 14px;
+      line-height: 1.3;
+      font-family: 'Alexandria', Helvetica, sans-serif;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 14px;
+      cursor: pointer;
+    }
+
+    .amp-btn-primary {
+      border-color: #1e1033;
+      background: #1e1033;
+      color: #fff;
+    }
+
+    .amp-btn-primary i { color: #2CF7B3; font-size: 12px; }
+
+    .ma-search {
+      width: min(100%, 390px);
+      height: 38px;
+      border: 1px solid #ddd8e6;
+      border-radius: 999px;
+      background: #fff;
+      padding: 0 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0;
+    }
+
+    .ma-search-icon { color: #8f88a0; font-size: 13px; flex-shrink: 0; }
+    .ma-search input {
+      width: 100%;
+      border: none;
+      background: transparent;
+      font-size: 14px;
+      line-height: 1.3;
+      color: #4b405c;
+      outline: none;
+      font-family: 'Alexandria', Helvetica, sans-serif;
+    }
+
+    .amp-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .amp-chip {
+      min-height: 30px;
+      border-radius: 10px;
+      border: 1px solid #ded9e6;
+      background: #fff;
+      color: #1e1033;
+      font-size: 14px;
+      line-height: 1.2;
+      padding: 0 10px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      font-family: 'Alexandria', Helvetica, sans-serif;
+    }
+
+    .amp-chip span { color: #8b839a; }
+    .amp-chip.is-active {
+      background: #efe3ff;
+      border-color: #d2b8fa;
+    }
+
+    .amp-section {
+      display: grid;
+      gap: 10px;
+    }
+
+    .amp-section h2 {
+      margin: 0;
+      color: #1e1033;
+      font-size: 20px;
+      line-height: 1.2;
+      font-weight: 500;
+    }
+
+    .amp-feature-grid {
+      display: grid;
+      grid-template-columns: 1.25fr 3fr;
+      gap: 12px;
+      align-items: stretch;
+    }
+
+    .amp-feature-banner {
+      border-radius: 16px;
+      background:
+        radial-gradient(circle at 95% 95%, rgba(125, 73, 209, .25) 0 20%, transparent 21%),
+        radial-gradient(circle at 88% 95%, rgba(125, 73, 209, .2) 0 20%, transparent 21%),
+        linear-gradient(135deg, #1a1038 0%, #30185a 100%);
+      border: 1px solid #3d2a63;
+      padding: 16px;
+      color: #fff;
+      display: grid;
+      gap: 10px;
+      align-content: space-between;
+      min-height: 188px;
+    }
+
+    .amp-feature-banner h3 {
+      margin: 0;
+      font-size: 20px;
+      line-height: 1.2;
+      font-weight: 500;
+    }
+
+    .amp-feature-banner p {
+      margin: 0;
+      font-size: 14px;
+      line-height: 1.35;
+      color: #dad2ee;
+      max-width: 250px;
+    }
+
+    .amp-browse-btn {
+      min-height: 34px;
+      width: max-content;
+      border-radius: 10px;
+      border: 1px solid #8a79b1;
+      background: #1f133b;
+      color: #fff;
+      font-size: 14px;
+      line-height: 1.2;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 12px;
+      cursor: pointer;
+      font-family: 'Alexandria', Helvetica, sans-serif;
+    }
+
+    .amp-browse-btn i { color: #2CF7B3; font-size: 11px; }
+
+    .amp-odoo-mark {
+      justify-self: end;
+      color: #f2edff;
+      font-size: 28px;
+      line-height: 1;
+      font-weight: 600;
+      opacity: .9;
+    }
+
+    .amp-feature-cards {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .amp-feature-card {
+      border: 1px solid #ece9ef;
+      border-radius: 14px;
+      background: #fff;
+      min-height: 88px;
+      padding: 12px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .amp-feature-logo {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      flex-shrink: 0;
+      overflow: hidden;
+      border: 1px solid #ece9ef;
+      background: #fff;
+    }
+
+    .amp-feature-logo svg { width: 100%; height: 100%; display: block; }
+
+    .amp-feature-copy h4 {
+      margin: 0;
+      color: #1e1033;
+      font-size: 20px;
+      line-height: 1.2;
+      font-weight: 500;
+    }
+
+    .amp-feature-copy p {
+      margin: 2px 0 0;
+      color: #787085;
+      font-size: 14px;
+      line-height: 1.25;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+      overflow: hidden;
+    }
+
+    .amp-market-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .amp-market-card {
+      border: 1px solid #ece9ef;
+      border-radius: 16px;
+      background: #fff;
+      overflow: hidden;
+      min-height: 200px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .amp-market-art {
+      height: 108px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255,255,255,.95);
+      font-size: 26px;
+      line-height: 1;
+      font-weight: 700;
+      letter-spacing: .4px;
+      text-transform: none;
+    }
+
+    .amp-market-art.is-green { background: linear-gradient(135deg, #8cc43d 0%, #76ad2f 100%); }
+    .amp-market-art.is-blue { background: linear-gradient(135deg, #3d7fb0 0%, #366b95 100%); }
+    .amp-market-art.is-purple { background: linear-gradient(135deg, #8c62f5 0%, #754cd9 100%); }
+    .amp-market-art.is-light { background: linear-gradient(135deg, #e8ebe6 0%, #d9ddd6 100%); color: #1c2a19; }
+    .amp-market-art.is-gray { background: linear-gradient(135deg, #eceef2 0%, #dde2ea 100%); color: #5d6680; }
+    .amp-market-art.is-cyan { background: linear-gradient(135deg, #47a9c6 0%, #357d97 100%); }
+    .amp-market-art.is-soft { background: linear-gradient(135deg, #f1f2f4 0%, #e7eaee 100%); color: #6a7386; }
+    .amp-market-art.is-yellow { background: linear-gradient(135deg, #f0c24c 0%, #e5b53f 100%); }
+
+    .amp-market-body {
+      padding: 10px 12px 12px;
+      display: grid;
+      gap: 4px;
+      flex: 1;
+    }
+
+    .amp-market-body h3 {
+      margin: 0;
+      color: #1e1033;
+      font-size: 20px;
+      line-height: 1.2;
+      font-weight: 500;
+    }
+
+    .amp-market-body p {
+      margin: 0;
+      color: #787085;
+      font-size: 14px;
+      line-height: 1.3;
+      min-height: 36px;
+    }
+
+    .amp-market-rating {
+      margin-top: auto;
+      color: #1e1033;
+      font-size: 14px;
+      line-height: 1.2;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .amp-market-rating i { font-size: 12px; }
+
+    @media (max-width: 1300px) {
+      .amp-feature-grid { grid-template-columns: 1fr; }
+      .amp-feature-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .amp-market-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 920px) {
+      .amp-wrap { padding: 12px; }
+      .amp-page { padding: 12px; }
+      .amp-head-actions { width: 100%; }
+      .ma-search { width: 100%; }
+      .amp-market-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 640px) {
+      .amp-feature-cards { grid-template-columns: 1fr; }
+      .amp-market-grid { grid-template-columns: 1fr; }
+      .amp-btn { width: 100%; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+  <div id="overlay" aria-hidden="true"></div>
+  <aside id="sidebar" aria-label="Main navigation"></aside>
+  <div id="main-col">
+    <header id="navbar" style="display:flex;align-items:center;justify-content:space-between;height:56px;padding:0 16px;background:#fff;border-bottom:1px solid #e8e7eb;flex-shrink:0;min-width:0;"></header>
+    <div id="main-scroll">
+      <div class="amp-wrap">
+        <div id="apps-marketplace-root" class="amp-page"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="layout.js"></script>
+<script src="manage_apps_components.js"></script>
+<script src="apps_marketplace_components.js"></script>
+<script src="apps-marketplace-screen.js"></script>
+</body>
+</html>
