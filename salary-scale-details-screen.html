@@ -44,11 +44,11 @@
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      height: 40px;
-      padding: 0 10px;
-      border: 1px solid #e8e3ed;
-      border-radius: 14px;
-      background: #fff;
+      height: auto;
+      padding: 0;
+      border: none;
+      border-radius: 0;
+      background: transparent;
       color: #4b405c;
       font-size: 14px;
     }
@@ -284,7 +284,7 @@
     @media (max-width: 760px) {
       .ssd-page-wrap { padding: 12px; }
       .ssd-shell { padding: 12px; }
-      .ssd-pager,
+      .ssd-pager { width: 100%; justify-content: flex-start; }
       .ssd-title-actions { width: 100%; justify-content: flex-end; }
       .ssd-period-grid { grid-template-columns: 1fr; gap: 10px; }
       .ssd-period-col-left {
