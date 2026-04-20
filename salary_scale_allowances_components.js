@@ -9,7 +9,7 @@ const SalaryScaleAllowancesComponents = (function() {
     check: '<i class="fa-solid fa-check" aria-hidden="true"></i>',
     chevronDown: '<i class="fa-solid fa-chevron-down" aria-hidden="true"></i>',
     chevronLeft: '<i class="fa-solid fa-chevron-left" aria-hidden="true"></i>',
-    chevronRight: '<i class="fa-solid fa-chevron-right" aria-hidden="true"></i>',
+    chevronRight: '<i class="fa-solid fa-arrow-right" aria-hidden="true"></i>',
     plus: '<i class="fa-solid fa-plus" aria-hidden="true"></i>',
     close: '<i class="fa-solid fa-xmark" aria-hidden="true"></i>'
   };
