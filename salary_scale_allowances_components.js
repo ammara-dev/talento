@@ -143,6 +143,7 @@ const SalaryScaleAllowancesComponents = (function() {
   }
 
   function FooterBar(config) {
+    const nextIcon = config && config.nextIcon === 'check' ? Icons.check : Icons.chevronRight;
     return `
       <footer class="ssa-footer">
         <p class="ssa-footer-step">${escapeHtml(config.stepLabel || '')}</p>
@@ -153,7 +154,7 @@ const SalaryScaleAllowancesComponents = (function() {
           </button>
           <button type="button" class="ssa-btn is-primary">
             <span>${escapeHtml(config.nextLabel || 'Next step')}</span>
-            <span>${Icons.chevronRight}</span>
+            <span>${nextIcon}</span>
           </button>
         </div>
       </footer>

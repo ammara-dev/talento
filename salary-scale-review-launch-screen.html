@@ -150,16 +150,21 @@
     }
     .ssr-row {
       display: grid;
-      grid-template-columns: 140px fit-content(100%);
+      grid-template-columns: minmax(140px, 1fr) auto;
       gap: 8px;
       align-items: center;
+    }
+    .ssr-row + .ssr-row {
+      border-top: 1px dashed #ddd7e8;
+      padding-top: 10px;
+      margin-top: 2px;
     }
     .ssr-row-label { color: #6c637e; font-size: 14px; line-height: 1.35; }
     .ssr-row-values {
       display: flex;
       flex-wrap: wrap;
       gap: 6px;
-      justify-content: flex-start;
+      justify-content: flex-end;
       align-items: center;
       max-width: 100%;
     }

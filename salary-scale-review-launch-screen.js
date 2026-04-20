@@ -60,7 +60,8 @@
     footer: {
       stepLabel: 'Step 04 of 04',
       backLabel: 'Back',
-      nextLabel: 'Launch salary scale'
+      nextLabel: 'Launch salary scale',
+      nextIcon: 'check'
     }
   };
 
