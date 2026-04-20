@@ -41,7 +41,6 @@
         nameField: {
           label: 'Level name',
           required: true,
-          inputClass: 'is-plain',
           value: '',
           placeholder: 'e.g. Senior Manager'
         },
@@ -55,12 +54,12 @@
           minLabel: 'D1: 6,000 SAR',
           maxLabel: 'D6: 13,000 SAR',
           bars: [
-            { label: 'D1', height: '26px', color: '#CBB8EA' },
-            { label: 'D2', height: '38px', color: '#C2ACE5' },
-            { label: 'D3', height: '54px', color: '#B99FDF' },
-            { label: 'D4', height: '60px', color: '#B393DC' },
-            { label: 'D5', height: '76px', color: '#AF87DF' },
-            { label: 'D6', height: '88px', color: '#A577E1' }
+            { label: 'D1', height: '26px', color: '#E3D0FF' },
+            { label: 'D2', height: '38px', color: '#DDC5FF' },
+            { label: 'D3', height: '54px', color: '#D6B9FF' },
+            { label: 'D4', height: '60px', color: '#CFADFF' },
+            { label: 'D5', height: '76px', color: '#C8A1FF' },
+            { label: 'D6', height: '88px', color: '#BA8AFF' }
           ]
         }
       }
