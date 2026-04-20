@@ -71,7 +71,7 @@ const SalaryScaleAllowancesComponents = (function() {
         </label>
         <label>
           <span class="ssa-field-label">${escapeHtml(row.valueLabel || 'Value')}</span>
-          <input type="text" class="ssa-input" value="${escapeHtml(row.value || '')}" />
+          <input type="text" class="ssa-input ssa-input-value" value="${escapeHtml(row.value || '')}" />
         </label>
       </div>
     `;
@@ -101,7 +101,7 @@ const SalaryScaleAllowancesComponents = (function() {
         <p class="ssa-small-title">${escapeHtml(config.title || '')}</p>
         <div class="ssa-other-row">
           <input type="text" class="ssa-input" placeholder="${escapeHtml(config.namePlaceholder || '')}" />
-          <input type="text" class="ssa-input" placeholder="${escapeHtml(config.valuePlaceholder || '')}" />
+          <input type="text" class="ssa-input ssa-input-value" placeholder="${escapeHtml(config.valuePlaceholder || '')}" />
           <span class="ssa-icon-x" aria-hidden="true">${Icons.close}</span>
         </div>
         <button type="button" class="ssa-add-link">${escapeHtml(config.addLabel || '')} ${Icons.plus}</button>

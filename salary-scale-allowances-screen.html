@@ -30,7 +30,7 @@
     .ssa-stepper {
       border: 1px solid #ece9ef;
       border-radius: 20px;
-      background: #fff;
+      background: #0E121B05;
       padding: 14px 16px;
       display: flex;
       align-items: center;
@@ -49,7 +49,6 @@
       white-space: nowrap;
       flex-shrink: 0;
       padding: 6px 10px;
-      border-radius: 999px;
     }
 
     .ssa-step-line {
@@ -79,7 +78,7 @@
     .ssa-step.is-active {
       color: #8b64e4;
       font-weight: 500;
-      background: #f5f0ff;
+      background: transparent;
     }
 
     .ssa-step.is-completed .ssa-step-dot {
@@ -97,7 +96,7 @@
     .ssa-main-panel {
       border: 1px solid #ece9ef;
       border-radius: 20px;
-      background: #fff;
+      background: #0E121B05;
       padding: 16px;
       box-shadow: 0 10px 24px rgba(30,16,51,.04);
     }
@@ -105,7 +104,7 @@
     .ssa-main-title {
       margin: 0;
       color: #1e1033;
-      font-size: 32px;
+      font-size: 20px;
       line-height: 1.3;
       font-weight: 500;
     }
@@ -127,7 +126,7 @@
     .ssa-level-list { display: grid; gap: 8px; }
 
     .ssa-level-item {
-      border: 1px solid transparent;
+      border: 1px solid #3623531F;
       border-radius: 12px;
       padding: 8px;
       display: grid;
@@ -138,7 +137,7 @@
     }
 
     .ssa-level-item.is-active {
-      border-color: #d9c3fb;
+      border: 2px solid #ab73ff;
       background: #fbf8ff;
     }
 
@@ -153,7 +152,7 @@
     .ssa-level-title {
       margin: 0;
       color: #1e1033;
-      font-size: 28px;
+      font-size: 14px;
       line-height: 1.3;
       font-weight: 500;
     }
@@ -193,8 +192,8 @@
 
     .ssa-period-total {
       color: #7d748f;
-      font-size: 28px;
-      line-height: 1;
+      font-size: 18px;
+      line-height: 1.3;
       font-weight: 500;
     }
 
@@ -229,10 +228,15 @@
       justify-content: space-between;
     }
 
+    .ssa-input-value {
+      border: 2px solid #dac7fb;
+      background: #fff;
+    }
+
     .ssa-muted-card {
       border: 1px solid #ece9ef;
       border-radius: 12px;
-      background: #fcfbfe;
+      background: #F4F2F7;
       padding: 10px;
       display: grid;
       gap: 8px;
@@ -328,11 +332,10 @@
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 6px;
-      border-radius: 14px;
-      border: 1px solid #e8e7eb;
-      background: #fff;
-      box-shadow: 0 10px 24px rgba(30,16,51,.04);
+      padding: 0;
+      border: 0;
+      background: transparent;
+      box-shadow: none;
     }
 
     .ssa-btn {
@@ -368,8 +371,8 @@
       .ssa-page-wrap { padding: 14px 10px 0; }
       .ssa-stepper { flex-wrap: wrap; row-gap: 10px; }
       .ssa-step-line { display: none; }
-      .ssa-main-title { font-size: 24px; }
-      .ssa-level-title { font-size: 20px; }
+      .ssa-main-title { font-size: 20px; }
+      .ssa-level-title { font-size: 14px; }
       .ssa-level-list { grid-template-columns: 1fr; }
       .ssa-grid-2 { grid-template-columns: 1fr; }
       .ssa-other-row { grid-template-columns: 1fr; }
