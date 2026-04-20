@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <title>Talento - Salary Scale Add Levels</title>
+  <meta name="description" content="Talento HR Platform - Salary scale add levels step" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared-styles.css" />
+  <script src="design-tokens.js"></script>
+
+  <style>
+    #main-scroll { background: #f6f5f7; }
+    .ssal-page-wrap { padding: 18px 18px 0; min-height: calc(100vh - 56px); }
+    .ssal-flow-stack { width: min(100%, 980px); margin: 0 auto; display: grid; gap: 14px; }
+
+    .ssa-page-title {
+      margin: 0;
+      font-size: 20px;
+      line-height: 1.3;
+      font-weight: 500;
+      color: #1e1033;
+    }
+
+    .ssa-stepper {
+      border: 2px solid #ffffff;
+      border-radius: 20px;
+      background: #0E121B05;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      min-width: 0;
+      box-shadow: 0 10px 24px rgba(30,16,51,.04);
+      gap: 0;
+    }
+
+    .ssa-step {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #9a93a8;
+      font-size: 14px;
+      line-height: 1.3;
+      white-space: nowrap;
+      flex-shrink: 0;
+      padding: 6px 10px;
+    }
+
+    .ssa-step-line {
+      flex: 1 1 22px;
+      min-width: 16px;
+      height: 1px;
+      background: #cfc8da;
+      margin: 0 8px;
+    }
+
+    .ssa-step-line.is-complete { background: #c8a8ff; }
+
+    .ssa-step-dot {
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      border: 1px solid #dcd6e6;
+      color: #a19aae;
+      font-size: 10px;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #fff;
+      flex-shrink: 0;
+    }
+
+    .ssa-step.is-completed,
+    .ssa-step.is-active {
+      color: #8b64e4;
+      font-weight: 500;
+      background: transparent;
+    }
+
+    .ssa-step.is-completed .ssa-step-dot {
+      border-color: #8b64e4;
+      color: #fff;
+      background: #ab73ff;
+    }
+
+    .ssa-step.is-active .ssa-step-dot {
+      border-color: #8b64e4;
+      color: #8b64e4;
+      background: #fff;
+    }
+
+    .ssal-main-panel {
+      border: 2px solid #ffffff;
+      border-radius: 20px;
+      background: #0E121B05;
+      padding: 20px;
+      box-shadow: 0 10px 24px rgba(30,16,51,.04);
+    }
+
+    .ssal-main-title {
+      margin: 0;
+      color: #1e1033;
+      font-size: 20px;
+      line-height: 1.3;
+      font-weight: 500;
+    }
+
+    .ssal-main-sub {
+      margin: 4px 0 14px;
+      color: #6f6780;
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .ssal-main-grid {
+      display: grid;
+      grid-template-columns: 210px minmax(0, 1fr);
+      gap: 14px;
+      align-items: start;
+    }
+
+    .ssal-level-list { display: grid; gap: 8px; }
+
+    .ssal-level-item {
+      border: 1px solid transparent;
+      border-radius: 12px;
+      padding: 8px;
+      display: grid;
+      grid-template-columns: 18px 1fr 20px;
+      gap: 8px;
+      align-items: start;
+      background: transparent;
+    }
+
+    .ssal-level-item.is-active {
+      border: 2px solid #ab73ff;
+      background: #fbf8ff;
+    }
+
+    .ssal-level-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 3px;
+      margin-top: 2px;
+    }
+
+    .ssal-level-title {
+      margin: 0;
+      color: #1e1033;
+      font-size: 14px;
+      line-height: 1.3;
+      font-weight: 500;
+    }
+
+    .ssal-level-sub {
+      margin: 2px 0 0;
+      color: #9b93a9;
+      font-size: 14px;
+      line-height: 1.3;
+    }
+
+    .ssal-icon-btn {
+      width: 20px;
+      height: 20px;
+      border: none;
+      background: transparent;
+      color: #9d95ab;
+      font-size: 12px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .ssal-add-level-btn {
+      height: 48px;
+      border: 1px solid #ece9ef;
+      border-radius: 12px;
+      background: #fff;
+      color: #1e1033;
+      font-size: 14px;
+      line-height: 1;
+      font-family: 'Alexandria', Helvetica, sans-serif;
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 14px;
+      cursor: pointer;
+    }
+
+    .ssal-editor-card {
+      border: 1px solid #ece9ef;
+      border-radius: 20px;
+      background: #fff;
+      padding: 16px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .ssal-swatches { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+
+    .ssal-swatch {
+      width: 26px;
+      height: 26px;
+      border: 1px solid #e8e3ed;
+      border-radius: 6px;
+      cursor: pointer;
+      box-shadow: 0 3px 8px rgba(30,16,51,.1);
+    }
+
+    .ssal-swatch.is-active {
+      border: 3px solid #cab0f7;
+      box-shadow: inset 0 0 0 2px #fff;
+    }
+
+    .ssal-field { display: grid; gap: 6px; }
+
+    .ssal-label {
+      margin: 0;
+      color: #1e1033;
+      font-size: 14px;
+      line-height: 1.3;
+      font-weight: 400;
+    }
+
+    .ssal-input {
+      width: 100%;
+      height: 44px;
+      border: 2px solid #dac7fb;
+      border-radius: 10px;
+      background: #fff;
+      padding: 0 12px;
+      color: #1e1033;
+      font-size: 14px;
+      line-height: 1.2;
+      outline: none;
+      font-family: 'Alexandria', Helvetica, sans-serif;
+    }
+
+    .ssal-select {
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .ssal-row-fields {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .ssal-preview-title {
+      margin: 2px 0 6px;
+      color: #1e1033;
+      font-size: 14px;
+      line-height: 1.35;
+      font-weight: 500;
+    }
+
+    .ssal-preview-card {
+      border: 2px solid #ddd3ef;
+      border-radius: 12px;
+      background: #fff;
+      padding: 10px 12px 12px;
+    }
+
+    .ssal-preview-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 10px;
+      color: #7f7790;
+      font-size: 14px;
+      line-height: 1.3;
+      font-weight: 500;
+    }
+
+    .ssal-preview-head p { margin: 0; }
+    .ssal-preview-head p:last-child { color: #8b64e4; }
+
+    .ssal-bars {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0,1fr));
+      align-items: end;
+      gap: 8px;
+      min-height: 124px;
+    }
+
+    .ssal-bar-col { display: grid; gap: 4px; justify-items: center; }
+
+    .ssal-bar {
+      width: 100%;
+      max-width: 96px;
+      border-radius: 8px;
+    }
+
+    .ssal-bar-label {
+      color: #8f88a0;
+      font-size: 14px;
+      line-height: 1.3;
+    }
+
+    .ssa-footer {
+      position: sticky;
+      bottom: 0;
+      width: min(100%, 980px);
+      margin: 0 auto;
+      padding: 10px 0 14px;
+      background: #f6f5f7;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .ssa-footer-step {
+      color: #b1aabf;
+      font-size: 14px;
+      line-height: 1.35;
+    }
+
+    .ssa-footer-actions {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      box-shadow: none;
+    }
+
+    .ssa-btn {
+      height: 40px;
+      border-radius: 10px;
+      border: 1px solid #e8e3ed;
+      background: #fff;
+      color: #6f6780;
+      font-size: 14px;
+      line-height: 1;
+      padding: 0 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+    }
+
+    .ssa-btn.is-primary {
+      background: #1e1033;
+      border-color: #1e1033;
+      color: #fff;
+      box-shadow: 0 8px 18px rgba(53,22,89,.25);
+    }
+
+    .ssa-btn.is-primary i { color: #2cf7b3; }
+
+    @media (max-width: 960px) {
+      .ssal-main-grid { grid-template-columns: 1fr; }
+      .ssal-level-list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .ssal-add-level-btn { grid-column: span 3; }
+    }
+
+    @media (max-width: 760px) {
+      .ssal-page-wrap { padding: 14px 10px 0; }
+      .ssa-stepper { flex-wrap: wrap; row-gap: 10px; }
+      .ssa-step-line { display: none; }
+      .ssal-level-list { grid-template-columns: 1fr; }
+      .ssal-add-level-btn { grid-column: auto; }
+      .ssal-row-fields { grid-template-columns: 1fr; }
+      .ssal-bars { gap: 5px; }
+      .ssal-preview-head { font-size: 13px; }
+      .ssa-footer { flex-direction: column; align-items: stretch; }
+      .ssa-footer-actions { width: 100%; justify-content: flex-end; }
+    }
+  </style>
+</head>
+
+<body>
+<div id="app">
+  <div id="overlay" aria-hidden="true"></div>
+  <aside id="sidebar" aria-label="Main navigation"></aside>
+  <div id="main-col">
+    <header id="navbar" style="display:flex;align-items:center;justify-content:space-between;height:56px;padding:0 16px;background:#fff;border-bottom:1px solid #e8e7eb;flex-shrink:0;min-width:0;"></header>
+    <div id="main-scroll">
+      <div class="ssal-page-wrap">
+        <div class="ssal-flow-stack" id="salary-scale-add-levels-root"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="layout.js"></script>
+<script src="salary_scale_allowances_components.js"></script>
+<script src="salary_scale_add_levels_components.js"></script>
+<script src="salary-scale-add-levels-screen.js"></script>
+</body>
+</html>
