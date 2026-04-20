@@ -155,7 +155,7 @@
     .acdc-setup-copy h2 {
       margin: 0;
       color: #1e1033;
-      font-size: 20px;
+      font-size: 18px;
       line-height: 1.2;
       font-weight: 500;
     }
@@ -223,7 +223,7 @@
     .acdc-step-head h3 {
       margin: 0;
       color: #1e1033;
-      font-size: 20px;
+      font-size: 18px;
       line-height: 1.2;
       font-weight: 500;
     }
@@ -373,9 +373,13 @@
     }
 
     .acd-card.is-bank .acd-balance-value {
-      color: #FFFFFF99;
+      color: #fff;
       font-size: 28px;
       line-height: 1.15;
+    }
+
+    .acd-card.is-bank .acd-balance-currency {
+      color: #FFFFFF99 !important;
     }
 
     .acd-sparkline {
@@ -478,7 +482,7 @@
 
     @media (max-width: 1150px) {
       .acd-grid { grid-template-columns: 1fr 1fr; }
-      .acd-purchase-card { grid-column: auto; }
+      .acd-purchase-card { grid-column: 1 / -1; }
     }
 
     @media (max-width: 860px) {

@@ -68,6 +68,21 @@ const AccountingDashboardScreenComponents = (function() {
     `;
   }
 
+  function renderBalance(card) {
+    const balance = String(card.balance == null ? '' : card.balance);
+    if (!card.currencyColor) {
+      return escapeHtml(balance);
+    }
+
+    const suffix = ' SAR';
+    if (!balance.endsWith(suffix)) {
+      return escapeHtml(balance);
+    }
+
+    const amount = balance.slice(0, -suffix.length);
+    return `${escapeHtml(amount)} <span class="acd-balance-currency" style="color:${escapeHtml(card.currencyColor)}">SAR</span>`;
+  }
+
   function AccountCard(card) {
     const bankClass = card.variant === 'bank' ? ' is-bank' : '';
     return `
@@ -77,7 +92,7 @@ const AccountingDashboardScreenComponents = (function() {
         <p class="acd-card-sub">${escapeHtml(card.subtitle || '')}</p>
         ${card.sparkline ? Sparkline(card.sparkline) : ''}
         <p class="acd-balance-label">${escapeHtml(card.balanceLabel || '')}</p>
-        <p class="acd-balance-value">${escapeHtml(card.balance || '')}</p>
+        <p class="acd-balance-value">${renderBalance(card)}</p>
         ${CardFooter(card)}
       </article>
     `;

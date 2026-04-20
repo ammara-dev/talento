@@ -60,6 +60,7 @@
           subtitle: 'BE15001559627230',
           balanceLabel: 'Available balance',
           balance: '34,226.00 SAR',
+          currencyColor: '#FFFFFF99',
           singleAction: true,
           viewLabel: 'View',
           variant: 'bank'
