@@ -10,7 +10,18 @@
       {
         title: 'GENERAL SETTINGS',
         items: [
-          { label: 'Organization', icon: 'fa-solid fa-building', active: true },
+          {
+            label: 'Organization',
+            icon: 'fa-solid fa-building',
+            active: true,
+            expanded: true,
+            children: [
+              { label: 'Organization details', href: 'settings-organization-details.html' },
+              { label: 'Departments' },
+              { label: 'Branches' },
+              { label: 'Org structure' }
+            ]
+          },
           { label: 'People & HR', icon: 'fa-solid fa-users' },
           { label: 'Payroll & finance', icon: 'fa-solid fa-coins' },
           { label: 'Communication', icon: 'fa-solid fa-comment-dots' },
@@ -36,7 +47,8 @@
             icon: 'fa-solid fa-building',
             title: 'Organization',
             description: 'Manage company structure, branches, and operational settings',
-            items: ['Company profile', 'Branches & legal entities', 'Departments', 'Working calendar']
+            items: ['Company profile', 'Branches & legal entities', 'Departments', 'Working calendar'],
+            actionHref: 'settings-organization-details.html'
           },
           {
             icon: 'fa-solid fa-users',

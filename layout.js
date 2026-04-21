@@ -24,6 +24,7 @@
     'requests.html': { navItem: 'requests', submenu: null },
     'request2.html': { navItem: 'requests', submenu: null },
     'settings-overview.html': { navItem: 'settings', submenu: null },
+    'settings-organization-details.html': { navItem: 'settings', submenu: null },
     'create-new-request.html': { navItem: 'requests', submenu: null },
     'leave.html': { navItem: 'attendance-leave', submenu: 'leave' },
     'business-missions-trip.html': { navItem: 'business-missions', submenu: 'missions-trip' },
@@ -506,7 +507,8 @@
     const settingsNavBtn = document.getElementById('settings-nav-btn');
 
     let isOpen = false;
-    let isCollapsed = currentPage === 'settings-overview.html';
+    const isSettingsPage = currentPage.indexOf('settings-') === 0;
+    let isCollapsed = isSettingsPage;
 
     function applyCollapseState() {
       const desktop = window.innerWidth >= 1024;
@@ -571,7 +573,7 @@
 
     if (settingsNavBtn) {
       settingsNavBtn.addEventListener('click', function() {
-        if (currentPage !== 'settings-overview.html') {
+        if (!isSettingsPage) {
           window.location.href = 'settings-overview.html';
           return;
         }

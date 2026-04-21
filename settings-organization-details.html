@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
-  <title>Talento - Settings Overview</title>
-  <meta name="description" content="Talento HR Platform - Settings overview screen" />
+  <title>Talento - Organization settings</title>
+  <meta name="description" content="Talento HR Platform - Organization settings details screen" />
   <link rel="icon" type="image/png" href="/favicon.png" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -144,172 +144,249 @@
       min-width: 0;
       padding: 20px;
     }
-    .set-main-inner {
+    .org-main-inner {
+      max-width: 920px;
       display: grid;
-      gap: 48px;
-      min-width: 0;
+      gap: 16px;
     }
-    .set-main-header h1 {
-      margin: 0 0 4px;
-      color: #1e1033;
-      font-size: 32px;
-      line-height: 1.3;
-      font-weight: 500;
-    }
-    .set-main-header p {
-      margin: 0;
-      color: #4b405c;
-      font-size: 18px;
-      line-height: 1.45;
-    }
-
-    .set-main-section { display: grid; gap: 12px; }
-    .set-section-title-row {
-      display: flex;
-      align-items: flex-start;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-bottom: 2px;
-    }
-    .set-section-intro h2 {
-      margin: 0;
-      color: #1e1033;
-      font-size: 24px;
-      line-height: 1.3;
-      font-weight: 500;
-    }
-    .set-section-badge {
-      display: inline-flex;
-      align-items: center;
-      height: 32px;
-      padding: 0 14px;
-      border-radius: 100px;
-      border: none;
-      background: #e8e7eb;
-      color: #4b405c;
-      font-size: 14px;
-      font-weight: 500;
-      line-height: 1;
-      max-width: 100%;
-    }
-    .set-section-intro p {
+    .org-breadcrumb {
       margin: 0;
       color: #787085;
       font-size: 14px;
-      line-height: 1.45;
+      line-height: 1.4;
     }
-
-    .set-card-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(220px, 1fr));
-      gap: 20px;
+    .org-page-intro {
+      display: flex;
+      align-items: center;
+      gap: 14px;
     }
-    .set-card {
-      background: #fff;
-      border: 2px solid #e7d9ff;
-      border-radius: 18px;
-      padding: 12px;
-      display: grid;
-      gap: 0;
-      min-width: 0;
-    }
-    .set-card-top {
-      display: grid;
-      grid-template-columns: 48px 1fr;
-      gap: 10px;
-      align-items: start;
-      background: #f7f2ff;
-      border-radius: 12px;
-      padding: 10px;
-      margin-bottom: 12px;
-    }
-    .set-card-icon {
+    .org-page-icon {
       width: 48px;
       height: 48px;
       border-radius: 14px;
       background: linear-gradient(160deg, #d7b6ff 0%, #ac7ef3 100%);
-      display: flex;
-      align-items: flex-start;
-      justify-content: flex-start;
-      padding: 12px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       color: #fff;
       font-size: 22px;
+      flex-shrink: 0;
     }
-    .set-card h3 {
+    .org-page-title {
       margin: 0;
       color: #1e1033;
-      font-size: 18px;
-      line-height: 1.2;
+      font-size: 20px;
+      line-height: 1.3;
       font-weight: 500;
     }
-    .set-card-top p {
+    .org-page-subtitle {
       margin: 2px 0 0;
       color: #787085;
       font-size: 14px;
       line-height: 1.4;
     }
-    .set-card-list {
-      background: #fff;
-      border-radius: 12px;
-      padding: 8px 10px;
+
+    .org-cards-wrap {
       display: grid;
-      gap: 8px;
-      margin: 0;
-      list-style: none;
+      gap: 16px;
     }
-    .set-card-list li {
+    .org-card {
+      background: #fff;
+      border: 1px solid #e8e7eb;
+      border-radius: 20px;
+      padding: 18px 20px;
+      display: grid;
+      gap: 14px;
+    }
+    .org-card-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .org-card-head h2 {
       margin: 0;
       color: #1e1033;
+      font-size: 20px;
+      line-height: 1.3;
+      font-weight: 500;
+    }
+    .org-card-desc,
+    .org-card-subtitle {
+      margin: 2px 0 0;
+      color: #787085;
       font-size: 14px;
-      line-height: 1.35;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
+      line-height: 1.4;
+      font-weight: 400;
     }
-    .set-card-list li::before {
-      content: '•';
-      color: #8e88a0;
-      line-height: 1;
-    }
-    .set-card-action {
-      min-height: 42px;
+    .org-card-action-btn {
+      min-height: 34px;
+      padding: 0 14px;
       border-radius: 12px;
       border: 1px solid #e8e7eb;
       background: #fff;
-      color: #1e1033;
+      color: #4b405c;
+      font-size: 14px;
+      line-height: 1;
       display: inline-flex;
       align-items: center;
-      justify-content: center;
-      gap: 10px;
+      gap: 8px;
+      white-space: nowrap;
+      font-family: 'Alexandria', Helvetica, sans-serif;
+    }
+    .org-info-rows {
+      border-top: 1px solid #f0eef6;
+    }
+    .org-info-row {
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      border-bottom: 1px solid #f0eef6;
+      color: #787085;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+    .org-info-row:last-child { border-bottom: none; }
+    .org-info-row strong {
+      color: #1e1033;
       font-size: 14px;
       font-weight: 500;
+      text-align: right;
+    }
+
+    .org-invite-panel {
+      border: 1px solid #ece9ef;
+      border-radius: 14px;
+      padding: 12px;
+      display: grid;
+      gap: 10px;
+      background: #fff;
+    }
+    .org-invite-title,
+    .org-pending-label {
+      margin: 0;
+      color: #1e1033;
+      font-size: 14px;
+      line-height: 1.4;
+      font-weight: 500;
+    }
+    .org-pending-label { color: #787085; font-weight: 400; }
+    .org-invite-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .org-invite-input {
+      flex: 1 1 260px;
+      min-height: 40px;
+      border: 1px solid #e8e7eb;
+      border-radius: 12px;
+      padding: 0 12px;
+      font-size: 14px;
+      color: #4b405c;
       font-family: 'Alexandria', Helvetica, sans-serif;
-      margin-top: 32px;
-      text-decoration: none;
+      background: #fff;
+      min-width: 0;
+    }
+    .org-invite-send-btn {
+      min-height: 40px;
+      padding: 0 16px;
+      border: 1px solid #e8e7eb;
+      border-radius: 12px;
+      background: #f6f5f7;
+      color: #787085;
+      font-size: 14px;
+      font-family: 'Alexandria', Helvetica, sans-serif;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .org-pending-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .org-chip {
+      min-height: 24px;
+      padding: 0 10px;
+      border-radius: 100px;
+      background: #f0eef3;
+      color: #4b405c;
+      font-size: 14px;
+      display: inline-flex;
+      align-items: center;
     }
 
-    .set-card-muted {
-      background: #f4f2f5;
-      border-color: #d1ced9;
+    .org-options-wrap {
+      display: grid;
+      gap: 8px;
     }
-    .set-card-muted .set-card-top {
-      background: #f4f2f5;
+    .org-option-row {
+      border: 1px solid #ece9ef;
+      border-radius: 12px;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      background: #fff;
     }
-    .set-card-muted .set-card-icon {
-      background: #d1ced9;
-      color: #e8e7eb;
+    .org-option-title {
+      margin: 0;
+      color: #1e1033;
+      font-size: 14px;
+      line-height: 1.4;
+      font-weight: 500;
     }
-    .set-card-muted .set-card-list,
-    .set-card-muted .set-card-action {
-      background: #f4f2f5;
-      border-color: #d1ced9;
+    .org-option-desc {
+      margin: 2px 0 0;
+      color: #787085;
+      font-size: 14px;
+      line-height: 1.4;
+      font-weight: 400;
+    }
+    .org-toggle-switch {
+      width: 32px;
+      height: 20px;
+      border-radius: 100px;
+      border: none;
+      background: #d7d1e3;
+      padding: 2px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: flex-start;
+      flex-shrink: 0;
+    }
+    .org-toggle-switch span {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #fff;
+      display: block;
+      transition: transform 150ms ease;
+    }
+    .org-toggle-switch.is-on {
+      background: #1e1033;
+      justify-content: flex-end;
+    }
+    .org-select-btn {
+      min-height: 34px;
+      padding: 0 12px;
+      border-radius: 10px;
+      border: 1px solid #e8e7eb;
+      background: #f6f5f7;
+      color: #4b405c;
+      font-size: 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+      font-family: 'Alexandria', Helvetica, sans-serif;
     }
 
-    @media (max-width: 1260px) {
-      .set-card-grid {
-        grid-template-columns: repeat(2, minmax(220px, 1fr));
-      }
-    }
     @media (max-width: 1024px) {
       .set-shell {
         grid-template-columns: 1fr;
@@ -325,23 +402,32 @@
         overflow: visible;
         border-bottom: 1px solid #e8e7eb;
       }
+      .org-main-inner { max-width: 100%; }
     }
     @media (max-width: 820px) {
-      .set-section-title-row {
-        gap: 8px;
-      }
-      .set-section-badge {
-        height: 30px;
-        padding: 0 12px;
-      }
-      .set-card-grid {
-        grid-template-columns: 1fr;
-      }
       #settings-main-root {
         padding: 14px 12px;
       }
       .set-side-wrap {
         padding: 14px 12px;
+      }
+      .org-page-intro {
+        align-items: flex-start;
+      }
+      .org-card {
+        padding: 14px;
+      }
+      .org-card-head {
+        flex-wrap: wrap;
+      }
+      .org-info-row {
+        min-height: 0;
+        padding: 10px 0;
+        align-items: flex-start;
+        flex-direction: column;
+      }
+      .org-info-row strong {
+        text-align: left;
       }
     }
   </style>
@@ -355,7 +441,7 @@
     <div id="main-scroll">
       <div class="set-shell">
         <aside id="settings-side-panel" aria-label="Settings navigation"></aside>
-        <main id="settings-main-root" aria-label="Settings overview content"></main>
+        <main id="settings-main-root" aria-label="Organization settings content"></main>
       </div>
     </div>
   </div>
@@ -365,7 +451,7 @@
 <script src="leave_components.js"></script>
 <script src="settings_overview_components.js"></script>
 <script src="settings_sidebar_shell.js"></script>
-<script src="settings_overview_screen.js"></script>
+<script src="settings_organization_details_components.js"></script>
+<script src="settings_organization_details_screen.js"></script>
 </body>
 </html>
-

@@ -14,15 +14,39 @@ const SettingsOverviewComponents = (function() {
       .replace(/'/g, '&#39;');
   }
 
+  function SidebarChildItem(item) {
+    if (!item.href) {
+      return `<span class="set-side-child${item.active ? ' is-active' : ''}">${escapeHtml(item.label || '')}</span>`;
+    }
+    return `<a class="set-side-child${item.active ? ' is-active' : ''}" href="${escapeHtml(item.href)}">${escapeHtml(item.label || '')}</a>`;
+  }
+
   function SidebarItem(item) {
+    const children = Array.isArray(item.children) ? item.children : [];
+    const hasChildren = children.length > 0;
+    const itemContent = `
+      <span class="set-side-item-main">
+        <i class="${escapeHtml(item.icon || 'fa-solid fa-circle')}" aria-hidden="true"></i>
+        <span>${escapeHtml(item.label || '')}</span>
+      </span>
+      <i class="fa-solid fa-chevron-down${hasChildren && item.expanded ? ' is-open' : ''}" aria-hidden="true"></i>
+    `;
+
+    const itemMarkup = item.href
+      ? `<a class="set-side-item${item.active ? ' is-active' : ''}" href="${escapeHtml(item.href)}">${itemContent}</a>`
+      : `<button type="button" class="set-side-item${item.active ? ' is-active' : ''}">${itemContent}</button>`;
+
+    if (!hasChildren) {
+      return itemMarkup;
+    }
+
     return `
-      <button type="button" class="set-side-item${item.active ? ' is-active' : ''}">
-        <span class="set-side-item-main">
-          <i class="${escapeHtml(item.icon || 'fa-solid fa-circle')}" aria-hidden="true"></i>
-          <span>${escapeHtml(item.label || '')}</span>
-        </span>
-        <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
-      </button>
+      <div class="set-side-item-block">
+        ${itemMarkup}
+        <div class="set-side-children${item.expanded ? ' is-open' : ''}">
+          ${children.map(SidebarChildItem).join('')}
+        </div>
+      </div>
     `;
   }
 
@@ -69,6 +93,11 @@ const SettingsOverviewComponents = (function() {
 
   function SettingsCard(card, variantClass) {
     const items = Array.isArray(card.items) ? card.items : [];
+    const actionText = escapeHtml(card.actionText || 'Manage settings');
+    const actionIcon = '<i class="fa-solid fa-arrow-right" aria-hidden="true"></i>';
+    const actionMarkup = card.actionHref
+      ? `<a class="set-card-action" href="${escapeHtml(card.actionHref)}">${actionText}${actionIcon}</a>`
+      : `<button type="button" class="set-card-action">${actionText}${actionIcon}</button>`;
     return `
       <article class="set-card${variantClass ? ` ${variantClass}` : ''}">
         <div class="set-card-top">
@@ -81,10 +110,7 @@ const SettingsOverviewComponents = (function() {
         <ul class="set-card-list">
           ${items.map(function(item) { return `<li>${escapeHtml(item)}</li>`; }).join('')}
         </ul>
-        <button type="button" class="set-card-action">
-          Manage settings
-          <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
-        </button>
+        ${actionMarkup}
       </article>
     `;
   }
