@@ -581,6 +581,7 @@
           isCollapsed = !isCollapsed;
           applyCollapseState();
         } else {
+          if (isOpen) closeMobile();
           window.dispatchEvent(new CustomEvent('settings-panel-toggle'));
         }
       });

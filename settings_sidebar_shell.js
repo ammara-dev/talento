@@ -30,9 +30,10 @@ const SettingsSidebarShell = (function() {
     const shell = secondary ? secondary.closest('.set-shell') : null;
     if (!primary || !secondary) return;
     const isDesktop = window.innerWidth >= 1024;
+    const isPrimaryMobileDrawerOpen = primary.classList.contains('open');
     const shouldHideSettingsPanel = isDesktop
       ? !primary.classList.contains('collapsed')
-      : !isMobilePanelOpen;
+      : (isPrimaryMobileDrawerOpen || !isMobilePanelOpen);
     secondary.classList.toggle('is-primary-collapsed', shouldHideSettingsPanel);
     if (shell) shell.classList.toggle('is-settings-panel-hidden', shouldHideSettingsPanel);
   }
