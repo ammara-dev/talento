@@ -8,8 +8,8 @@
   const requestsData = {
     team: [
       {
-        employeeName: 'Fahad AlShahrani',
-        employeeRole: 'Marketing lead',
+        employeeName: 'Sun 11 February 2024',
+        employeeRole: '',
         avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
         statusKey: 'pending',
         statusLabel: 'In review',
@@ -21,8 +21,8 @@
         approverAvatar: 'https://randomuser.me/api/portraits/women/44.jpg'
       },
       {
-        employeeName: 'Khalid AlAnazi',
-        employeeRole: 'People & culture lead',
+        employeeName: 'Sun 11 February 2024',
+        employeeRole: '',
         avatar: 'https://randomuser.me/api/portraits/men/45.jpg',
         statusKey: 'pending',
         statusLabel: 'In review',
@@ -34,8 +34,8 @@
         approverAvatar: 'https://randomuser.me/api/portraits/men/63.jpg'
       },
       {
-        employeeName: 'Fahad AlShahrani',
-        employeeRole: 'Marketing lead',
+        employeeName: 'Sun 11 February 2024',
+        employeeRole: '',
         avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
         statusKey: 'approved',
         statusLabel: 'Approved',
@@ -47,8 +47,8 @@
         approverAvatar: 'https://randomuser.me/api/portraits/women/44.jpg'
       },
       {
-        employeeName: 'Fahad AlShahrani',
-        employeeRole: 'Marketing lead',
+        employeeName: 'Sun 11 February 2024',
+        employeeRole: '',
         avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
         statusKey: 'rejected',
         statusLabel: 'Rejected',
@@ -117,7 +117,7 @@
   };
 
   const requestsState = {
-    scope: 'mine',
+    scope: 'team',
     status: 'all',
     query: ''
   };
@@ -141,7 +141,7 @@
 
   function getScopeOptions() {
     return [
-      { value: 'team', label: 'Team requests', count: countPending(requestsData.team) },
+      { value: 'team', label: 'Team requests' },
       { value: 'mine', label: 'My requests', count: countPending(requestsData.mine) }
     ];
   }
@@ -153,10 +153,7 @@
         value: 'pending',
         label: 'Pending',
         icon: 'pending',
-        count: rows.filter(function(row) {
-          return normalizeStatus(row.statusKey) === 'pending';
-        }).length,
-        showCount: true
+        showCount: false
       },
       { value: 'approved', label: 'Approved', icon: 'approved' },
       { value: 'rejected', label: 'Rejected', icon: 'rejected' },
@@ -205,6 +202,7 @@
     });
 
     bindRequestsScreenEvents();
+    applyRequest2LayoutTweaks();
 
     if (shouldFocusSearch) {
       const searchInput = root.querySelector('.requests-search input');
@@ -239,6 +237,13 @@
         requestsState.query = event.target.value;
         renderRequestsScreen(true);
       });
+    }
+  }
+
+  function applyRequest2LayoutTweaks() {
+    const requestedOnHeader = document.querySelector('.requests-table thead th:first-child .requests-header-label span');
+    if (requestedOnHeader) {
+      requestedOnHeader.textContent = 'Requested on';
     }
   }
 })();

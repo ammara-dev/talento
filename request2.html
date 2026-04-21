@@ -183,7 +183,9 @@
       display: flex;
       align-items: center;
       gap: 4px;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      white-space: nowrap;
     }
 
     .requests-status-tab {
@@ -263,13 +265,15 @@
       color: #676078 !important;
     }
 
-    .requests-table .badge-approved {
-      background: #dcf7e6 !important;
+    .requests-table .badge-approved,
+    .requests-table .badge-plain-approved {
+      background: #d7ffe7 !important;
       color: #1a9a54 !important;
     }
 
-    .requests-table .badge-rejected {
-      background: #fde2e6 !important;
+    .requests-table .badge-rejected,
+    .requests-table .badge-plain-rejected {
+      background: #ffeaec !important;
       color: #d73a49 !important;
     }
 
@@ -314,6 +318,17 @@
 
     .requests-employee-cell {
       min-width: 260px;
+    }
+
+    .requests-table .requests-avatar,
+    .requests-table .requests-avatar-fallback,
+    .requests-table .requests-person-role {
+      display: none !important;
+    }
+
+    .requests-table .requests-employee-cell {
+      gap: 8px;
+      min-width: 0;
     }
 
     .requests-person-meta {
