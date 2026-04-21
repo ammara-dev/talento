@@ -117,7 +117,8 @@
                 badge: section.badge
               })}
               ${SettingsOverviewComponents.SettingsGrid({
-                cards: section.cards
+                cards: section.cards,
+                variant: section.badge ? 'advanced-muted' : ''
               })}
             </section>
           `;

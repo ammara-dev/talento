@@ -67,10 +67,10 @@ const SettingsOverviewComponents = (function() {
     `;
   }
 
-  function SettingsCard(card) {
+  function SettingsCard(card, variantClass) {
     const items = Array.isArray(card.items) ? card.items : [];
     return `
-      <article class="set-card">
+      <article class="set-card${variantClass ? ` ${variantClass}` : ''}">
         <div class="set-card-top">
           <div class="set-card-icon"><i class="${escapeHtml(card.icon || 'fa-solid fa-gear')}" aria-hidden="true"></i></div>
           <div>
@@ -91,7 +91,8 @@ const SettingsOverviewComponents = (function() {
 
   function SettingsGrid(config) {
     const cards = Array.isArray(config.cards) ? config.cards : [];
-    return `<div class="set-card-grid">${cards.map(SettingsCard).join('')}</div>`;
+    const variantClass = config.variant === 'advanced-muted' ? 'set-card-muted' : '';
+    return `<div class="set-card-grid">${cards.map(function(card) { return SettingsCard(card, variantClass); }).join('')}</div>`;
   }
 
   return {
