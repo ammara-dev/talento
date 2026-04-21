@@ -18,7 +18,7 @@
             expanded: true,
             children: [
               { label: 'Organization details', href: 'settings-organization-details.html', active: true },
-              { label: 'Departments' },
+              { label: 'Departments', href: 'settings-departments.html' },
               { label: 'Branches' },
               { label: 'Org structure' }
             ]
@@ -90,6 +90,7 @@
         description: 'Configure your organizational department structure',
         actionText: 'Manage',
         actionIcon: 'fa-solid fa-wrench',
+        actionHref: 'settings-departments.html',
         options: [
           {
             title: 'Hierarchical Departments',
@@ -150,6 +151,7 @@
               subTitle: card.subTitle,
               actionText: card.actionText,
               actionIcon: card.actionIcon,
+              actionHref: card.actionHref,
               type: card.configType,
               inviteConfig: card.inviteConfig,
               options: card.options

@@ -18,7 +18,7 @@
             expanded: true,
             children: [
               { label: 'Organization details', href: 'settings-organization-details.html' },
-              { label: 'Departments' },
+              { label: 'Departments', href: 'settings-departments.html' },
               { label: 'Branches' },
               { label: 'Org structure' }
             ]

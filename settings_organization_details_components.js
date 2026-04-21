@@ -32,12 +32,11 @@ const SettingsOrganizationDetailsComponents = (function() {
   }
 
   function ActionButton(config) {
-    return `
-      <button type="button" class="org-card-action-btn">
-        ${escapeHtml(config.label || 'Edit')}
-        <i class="${escapeHtml(config.icon || 'fa-solid fa-pen')}" aria-hidden="true"></i>
-      </button>
-    `;
+    const content = `${escapeHtml(config.label || 'Edit')}<i class="${escapeHtml(config.icon || 'fa-solid fa-pen')}" aria-hidden="true"></i>`;
+    if (config.href) {
+      return `<a class="org-card-action-btn" href="${escapeHtml(config.href)}">${content}</a>`;
+    }
+    return `<button type="button" class="org-card-action-btn">${content}</button>`;
   }
 
   function InfoRowsCard(config) {
@@ -46,7 +45,7 @@ const SettingsOrganizationDetailsComponents = (function() {
       <section class="org-card">
         <div class="org-card-head">
           <h2>${escapeHtml(config.title || '')}</h2>
-          ${ActionButton({ label: config.actionText || 'Edit', icon: config.actionIcon || 'fa-solid fa-pen' })}
+          ${ActionButton({ label: config.actionText || 'Edit', icon: config.actionIcon || 'fa-solid fa-pen', href: config.actionHref })}
         </div>
         <div class="org-info-rows">
           ${rows.map(function(row) {
@@ -110,10 +109,80 @@ const SettingsOrganizationDetailsComponents = (function() {
             <h2>${escapeHtml(config.title || '')}</h2>
             ${config.description ? `<p class="org-card-desc">${escapeHtml(config.description)}</p>` : ''}
           </div>
-          ${ActionButton({ label: config.actionText || 'Manage', icon: config.actionIcon || 'fa-solid fa-wrench' })}
+          ${ActionButton({ label: config.actionText || 'Manage', icon: config.actionIcon || 'fa-solid fa-wrench', href: config.actionHref })}
         </div>
         ${config.subTitle ? `<p class="org-card-subtitle">${escapeHtml(config.subTitle)}</p>` : ''}
         ${bodyContent}
+      </section>
+    `;
+  }
+
+  function DepartmentFilterButton(config) {
+    return `
+      <button type="button" class="dept-filter-btn">
+        ${escapeHtml(config.label || '')}
+        <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+      </button>
+    `;
+  }
+
+  function DepartmentRow(row) {
+    const avatar = row.avatar || 'https://randomuser.me/api/portraits/men/32.jpg';
+    return `
+      <tr>
+        <td><input type="checkbox" class="dept-checkbox" /></td>
+        <td>${escapeHtml(row.name || '')}</td>
+        <td><span class="dept-status-badge">${escapeHtml(row.status || 'Active')}</span></td>
+        <td>${escapeHtml(row.parentDepartment || '')}</td>
+        <td><span class="dept-employees"><i class="fa-solid fa-earth-americas" aria-hidden="true"></i>${escapeHtml(row.employeeCount || '')}</span></td>
+        <td>
+          <div class="dept-head-wrap">
+            <img src="${escapeHtml(avatar)}" alt="${escapeHtml(row.head || 'Department head')}" />
+            <span>${escapeHtml(row.head || '')}</span>
+          </div>
+        </td>
+        <td>
+          <div class="dept-actions-wrap">
+            <button type="button" class="dept-edit-btn">Edit <i class="fa-solid fa-pen" aria-hidden="true"></i></button>
+            <button type="button" class="dept-more-btn" aria-label="More actions"><i class="fa-solid fa-ellipsis-vertical" aria-hidden="true"></i></button>
+          </div>
+        </td>
+      </tr>
+    `;
+  }
+
+  function DepartmentsTableCard(config) {
+    const rows = Array.isArray(config.rows) ? config.rows : [];
+    return `
+      <section class="dept-card">
+        <div class="dept-toolbar">
+          <div class="dept-search-wrap">
+            <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+            <input type="text" placeholder="${escapeHtml(config.searchPlaceholder || 'Search')}" />
+          </div>
+          <div class="dept-filters-wrap">
+            ${DepartmentFilterButton({ label: config.filterLabel || 'Department All' })}
+            ${DepartmentFilterButton({ label: config.sortLabel || 'Sort by All types' })}
+          </div>
+        </div>
+        <div class="dept-table-wrap">
+          <table class="dept-table">
+            <thead>
+              <tr>
+                <th><input type="checkbox" class="dept-checkbox" /></th>
+                <th>Department name</th>
+                <th>Status</th>
+                <th>Parent department</th>
+                <th>Employees</th>
+                <th>Head of department</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${rows.map(DepartmentRow).join('')}
+            </tbody>
+          </table>
+        </div>
       </section>
     `;
   }
@@ -122,7 +191,8 @@ const SettingsOrganizationDetailsComponents = (function() {
     Breadcrumb,
     PageIntro,
     InfoRowsCard,
-    ConfigCard
+    ConfigCard,
+    DepartmentsTableCard
   };
 })();
 

@@ -25,6 +25,7 @@
     'request2.html': { navItem: 'requests', submenu: null },
     'settings-overview.html': { navItem: 'settings', submenu: null },
     'settings-organization-details.html': { navItem: 'settings', submenu: null },
+    'settings-departments.html': { navItem: 'settings', submenu: null },
     'create-new-request.html': { navItem: 'requests', submenu: null },
     'leave.html': { navItem: 'attendance-leave', submenu: 'leave' },
     'business-missions-trip.html': { navItem: 'business-missions', submenu: 'missions-trip' },

@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <title>Talento - Departments settings</title>
+  <meta name="description" content="Talento HR Platform - Departments settings screen" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared-styles.css" />
+  <script src="design-tokens.js"></script>
+  <style>
+    #main-scroll { background: #f6f5f7; }
+
+    .set-shell {
+      display: grid;
+      grid-template-columns: 272px 1fr;
+      min-height: calc(100vh - 56px);
+      background: #f6f5f7;
+      transition: grid-template-columns 300ms ease;
+    }
+    .set-shell.is-settings-panel-hidden { grid-template-columns: 1fr; }
+    .set-shell.is-settings-panel-hidden #settings-side-panel { display: none; }
+
+    #settings-side-panel {
+      border-right: 1px solid #e8e7eb;
+      background: #f6f5f7;
+      min-width: 0;
+      transition: width 300ms ease, opacity 300ms ease;
+    }
+    #settings-side-panel.is-primary-collapsed {
+      width: 0;
+      min-width: 0;
+      opacity: 0;
+      overflow: hidden;
+      border-right: none;
+    }
+
+    .set-side-wrap { height: 100%; display: flex; flex-direction: column; gap: 14px; padding: 16px 14px; min-width: 0; }
+    .set-side-head h2 { margin: 0 0 10px; color: #1e1033; font-size: 20px; line-height: 1.3; font-weight: 500; }
+    .set-side-search-fallback { width: 100%; height: 36px; border-radius: 999px; border: 1px solid #e2dde9; padding: 0 12px; font-size: 14px; color: #4b405c; font-family: 'Alexandria', Helvetica, sans-serif; background: #fff; }
+    .set-side-head .search-input-wrap { height: 36px !important; border-radius: 999px !important; background: #fff !important; border: 1px solid #e2dde9 !important; }
+    .set-side-scroll { display: grid; gap: 18px; overflow-y: auto; padding-right: 2px; }
+    .set-side-group-title { margin: 0 0 10px; color: #787085; font-size: 12px; font-weight: 500; line-height: 1.2; }
+    .set-side-group-list { display: grid; gap: 4px; }
+    .set-side-item-block { display: grid; gap: 2px; }
+    .set-side-item { width: 100%; min-height: 38px; border-radius: 8px; display: flex; align-items: center; justify-content: space-between; padding: 0 10px; color: #1e1033; font-size: 14px; background: transparent; border: none; font-family: 'Alexandria', Helvetica, sans-serif; text-decoration: none; }
+    .set-side-item-main { display: inline-flex; align-items: center; gap: 10px; white-space: nowrap; }
+    .set-side-item i { color: #4b405c; }
+    .set-side-item .fa-chevron-down { transition: transform 150ms ease; transform: rotate(0deg); }
+    .set-side-item .fa-chevron-down.is-open { transform: rotate(180deg); }
+    .set-side-item.is-active { background: #ece9f2; }
+    .set-side-item:hover:not(.is-active) { background: rgba(236, 233, 239, 0.55); }
+    .set-side-children { display: none; margin-left: 12px; padding-left: 12px; border-left: 1px solid #e8e7eb; gap: 2px; }
+    .set-side-children.is-open { display: grid; }
+    .set-side-child { min-height: 34px; border-radius: 8px; display: inline-flex; align-items: center; padding: 0 10px; background: transparent; color: #4b405c; font-size: 14px; text-decoration: none; }
+    .set-side-child.is-active { background: #ece9f2; color: #1e1033; font-weight: 500; }
+    .set-side-child:hover:not(.is-active) { background: rgba(236, 233, 239, 0.55); }
+
+    #settings-main-root { min-width: 0; padding: 20px; }
+    .org-main-inner { max-width: 920px; display: grid; gap: 16px; }
+    .org-breadcrumb { margin: 0; color: #787085; font-size: 14px; line-height: 1.4; }
+    .org-page-intro { display: flex; align-items: center; gap: 14px; }
+    .org-page-icon { width: 48px; height: 48px; border-radius: 14px; background: linear-gradient(160deg, #d7b6ff 0%, #ac7ef3 100%); display: inline-flex; align-items: center; justify-content: center; color: #fff; font-size: 22px; flex-shrink: 0; }
+    .org-page-title { margin: 0; color: #1e1033; font-size: 20px; line-height: 1.3; font-weight: 500; }
+    .org-page-subtitle { margin: 2px 0 0; color: #787085; font-size: 14px; line-height: 1.4; }
+    .dept-card {
+      background: #fff;
+      border: 1px solid #e8e7eb;
+      border-radius: 20px;
+      padding: 16px;
+      display: grid;
+      gap: 12px;
+    }
+    .dept-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .dept-search-wrap {
+      flex: 1 1 360px;
+      max-width: 430px;
+      min-height: 34px;
+      border: 1px solid #e8e7eb;
+      border-radius: 999px;
+      background: #f6f5f7;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 12px;
+    }
+    .dept-search-wrap i { color: #8a8396; font-size: 14px; }
+    .dept-search-wrap input {
+      border: none;
+      background: transparent;
+      width: 100%;
+      font-size: 14px;
+      color: #4b405c;
+      font-family: 'Alexandria', Helvetica, sans-serif;
+      min-width: 0;
+    }
+    .dept-filters-wrap {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .dept-filter-btn {
+      min-height: 34px;
+      border-radius: 999px;
+      border: 1px solid #e8e7eb;
+      background: #f6f5f7;
+      color: #4b405c;
+      font-size: 14px;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 12px;
+      font-family: 'Alexandria', Helvetica, sans-serif;
+      white-space: nowrap;
+    }
+    .dept-table-wrap { overflow-x: auto; }
+    .dept-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      min-width: 860px;
+      border: 1px solid #ece9ef;
+      border-radius: 14px;
+      overflow: hidden;
+      background: #fff;
+    }
+    .dept-table thead th {
+      background: #f6f5f7;
+      color: #787085;
+      font-size: 14px;
+      font-weight: 400;
+      text-align: left;
+      padding: 10px 12px;
+      border-bottom: 1px solid #ece9ef;
+      white-space: nowrap;
+    }
+    .dept-table tbody td {
+      font-size: 14px;
+      color: #1e1033;
+      padding: 12px;
+      border-bottom: 1px solid #f0eef6;
+      vertical-align: middle;
+      white-space: nowrap;
+    }
+    .dept-table tbody tr:last-child td { border-bottom: none; }
+    .dept-checkbox {
+      width: 16px;
+      height: 16px;
+      border-radius: 4px;
+      border: 1px solid #d9d4e2;
+      accent-color: #7c3aed;
+    }
+    .dept-status-badge {
+      height: 24px;
+      border-radius: 999px;
+      background: #d7ffe7;
+      color: #15803d;
+      font-size: 14px;
+      display: inline-flex;
+      align-items: center;
+      padding: 0 10px;
+      line-height: 1;
+    }
+    .dept-employees {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: #4b405c;
+      font-size: 14px;
+    }
+    .dept-head-wrap {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .dept-head-wrap img {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1px solid #ece9ef;
+    }
+    .dept-actions-wrap {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .dept-edit-btn {
+      min-height: 34px;
+      border-radius: 10px;
+      border: 1px solid #e8e7eb;
+      background: #fff;
+      color: #4b405c;
+      font-size: 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 12px;
+      font-family: 'Alexandria', Helvetica, sans-serif;
+    }
+    .dept-more-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      border: 1px solid #e8e7eb;
+      background: #fff;
+      color: #4b405c;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+    }
+
+    @media (max-width: 1024px) {
+      .set-shell { grid-template-columns: 1fr; }
+      #settings-side-panel { position: fixed; top: 56px; left: 0; bottom: 0; width: 272px; border-right: 1px solid #e8e7eb; border-bottom: none; z-index: 35; overflow-y: auto; transform: translateX(0); opacity: 1; transition: transform 250ms ease, opacity 250ms ease; box-shadow: 6px 0 16px rgba(30, 16, 51, 0.08); }
+      .set-shell.is-settings-panel-hidden #settings-side-panel { display: block; transform: translateX(-100%); opacity: 0; pointer-events: none; }
+      .org-main-inner { max-width: 100%; }
+    }
+    @media (max-width: 820px) {
+      #settings-main-root { padding: 14px 12px; }
+      .set-side-wrap { padding: 14px 12px; }
+      .org-page-intro { align-items: flex-start; }
+      .dept-search-wrap { max-width: 100%; flex-basis: 100%; }
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+  <div id="overlay" aria-hidden="true"></div>
+  <aside id="sidebar" aria-label="Main navigation"></aside>
+  <div id="main-col">
+    <header id="navbar" style="display:flex;align-items:center;justify-content:space-between;height:56px;padding:0 16px;background:#fff;border-bottom:1px solid #e8e7eb;flex-shrink:0;min-width:0;"></header>
+    <div id="main-scroll">
+      <div class="set-shell">
+        <aside id="settings-side-panel" aria-label="Settings navigation"></aside>
+        <main id="settings-main-root" aria-label="Departments settings content"></main>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="layout.js"></script>
+<script src="leave_components.js"></script>
+<script src="settings_overview_components.js"></script>
+<script src="settings_sidebar_shell.js"></script>
+<script src="settings_organization_details_components.js"></script>
+<script src="settings_departments_screen.js"></script>
+</body>
+</html>
