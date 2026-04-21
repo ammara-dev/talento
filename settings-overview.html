@@ -77,7 +77,7 @@
     .set-side-group-title {
       margin: 0 0 10px;
       color: #787085;
-      font-size: 14px;
+      font-size: 12px;
       font-weight: 500;
       line-height: 1.2;
     }
@@ -112,34 +112,53 @@
     }
     .set-main-inner {
       display: grid;
-      gap: 20px;
+      gap: 48px;
       min-width: 0;
     }
     .set-main-header h1 {
       margin: 0 0 4px;
       color: #1e1033;
-      font-size: 20px;
+      font-size: 32px;
       line-height: 1.3;
       font-weight: 600;
     }
     .set-main-header p {
       margin: 0;
       color: #4b405c;
-      font-size: 14px;
+      font-size: 18px;
       line-height: 1.45;
     }
 
     .set-main-section { display: grid; gap: 12px; }
+    .set-section-title-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 2px;
+    }
     .set-section-intro h2 {
-      margin: 0 0 2px;
+      margin: 0;
       color: #1e1033;
-      font-size: 20px;
+      font-size: 24px;
       line-height: 1.3;
       font-weight: 600;
     }
+    .set-section-badge {
+      display: inline-flex;
+      align-items: center;
+      height: 32px;
+      padding: 0 14px;
+      border-radius: 8px;
+      border: 1px solid #d8d3e2;
+      background: #f4f2f5;
+      color: #4b405c;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 1;
+    }
     .set-section-intro p {
       margin: 0;
-      color: #4b405c;
+      color: #787085;
       font-size: 14px;
       line-height: 1.45;
     }
@@ -147,15 +166,15 @@
     .set-card-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(220px, 1fr));
-      gap: 14px;
+      gap: 20px;
     }
     .set-card {
       background: #fff;
-      border: 1px solid #e4daf9;
+      border: 1px solid #e7d9ff;
       border-radius: 18px;
       padding: 12px;
       display: grid;
-      gap: 10px;
+      gap: 0;
       min-width: 0;
     }
     .set-card-top {
@@ -163,6 +182,10 @@
       grid-template-columns: 48px 1fr;
       gap: 10px;
       align-items: center;
+      background: #f4f2f5;
+      border-radius: 12px;
+      padding: 10px;
+      margin-bottom: 12px;
     }
     .set-card-icon {
       width: 48px;
@@ -178,13 +201,13 @@
     .set-card h3 {
       margin: 0;
       color: #1e1033;
-      font-size: 20px;
+      font-size: 18px;
       line-height: 1.2;
       font-weight: 500;
     }
     .set-card-top p {
       margin: 2px 0 0;
-      color: #4b405c;
+      color: #787085;
       font-size: 14px;
       line-height: 1.4;
     }
@@ -195,12 +218,22 @@
       padding: 8px 10px;
       display: grid;
       gap: 8px;
+      margin: 0;
+      list-style: none;
     }
-    .set-card-list p {
+    .set-card-list li {
       margin: 0;
       color: #1e1033;
       font-size: 14px;
       line-height: 1.35;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .set-card-list li::before {
+      content: '•';
+      color: #8e88a0;
+      line-height: 1;
     }
     .set-card-action {
       min-height: 42px;
@@ -215,6 +248,7 @@
       font-size: 14px;
       font-weight: 500;
       font-family: 'Alexandria', Helvetica, sans-serif;
+      margin-top: 32px;
     }
 
     @media (max-width: 1260px) {

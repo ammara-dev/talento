@@ -58,7 +58,10 @@ const SettingsOverviewComponents = (function() {
   function SectionIntro(config) {
     return `
       <div class="set-section-intro">
-        <h2>${escapeHtml(config.title || '')}</h2>
+        <div class="set-section-title-row">
+          <h2>${escapeHtml(config.title || '')}</h2>
+          ${config.badge ? `<span class="set-section-badge">${escapeHtml(config.badge)}</span>` : ''}
+        </div>
         <p>${escapeHtml(config.description || '')}</p>
       </div>
     `;
@@ -75,9 +78,9 @@ const SettingsOverviewComponents = (function() {
             <p>${escapeHtml(card.description || '')}</p>
           </div>
         </div>
-        <div class="set-card-list">
-          ${items.map(function(item) { return `<p>• ${escapeHtml(item)}</p>`; }).join('')}
-        </div>
+        <ul class="set-card-list">
+          ${items.map(function(item) { return `<li>${escapeHtml(item)}</li>`; }).join('')}
+        </ul>
         <button type="button" class="set-card-action">
           Manage settings
           <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>

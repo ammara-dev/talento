@@ -73,6 +73,7 @@
       {
         title: 'Advanced settings',
         description: 'System-level configuration, security, and technical settings',
+        badge: 'Restricted access',
         cards: [
           {
             icon: 'fa-solid fa-shield-halved',
@@ -112,7 +113,8 @@
             <section class="set-main-section">
               ${SettingsOverviewComponents.SectionIntro({
                 title: section.title,
-                description: section.description
+                description: section.description,
+                badge: section.badge
               })}
               ${SettingsOverviewComponents.SettingsGrid({
                 cards: section.cards
