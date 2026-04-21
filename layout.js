@@ -580,6 +580,8 @@
         if (window.innerWidth >= 1024) {
           isCollapsed = !isCollapsed;
           applyCollapseState();
+        } else {
+          window.dispatchEvent(new CustomEvent('settings-panel-toggle'));
         }
       });
     }

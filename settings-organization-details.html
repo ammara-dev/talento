@@ -393,15 +393,25 @@
         grid-template-columns: 1fr;
       }
       #settings-side-panel {
-        border-right: none;
-        border-bottom: 1px solid #e8e7eb;
-      }
-      #settings-side-panel.is-primary-collapsed {
-        width: 100%;
-        min-width: 0;
+        position: fixed;
+        top: 56px;
+        left: 0;
+        bottom: 0;
+        width: 272px;
+        border-right: 1px solid #e8e7eb;
+        border-bottom: none;
+        z-index: 35;
+        overflow-y: auto;
+        transform: translateX(0);
         opacity: 1;
-        overflow: visible;
-        border-bottom: 1px solid #e8e7eb;
+        transition: transform 250ms ease, opacity 250ms ease;
+        box-shadow: 6px 0 16px rgba(30, 16, 51, 0.08);
+      }
+      .set-shell.is-settings-panel-hidden #settings-side-panel {
+        display: block;
+        transform: translateX(-100%);
+        opacity: 0;
+        pointer-events: none;
       }
       .org-main-inner { max-width: 100%; }
     }

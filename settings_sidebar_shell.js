@@ -6,6 +6,23 @@ const SettingsSidebarShell = (function() {
   'use strict';
 
   let sidebarObserver = null;
+  let panelClickBound = false;
+  let isMobilePanelOpen = false;
+
+  function handlePanelClick(event) {
+    const trigger = event.target.closest('.set-side-item-block > .set-side-item');
+    if (!trigger) return;
+    const block = trigger.closest('.set-side-item-block');
+    const children = block ? block.querySelector('.set-side-children') : null;
+    if (!children) return;
+
+    event.preventDefault();
+    const isOpen = children.classList.toggle('is-open');
+    const chevron = trigger.querySelector('.fa-chevron-down');
+    if (chevron) {
+      chevron.classList.toggle('is-open', isOpen);
+    }
+  }
 
   function syncWithPrimarySidebar() {
     const primary = document.getElementById('sidebar');
@@ -13,7 +30,9 @@ const SettingsSidebarShell = (function() {
     const shell = secondary ? secondary.closest('.set-shell') : null;
     if (!primary || !secondary) return;
     const isDesktop = window.innerWidth >= 1024;
-    const shouldHideSettingsPanel = isDesktop && !primary.classList.contains('collapsed');
+    const shouldHideSettingsPanel = isDesktop
+      ? !primary.classList.contains('collapsed')
+      : !isMobilePanelOpen;
     secondary.classList.toggle('is-primary-collapsed', shouldHideSettingsPanel);
     if (shell) shell.classList.toggle('is-settings-panel-hidden', shouldHideSettingsPanel);
   }
@@ -33,6 +52,11 @@ const SettingsSidebarShell = (function() {
 
     sidebarObserver.observe(primary, { attributes: true });
     window.addEventListener('resize', syncWithPrimarySidebar);
+    window.addEventListener('settings-panel-toggle', function() {
+      if (window.innerWidth >= 1024) return;
+      isMobilePanelOpen = !isMobilePanelOpen;
+      syncWithPrimarySidebar();
+    });
   }
 
   function render(config) {
@@ -42,6 +66,11 @@ const SettingsSidebarShell = (function() {
     panel.innerHTML = SettingsOverviewComponents.SettingsSidebar({
       groups: config.groups || []
     });
+
+    if (!panelClickBound) {
+      panel.addEventListener('click', handlePanelClick);
+      panelClickBound = true;
+    }
 
     setupSyncObserver();
     syncWithPrimarySidebar();
