@@ -506,7 +506,20 @@
     const settingsNavBtn = document.getElementById('settings-nav-btn');
 
     let isOpen = false;
-    let isCollapsed = false;
+    let isCollapsed = currentPage === 'settings-overview.html';
+
+    function applyCollapseState() {
+      const desktop = window.innerWidth >= 1024;
+      if (sidebar) sidebar.classList.toggle('collapsed', desktop && isCollapsed);
+      if (collapseBtn) {
+        collapseBtn.setAttribute('aria-label', isCollapsed ? 'Expand sidebar' : 'Collapse sidebar');
+      }
+      if (collapseIcon) {
+        collapseIcon.innerHTML = isCollapsed
+          ? '<rect x="3" y="3" width="18" height="18" rx="2"/><line x1="15" y1="3" x2="15" y2="21"/>'
+          : '<rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/>';
+      }
+    }
 
     // Show/hide collapse button based on screen size
     function updateLayout() {
@@ -522,6 +535,8 @@
         if (userInfo) userInfo.style.display = 'block';
         if (userChevron) userChevron.style.display = 'block';
       }
+
+      applyCollapseState();
     }
     updateLayout();
     window.addEventListener('resize', function() {
@@ -570,13 +585,7 @@
     if (collapseBtn) {
       collapseBtn.addEventListener('click', function() {
         isCollapsed = !isCollapsed;
-        if (sidebar) sidebar.classList.toggle('collapsed', isCollapsed);
-        collapseBtn.setAttribute('aria-label', isCollapsed ? 'Expand sidebar' : 'Collapse sidebar');
-        if (collapseIcon) {
-          collapseIcon.innerHTML = isCollapsed
-            ? '<rect x="3" y="3" width="18" height="18" rx="2"/><line x1="15" y1="3" x2="15" y2="21"/>'
-            : '<rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/>';
-        }
+        applyCollapseState();
       });
     }
 

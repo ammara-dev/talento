@@ -11,7 +11,7 @@ const SettingsSidebarShell = (function() {
     const primary = document.getElementById('sidebar');
     const secondary = document.getElementById('settings-side-panel');
     if (!primary || !secondary) return;
-    secondary.classList.toggle('is-primary-collapsed', primary.classList.contains('collapsed'));
+    secondary.classList.toggle('is-primary-collapsed', !primary.classList.contains('collapsed'));
   }
 
   function setupSyncObserver() {
