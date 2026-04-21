@@ -125,7 +125,7 @@
   }
 
   function render() {
-    if (window.SettingsSidebarShell) {
+    if (typeof SettingsSidebarShell !== 'undefined') {
       SettingsSidebarShell.render({
         containerId: 'settings-side-panel',
         groups: screenData.sideGroups
