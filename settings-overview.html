@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <title>Talento - Settings Overview</title>
+  <meta name="description" content="Talento HR Platform - Settings overview screen" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared-styles.css" />
+  <script src="design-tokens.js"></script>
+  <style>
+    #main-scroll { background: #f6f5f7; }
+
+    .set-shell {
+      display: grid;
+      grid-template-columns: 272px 1fr;
+      min-height: calc(100vh - 56px);
+      background: #f6f5f7;
+    }
+
+    #settings-side-panel {
+      border-right: 1px solid #e8e7eb;
+      background: #f6f5f7;
+      min-width: 0;
+      transition: width 300ms ease, opacity 300ms ease;
+    }
+    #settings-side-panel.is-primary-collapsed {
+      width: 0;
+      min-width: 0;
+      opacity: 0;
+      overflow: hidden;
+      border-right: none;
+    }
+
+    .set-side-wrap {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      padding: 16px 14px;
+      min-width: 0;
+    }
+    .set-side-head h2 {
+      margin: 0 0 10px;
+      color: #1e1033;
+      font-size: 20px;
+      line-height: 1.3;
+      font-weight: 500;
+    }
+    .set-side-search-fallback {
+      width: 100%;
+      height: 36px;
+      border-radius: 999px;
+      border: 1px solid #e2dde9;
+      padding: 0 12px;
+      font-size: 14px;
+      color: #4b405c;
+      font-family: 'Alexandria', Helvetica, sans-serif;
+      background: #fff;
+    }
+    .set-side-head .search-input-wrap {
+      height: 36px !important;
+      border-radius: 999px !important;
+      background: #fff !important;
+      border: 1px solid #e2dde9 !important;
+    }
+    .set-side-scroll {
+      display: grid;
+      gap: 18px;
+      overflow-y: auto;
+      padding-right: 2px;
+    }
+    .set-side-group-title {
+      margin: 0 0 10px;
+      color: #787085;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 1.2;
+    }
+    .set-side-group-list { display: grid; gap: 4px; }
+    .set-side-item {
+      width: 100%;
+      min-height: 38px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 10px;
+      color: #1e1033;
+      font-size: 14px;
+      background: transparent;
+      border: none;
+      font-family: 'Alexandria', Helvetica, sans-serif;
+    }
+    .set-side-item-main {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      white-space: nowrap;
+    }
+    .set-side-item i { color: #4b405c; }
+    .set-side-item.is-active { background: #ece9f2; }
+    .set-side-item:hover:not(.is-active) { background: rgba(236, 233, 239, 0.55); }
+
+    #settings-main-root {
+      min-width: 0;
+      padding: 20px;
+    }
+    .set-main-inner {
+      display: grid;
+      gap: 20px;
+      min-width: 0;
+    }
+    .set-main-header h1 {
+      margin: 0 0 4px;
+      color: #1e1033;
+      font-size: 20px;
+      line-height: 1.3;
+      font-weight: 600;
+    }
+    .set-main-header p {
+      margin: 0;
+      color: #4b405c;
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .set-main-section { display: grid; gap: 12px; }
+    .set-section-intro h2 {
+      margin: 0 0 2px;
+      color: #1e1033;
+      font-size: 20px;
+      line-height: 1.3;
+      font-weight: 600;
+    }
+    .set-section-intro p {
+      margin: 0;
+      color: #4b405c;
+      font-size: 14px;
+      line-height: 1.45;
+    }
+
+    .set-card-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(220px, 1fr));
+      gap: 14px;
+    }
+    .set-card {
+      background: #fff;
+      border: 1px solid #e4daf9;
+      border-radius: 18px;
+      padding: 12px;
+      display: grid;
+      gap: 10px;
+      min-width: 0;
+    }
+    .set-card-top {
+      display: grid;
+      grid-template-columns: 48px 1fr;
+      gap: 10px;
+      align-items: center;
+    }
+    .set-card-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: linear-gradient(160deg, #d7b6ff 0%, #ac7ef3 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 22px;
+    }
+    .set-card h3 {
+      margin: 0;
+      color: #1e1033;
+      font-size: 20px;
+      line-height: 1.2;
+      font-weight: 500;
+    }
+    .set-card-top p {
+      margin: 2px 0 0;
+      color: #4b405c;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+    .set-card-list {
+      border: 1px solid #ece9ef;
+      background: #fff;
+      border-radius: 12px;
+      padding: 8px 10px;
+      display: grid;
+      gap: 8px;
+    }
+    .set-card-list p {
+      margin: 0;
+      color: #1e1033;
+      font-size: 14px;
+      line-height: 1.35;
+    }
+    .set-card-action {
+      min-height: 42px;
+      border-radius: 12px;
+      border: 1px solid #e8e7eb;
+      background: #fff;
+      color: #1e1033;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      font-size: 14px;
+      font-weight: 500;
+      font-family: 'Alexandria', Helvetica, sans-serif;
+    }
+
+    @media (max-width: 1260px) {
+      .set-card-grid {
+        grid-template-columns: repeat(2, minmax(220px, 1fr));
+      }
+    }
+    @media (max-width: 1024px) {
+      .set-shell {
+        grid-template-columns: 1fr;
+      }
+      #settings-side-panel {
+        border-right: none;
+        border-bottom: 1px solid #e8e7eb;
+      }
+      #settings-side-panel.is-primary-collapsed {
+        width: 100%;
+        min-width: 0;
+        opacity: 1;
+        overflow: visible;
+        border-bottom: 1px solid #e8e7eb;
+      }
+    }
+    @media (max-width: 820px) {
+      .set-card-grid {
+        grid-template-columns: 1fr;
+      }
+      #settings-main-root {
+        padding: 14px 12px;
+      }
+      .set-side-wrap {
+        padding: 14px 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+  <div id="overlay" aria-hidden="true"></div>
+  <aside id="sidebar" aria-label="Main navigation"></aside>
+  <div id="main-col">
+    <header id="navbar" style="display:flex;align-items:center;justify-content:space-between;height:56px;padding:0 16px;background:#fff;border-bottom:1px solid #e8e7eb;flex-shrink:0;min-width:0;"></header>
+    <div id="main-scroll">
+      <div class="set-shell">
+        <aside id="settings-side-panel" aria-label="Settings navigation"></aside>
+        <main id="settings-main-root" aria-label="Settings overview content"></main>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="layout.js"></script>
+<script src="leave_components.js"></script>
+<script src="settings_overview_components.js"></script>
+<script src="settings_sidebar_shell.js"></script>
+<script src="settings_overview_screen.js"></script>
+</body>
+</html>
+

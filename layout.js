@@ -23,6 +23,7 @@
     'apps-marketplace-screen.html': { navItem: 'apps', submenu: null },
     'requests.html': { navItem: 'requests', submenu: null },
     'request2.html': { navItem: 'requests', submenu: null },
+    'settings-overview.html': { navItem: 'settings', submenu: null },
     'create-new-request.html': { navItem: 'requests', submenu: null },
     'leave.html': { navItem: 'attendance-leave', submenu: 'leave' },
     'business-missions-trip.html': { navItem: 'business-missions', submenu: 'missions-trip' },
@@ -112,6 +113,7 @@
     const isPerformanceEvaluationActive = config.submenu === 'performance-evaluation';
     const isTeamEngagementExpanded = config.navItem === 'team-engagement';
     const isAppsActive = config.navItem === 'apps';
+    const isSettingsActive = config.navItem === 'settings';
 
     return `
     <!-- Logo + Collapse -->
@@ -404,7 +406,7 @@
 
     <!-- Settings (bottom) -->
     <div style="padding:10px 8px 14px;flex-shrink:0;border-top:1px solid #e8e7eb;margin-top:4px;">
-      <button class="nav-item"
+      <button id="settings-nav-btn" class="nav-item${isSettingsActive ? ' active' : ''}" ${isSettingsActive ? 'aria-current="page"' : ''}
         style="display:flex;align-items:center;gap:10px;width:100%;height:40px;border-radius:8px;padding:0 8px;outline:none;">
         <i class="fa-solid fa-gear" style="width:20px;font-size:16px;color:#1e1033;flex-shrink:0;"></i>
         <span class="s-label settings-label" style="color:#1e1033;font-size:14px;letter-spacing:-0.14px;white-space:nowrap;">Settings</span>
@@ -501,6 +503,7 @@
     const collapseIcon = document.getElementById('collapse-icon');
     const userInfo = document.getElementById('user-info');
     const userChevron = document.getElementById('user-chevron');
+    const settingsNavBtn = document.getElementById('settings-nav-btn');
 
     let isOpen = false;
     let isCollapsed = false;
@@ -549,6 +552,14 @@
 
     if (overlay) {
       overlay.addEventListener('click', closeMobile);
+    }
+
+    if (settingsNavBtn) {
+      settingsNavBtn.addEventListener('click', function() {
+        if (currentPage !== 'settings-overview.html') {
+          window.location.href = 'settings-overview.html';
+        }
+      });
     }
 
     document.addEventListener('keydown', function(e) {
