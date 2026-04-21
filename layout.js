@@ -573,6 +573,11 @@
       settingsNavBtn.addEventListener('click', function() {
         if (currentPage !== 'settings-overview.html') {
           window.location.href = 'settings-overview.html';
+          return;
+        }
+        if (window.innerWidth >= 1024) {
+          isCollapsed = true;
+          applyCollapseState();
         }
       });
     }
