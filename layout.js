@@ -576,7 +576,7 @@
           return;
         }
         if (window.innerWidth >= 1024) {
-          isCollapsed = true;
+          isCollapsed = !isCollapsed;
           applyCollapseState();
         }
       });
