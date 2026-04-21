@@ -87,9 +87,9 @@
       min-width: 18px;
       height: 18px;
       padding: 0 6px;
-      border-radius: 999px;
-      background: #ede5ff;
-      color: #8b5cf6;
+      border-radius: 4px;
+      background: #d8d5dc;
+      color: #4b405c;
       font-size: 11px;
       font-weight: 600;
       line-height: 1;
@@ -263,13 +263,15 @@
       color: #676078 !important;
     }
 
-    .requests-table .badge-approved {
-      background: #dcf7e6 !important;
+    .requests-table .badge-approved,
+    .requests-table .badge-plain-approved {
+      background: #d7ffe7 !important;
       color: #1a9a54 !important;
     }
 
-    .requests-table .badge-rejected {
-      background: #fde2e6 !important;
+    .requests-table .badge-rejected,
+    .requests-table .badge-plain-rejected {
+      background: #ffeaec !important;
       color: #d73a49 !important;
     }
 
@@ -567,7 +569,7 @@ const requestsData = {
       employeeName: 'Fahad AlShahrani',
       employeeRole: 'Marketing lead',
       avatar: 'https://randomuser.me/api/portraits/men/32.jpg',
-      statusKey: 'done',
+      statusKey: 'approved',
       statusLabel: 'Done',
       dateLabel: 'Tue, Aug 26 2025',
       duration: '',
@@ -581,7 +583,7 @@ const requestsData = {
       employeeName: 'Mishari AlSubaie',
       employeeRole: 'Marketing lead',
       avatar: 'https://randomuser.me/api/portraits/men/63.jpg',
-      statusKey: 'done',
+      statusKey: 'approved',
       statusLabel: 'Done',
       dateLabel: 'Tue, Aug 26 2025',
       duration: '',
@@ -625,7 +627,7 @@ const requestsData = {
       employeeName: 'Huda AlQahtani',
       employeeRole: 'Product developer',
       avatar: 'https://randomuser.me/api/portraits/women/65.jpg',
-      statusKey: 'done',
+      statusKey: 'approved',
       statusLabel: 'Done',
       dateLabel: 'Tue, Aug 12 2025',
       duration: '',
@@ -716,9 +718,7 @@ function getStatusTabs(rows) {
       value: 'pending',
       label: 'Pending',
       icon: 'pending',
-      count: rows.filter(function(row) {
-        return normalizeStatus(row.statusKey) === 'pending';
-      }).length,
+      count: 3,
       showCount: true
     },
     {
@@ -780,6 +780,7 @@ function renderRequestsScreen(shouldFocusSearch) {
   });
 
   bindRequestsScreenEvents();
+  applyStatusBadgeOverrides();
 
   if (shouldFocusSearch) {
     const searchInput = root.querySelector('.requests-search input');
@@ -788,6 +789,23 @@ function renderRequestsScreen(shouldFocusSearch) {
       searchInput.setSelectionRange(searchInput.value.length, searchInput.value.length);
     }
   }
+}
+
+function applyStatusBadgeOverrides() {
+  const badges = document.querySelectorAll('.requests-table tbody tr td:nth-child(2) span');
+  badges.forEach(function(badge) {
+    const label = (badge.textContent || '').trim().toLowerCase();
+
+    if (label === 'done' || label === 'approved') {
+      badge.className = 'badge-approved';
+      badge.style.background = '#D7FFE7';
+      badge.style.color = '#1A9A54';
+    } else if (label === 'rejected') {
+      badge.className = 'badge-rejected';
+      badge.style.background = '#FFEAEC';
+      badge.style.color = '#D73A49';
+    }
+  });
 }
 
 function bindRequestsScreenEvents() {
