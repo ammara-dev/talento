@@ -16,6 +16,12 @@ const SettingsSidebarShell = (function() {
     const children = block ? block.querySelector('.set-side-children') : null;
     if (!children) return;
 
+    const chevronClicked = !!event.target.closest('.fa-chevron-down');
+    const isLink = trigger.tagName === 'A';
+    if (isLink && !chevronClicked) {
+      return;
+    }
+
     event.preventDefault();
     const isOpen = children.classList.toggle('is-open');
     const chevron = trigger.querySelector('.fa-chevron-down');

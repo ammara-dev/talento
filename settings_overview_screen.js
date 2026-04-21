@@ -13,6 +13,7 @@
           {
             label: 'Organization',
             icon: 'fa-solid fa-building',
+            href: 'settings-organization-details.html',
             active: true,
             expanded: true,
             children: [
