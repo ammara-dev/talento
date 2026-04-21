@@ -10,8 +10,11 @@ const SettingsSidebarShell = (function() {
   function syncWithPrimarySidebar() {
     const primary = document.getElementById('sidebar');
     const secondary = document.getElementById('settings-side-panel');
+    const shell = secondary ? secondary.closest('.set-shell') : null;
     if (!primary || !secondary) return;
-    secondary.classList.toggle('is-primary-collapsed', !primary.classList.contains('collapsed'));
+    const shouldHideSettingsPanel = !primary.classList.contains('collapsed');
+    secondary.classList.toggle('is-primary-collapsed', shouldHideSettingsPanel);
+    if (shell) shell.classList.toggle('is-settings-panel-hidden', shouldHideSettingsPanel);
   }
 
   function setupSyncObserver() {
