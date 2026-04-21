@@ -203,6 +203,7 @@
 
     bindRequestsScreenEvents();
     applyRequest2LayoutTweaks();
+    applyStatusBadgeOverrides();
 
     if (shouldFocusSearch) {
       const searchInput = root.querySelector('.requests-search input');
@@ -245,5 +246,22 @@
     if (requestedOnHeader) {
       requestedOnHeader.textContent = 'Requested on';
     }
+  }
+
+  function applyStatusBadgeOverrides() {
+    const badges = document.querySelectorAll('.requests-table tbody tr td:nth-child(2) span');
+    badges.forEach(function(badge) {
+      const label = (badge.textContent || '').trim().toLowerCase();
+
+      if (label === 'approved' || label === 'done') {
+        badge.className = 'badge-approved';
+        badge.style.background = '#D7FFE7';
+        badge.style.color = '#1A9A54';
+      } else if (label === 'rejected') {
+        badge.className = 'badge-rejected';
+        badge.style.background = '#FFEAEC';
+        badge.style.color = '#D73A49';
+      }
+    });
   }
 })();
