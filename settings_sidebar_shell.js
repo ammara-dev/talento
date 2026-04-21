@@ -12,7 +12,8 @@ const SettingsSidebarShell = (function() {
     const secondary = document.getElementById('settings-side-panel');
     const shell = secondary ? secondary.closest('.set-shell') : null;
     if (!primary || !secondary) return;
-    const shouldHideSettingsPanel = !primary.classList.contains('collapsed');
+    const isDesktop = window.innerWidth >= 1024;
+    const shouldHideSettingsPanel = isDesktop && !primary.classList.contains('collapsed');
     secondary.classList.toggle('is-primary-collapsed', shouldHideSettingsPanel);
     if (shell) shell.classList.toggle('is-settings-panel-hidden', shouldHideSettingsPanel);
   }
