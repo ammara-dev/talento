@@ -47,8 +47,8 @@
     },
     table: {
       searchPlaceholder: 'Search by name, ID, iqama, title or email',
-      filterLabel: 'Department All',
-      sortLabel: 'Sort by All types',
+      filterLabel: 'Department: All',
+      sortLabel: 'Sort by: All',
       rows: [
         {
           name: 'Human Resources',
