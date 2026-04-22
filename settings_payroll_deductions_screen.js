@@ -66,6 +66,7 @@
 
   function renderMainContent() {
     const root = document.getElementById('settings-main-root');
+    const footerRoot = document.getElementById('settings-footer-root');
     if (
       !root ||
       typeof SettingsOrganizationDetailsComponents === 'undefined' ||
@@ -80,8 +81,11 @@
         ${SettingsPayrollFinanceComponents.PayrollTabs({ tabs: screenData.tabs })}
         ${SettingsPayrollDeductionsComponents.DeductionsCard(screenData.deductionsCard)}
       </div>
-      ${SettingsPayrollFinanceComponents.FooterActions(screenData.footer)}
     `;
+
+    if (footerRoot) {
+      footerRoot.innerHTML = SettingsPayrollFinanceComponents.FooterActions(screenData.footer);
+    }
   }
 
   function render() {

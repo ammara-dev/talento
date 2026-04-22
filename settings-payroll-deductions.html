@@ -256,19 +256,22 @@
     }
 
     /* ── Footer actions ──────────────────────────────────── */
-    .payroll-footer-bar {
-      position: sticky;
+    #settings-footer-root {
+      position: fixed;
       bottom: 0;
-      z-index: 20;
+      left: 0;
+      right: 0;
+      z-index: 40;
+    }
+    .payroll-footer-bar {
       display: flex;
       justify-content: flex-end;
-      margin: 20px -20px -20px;
       padding: 8px 20px;
       background: #F3F1F4;
-      border: 1px solid #1E10330A;
-      border-left: none;
-      border-right: none;
+      border-top: 1px solid #1E10331A;
     }
+    /* push scrollable content above fixed footer */
+    #settings-main-root { padding-bottom: 70px; }
     .payroll-footer-actions { display: inline-flex; align-items: center; gap: 12px; }
     .payroll-discard-btn,
     .payroll-save-btn {
@@ -317,26 +320,16 @@
         pointer-events: none;
       }
       .payroll-main-inner { max-width: 100%; }
-      .payroll-footer-bar {
-        margin-left: -20px;
-        margin-right: -20px;
-        margin-bottom: -20px;
-        padding: 8px 12px;
-      }
+      .payroll-footer-bar { padding: 8px 12px; }
     }
 
     @media (max-width: 820px) {
-      #settings-main-root { padding: 14px 12px; }
+      #settings-main-root { padding: 14px 12px 70px; }
       .set-side-wrap { padding: 14px 12px; }
       .org-page-intro { align-items: flex-start; }
       .deduction-row {
         align-items: flex-start;
         flex-direction: column;
-      }
-      .payroll-footer-bar {
-        margin-left: -12px;
-        margin-right: -12px;
-        margin-bottom: -14px;
       }
       .payroll-footer-actions {
         width: 100%;
@@ -364,6 +357,7 @@
     </div>
   </div>
 </div>
+<footer id="settings-footer-root"></footer>
 
 <!-- Shared layout: primary sidebar + navbar -->
 <script src="layout.js"></script>
