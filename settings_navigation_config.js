@@ -26,10 +26,10 @@ const SettingsNavigationConfig = (function() {
           label: 'Payroll & finance',
           icon: 'fa-solid fa-coins',
           children: [
-            { key: 'payroll-settings', label: 'Payroll settings', href: 'settings-payroll-finance.html' },
+            { key: 'payroll-organization-details', label: 'Organization details', href: 'settings-organization-details.html' },
             { key: 'payroll-departments', label: 'Departments', href: 'settings-departments.html' },
-            { key: 'salary-scales', label: 'Salary scales', href: 'salary-scale.html' },
-            { key: 'deductions', label: 'Deductions', href: 'payroll.html' }
+            { key: 'payroll-branches', label: 'Branches', href: 'settings-payroll-finance.html' },
+            { key: 'payroll-org-structure', label: 'Org structure', href: 'settings-payroll-finance.html' }
           ]
         },
         { key: 'communication', label: 'Communication', icon: 'fa-solid fa-comment-dots' },
