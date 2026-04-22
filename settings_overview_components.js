@@ -24,17 +24,22 @@ const SettingsOverviewComponents = (function() {
   function SidebarItem(item) {
     const children = Array.isArray(item.children) ? item.children : [];
     const hasChildren = children.length > 0;
+    const chevronMarkup = hasChildren
+      ? `<i class="fa-solid fa-chevron-down${item.expanded ? ' is-open' : ''}" aria-hidden="true"></i>`
+      : '';
     const itemContent = `
       <span class="set-side-item-main">
         <i class="${escapeHtml(item.icon || 'fa-solid fa-circle')}" aria-hidden="true"></i>
         <span>${escapeHtml(item.label || '')}</span>
       </span>
-      <i class="fa-solid fa-chevron-down${hasChildren && item.expanded ? ' is-open' : ''}" aria-hidden="true"></i>
+      ${chevronMarkup}
     `;
 
-    const itemMarkup = item.href
-      ? `<a class="set-side-item${item.active ? ' is-active' : ''}" href="${escapeHtml(item.href)}">${itemContent}</a>`
-      : `<button type="button" class="set-side-item${item.active ? ' is-active' : ''}">${itemContent}</button>`;
+    const itemMarkup = hasChildren
+      ? `<button type="button" class="set-side-item${item.active ? ' is-active' : ''}">${itemContent}</button>`
+      : (item.href
+        ? `<a class="set-side-item${item.active ? ' is-active' : ''}" href="${escapeHtml(item.href)}">${itemContent}</a>`
+        : `<button type="button" class="set-side-item${item.active ? ' is-active' : ''}">${itemContent}</button>`);
 
     if (!hasChildren) {
       return itemMarkup;
@@ -67,7 +72,7 @@ const SettingsOverviewComponents = (function() {
     return `
       <div class="set-side-wrap">
         <div class="set-side-head">
-          <h2>Settings</h2>
+          <h2><a href="settings-overview.html" style="color:inherit;text-decoration:none;">Settings</a></h2>
           ${window.LeaveComponents && typeof LeaveComponents.SearchInput === 'function'
             ? LeaveComponents.SearchInput({ placeholder: 'Search', width: '100%' })
             : '<input class="set-side-search-fallback" placeholder="Search" />'}

@@ -17,8 +17,7 @@ const SettingsSidebarShell = (function() {
     if (!children) return;
 
     const chevronClicked = !!event.target.closest('.fa-chevron-down');
-    const isLink = trigger.tagName === 'A';
-    if (isLink && !chevronClicked) {
+    if (!chevronClicked) {
       return;
     }
 

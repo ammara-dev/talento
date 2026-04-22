@@ -8,7 +8,7 @@
   const screenData = {
     sideGroups: typeof SettingsNavigationConfig !== 'undefined'
       ? SettingsNavigationConfig.getSidebarGroups({
-        activeParent: 'payroll-finance',
+        activeParent: 'organization',
         activeChild: 'organization-details'
       })
       : [],

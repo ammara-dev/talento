@@ -9,18 +9,26 @@ const SettingsNavigationConfig = (function() {
     {
       title: 'GENERAL SETTINGS',
       items: [
-        { key: 'organization', label: 'Organization', icon: 'fa-solid fa-building', href: 'settings-organization-details.html' },
+        {
+          key: 'organization',
+          label: 'Organization',
+          icon: 'fa-solid fa-building',
+          children: [
+            { key: 'organization-details', label: 'Organization details', href: 'settings-organization-details.html' },
+            { key: 'branches', label: 'Branches' },
+            { key: 'org-structure', label: 'Org structure' }
+          ]
+        },
         { key: 'people-hr', label: 'People & HR', icon: 'fa-solid fa-users' },
         {
           key: 'payroll-finance',
           label: 'Payroll & finance',
           icon: 'fa-solid fa-coins',
-          href: 'settings-payroll-finance.html',
           children: [
-            { key: 'organization-details', label: 'Organization details', href: 'settings-organization-details.html' },
+            { key: 'payroll-settings', label: 'Payroll settings', href: 'settings-payroll-finance.html' },
             { key: 'departments', label: 'Departments', href: 'settings-payroll-finance.html' },
-            { key: 'branches', label: 'Branches' },
-            { key: 'org-structure', label: 'Org structure' }
+            { key: 'salary-scales', label: 'Salary scales' },
+            { key: 'deductions', label: 'Deductions' }
           ]
         },
         { key: 'communication', label: 'Communication', icon: 'fa-solid fa-comment-dots' },
