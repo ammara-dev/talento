@@ -81,9 +81,11 @@ const SettingsPayrollFinanceComponents = (function() {
     const discardText = escapeHtml(config.discardText || 'Discard');
     const saveText = escapeHtml(config.saveText || 'Save changes');
     return `
-      <div class="payroll-footer-actions">
-        <button type="button" class="payroll-discard-btn">${discardText} <i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
-        <button type="button" class="payroll-save-btn">${saveText} <i class="fa-solid fa-check" aria-hidden="true"></i></button>
+      <div class="payroll-footer-bar">
+        <div class="payroll-footer-actions">
+          <button type="button" class="payroll-discard-btn">${discardText} <i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+          <button type="button" class="payroll-save-btn">${saveText} <i class="fa-solid fa-check" aria-hidden="true"></i></button>
+        </div>
       </div>
     `;
   }

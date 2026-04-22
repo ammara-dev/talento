@@ -16,7 +16,16 @@ const SettingsOrganizationDetailsComponents = (function() {
 
   function Breadcrumb(config) {
     const items = Array.isArray(config.items) ? config.items : [];
-    return `<p class="org-breadcrumb">${items.map(escapeHtml).join(' / ')}</p>`;
+    return `
+      <p class="org-breadcrumb">
+        ${items.map(function(item, index) {
+          const isLast = index === items.length - 1;
+          const itemClass = isLast ? 'org-breadcrumb-current' : 'org-breadcrumb-item';
+          const separator = isLast ? '' : '<span class="org-breadcrumb-sep"> / </span>';
+          return `<span class="${itemClass}">${escapeHtml(item)}</span>${separator}`;
+        }).join('')}
+      </p>
+    `;
   }
 
   function PageIntro(config) {
