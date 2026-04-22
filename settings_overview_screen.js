@@ -6,39 +6,9 @@
   'use strict';
 
   const screenData = {
-    sideGroups: [
-      {
-        title: 'GENERAL SETTINGS',
-        items: [
-          {
-            label: 'Organization',
-            icon: 'fa-solid fa-building',
-            href: 'settings-organization-details.html',
-            active: true,
-            expanded: true,
-            children: [
-              { label: 'Organization details', href: 'settings-organization-details.html' },
-              { label: 'Departments', href: 'settings-departments.html' },
-              { label: 'Branches' },
-              { label: 'Org structure' }
-            ]
-          },
-          { label: 'People & HR', icon: 'fa-solid fa-users' },
-          { label: 'Payroll & finance', icon: 'fa-solid fa-coins' },
-          { label: 'Communication', icon: 'fa-solid fa-comment-dots' },
-          { label: 'Website', icon: 'fa-solid fa-window-maximize' },
-          { label: 'Operations', icon: 'fa-solid fa-chalkboard' }
-        ]
-      },
-      {
-        title: 'ADVANCED SETTINGS',
-        items: [
-          { label: 'Access & security', icon: 'fa-solid fa-shield-halved' },
-          { label: 'System Customization', icon: 'fa-solid fa-palette' },
-          { label: 'System & integrations', icon: 'fa-solid fa-wrench' }
-        ]
-      }
-    ],
+    sideGroups: typeof SettingsNavigationConfig !== 'undefined'
+      ? SettingsNavigationConfig.getSidebarGroups({})
+      : [],
     sections: [
       {
         title: 'General settings',
@@ -61,7 +31,8 @@
             icon: 'fa-solid fa-coins',
             title: 'Payroll & finance',
             description: 'Configure salary structures, deductions, and financial policies',
-            items: ['Salary scales', 'Payroll settings', 'Deductions', 'Loans']
+            items: ['Salary scales', 'Payroll settings', 'Deductions', 'Loans'],
+            actionHref: 'settings-payroll-finance.html'
           },
           {
             icon: 'fa-solid fa-comment-dots',
