@@ -63,7 +63,7 @@
         description: 'Configure your organizational department structure',
         actionText: 'Manage',
         actionIcon: 'fa-solid fa-wrench',
-        actionHref: 'settings-payroll-finance.html',
+        actionHref: 'settings-departments.html',
         options: [
           {
             title: 'Hierarchical Departments',

@@ -9,7 +9,7 @@
     sideGroups: typeof SettingsNavigationConfig !== 'undefined'
       ? SettingsNavigationConfig.getSidebarGroups({
         activeParent: 'payroll-finance',
-        activeChild: 'departments'
+        activeChild: 'payroll-settings'
       })
       : [],
     header: {
