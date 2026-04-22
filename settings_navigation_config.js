@@ -27,9 +27,9 @@ const SettingsNavigationConfig = (function() {
           icon: 'fa-solid fa-coins',
           children: [
             { key: 'payroll-organization-details', label: 'Organization details', href: 'settings-organization-details.html' },
-            { key: 'payroll-departments', label: 'Departments', href: 'settings-departments.html' },
-            { key: 'payroll-branches', label: 'Branches', href: 'settings-payroll-finance.html' },
-            { key: 'payroll-org-structure', label: 'Org structure', href: 'settings-payroll-finance.html' }
+            { key: 'payroll-departments', label: 'Departments', href: 'settings-payroll-finance.html?tab=departments' },
+            { key: 'payroll-branches', label: 'Branches', href: 'settings-payroll-finance.html?tab=branches' },
+            { key: 'payroll-org-structure', label: 'Org structure', href: 'settings-payroll-finance.html?tab=org-structure' }
           ]
         },
         { key: 'communication', label: 'Communication', icon: 'fa-solid fa-comment-dots' },
@@ -57,13 +57,18 @@ const SettingsNavigationConfig = (function() {
     const activeChild = state.activeChild || '';
     const groups = clone(baseGroups);
 
+    const currentFile = (typeof window !== 'undefined')
+      ? window.location.pathname.split('/').pop() + window.location.search
+      : '';
+
     groups.forEach(function(group) {
       (group.items || []).forEach(function(item) {
         const children = Array.isArray(item.children) ? item.children : [];
         let hasActiveChild = false;
 
         children.forEach(function(child) {
-          child.active = child.key === activeChild;
+          const hrefFile = child.href ? child.href.split('/').pop() : '';
+          child.active = child.key === activeChild || (!!hrefFile && hrefFile === currentFile);
           hasActiveChild = hasActiveChild || child.active;
         });
 
