@@ -5,11 +5,14 @@
 (function() {
   'use strict';
 
+  const isPayrollModule = (typeof window !== 'undefined')
+    && new URLSearchParams(window.location.search).get('module') === 'payroll';
+
   const screenData = {
     sideGroups: typeof SettingsNavigationConfig !== 'undefined'
       ? SettingsNavigationConfig.getSidebarGroups({
-        activeParent: 'organization',
-        activeChild: 'organization-details'
+        activeParent: isPayrollModule ? 'payroll-finance' : 'organization',
+        activeChild:  isPayrollModule ? 'payroll-organization-details' : 'organization-details'
       })
       : [],
     header: {
