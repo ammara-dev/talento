@@ -54,6 +54,7 @@
     'all-documents.html': { navItem: 'documents', submenu: 'all-documents' },
     'contracts.html': { navItem: 'documents', submenu: 'contracts' },
     'renewal.html': { navItem: 'documents', submenu: 'renewal' },
+    'surveys.html': { navItem: 'team-engagement', submenu: 'surveys' },
     'create-new-survey.html': { navItem: 'team-engagement', submenu: 'surveys' },
     'create-new-survey-start.html': { navItem: 'team-engagement', submenu: 'surveys' },
     'create-new-survey.xml': { navItem: 'team-engagement', submenu: 'surveys' },
@@ -362,7 +363,7 @@
           <svg class="s-arrow" id="team-engagement-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#4b405c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;${isTeamEngagementExpanded ? 'transform:rotate(180deg);' : ''}transition:transform 200ms;"><polyline points="6 9 12 15 18 9"/></svg>
         </button>
         <div id="team-engagement-submenu" style="display:${isTeamEngagementExpanded ? 'flex' : 'none'};flex-direction:column;">
-          <a href="create-new-survey.html" style="text-decoration:none;">
+          <a href="surveys.html" style="text-decoration:none;">
             <button class="nav-sub-item${isSurveysActive ? ' active' : ''}"${isSurveysActive ? ' aria-current="page"' : ''}
               style="display:flex;align-items:center;gap:10px;width:calc(100% - 32px);height:36px;padding:0 8px;margin:1px 8px 1px 24px;text-align:left;outline:none;">
               <i class="fa-regular fa-rectangle-list" style="width:16px;font-size:13px;color:${isSurveysActive ? '#1e1033' : '#787085'};flex-shrink:0;"></i>
