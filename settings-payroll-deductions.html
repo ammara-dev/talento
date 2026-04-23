@@ -257,11 +257,7 @@
 
     /* ── Footer actions ──────────────────────────────────── */
     #settings-footer-root {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      z-index: 40;
+      flex-shrink: 0;
     }
     .payroll-footer-bar {
       display: flex;
@@ -270,8 +266,6 @@
       background: #F3F1F4;
       border-top: 1px solid #1E10331A;
     }
-    /* push scrollable content above fixed footer */
-    #settings-main-root { padding-bottom: 70px; }
     .payroll-footer-actions { display: inline-flex; align-items: center; gap: 12px; }
     .payroll-discard-btn,
     .payroll-save-btn {
@@ -355,9 +349,9 @@
         <main id="settings-main-root" aria-label="Payroll deductions settings content"></main>
       </div>
     </div>
+    <footer id="settings-footer-root"></footer>
   </div>
 </div>
-<footer id="settings-footer-root"></footer>
 
 <!-- Shared layout: primary sidebar + navbar -->
 <script src="layout.js"></script>
