@@ -40,12 +40,11 @@
   }
 
   function avgScoreRing(percent, sublabel) {
+    percent = Number(percent);
     var isDraft = (percent === 0 && !sublabel);
     var color;
-    if (isDraft)              color = '#c9c4d4';
-    else if (percent >= 75)   color = '#38B291';
-    else if (percent >= 40)   color = '#2C71FF';
-    else                      color = '#EB505C';
+    if (isDraft) color = '#c9c4d4';
+    else         color = '#2C71FF';
     return {
       percent:    percent,
       label:      percent + '%',
@@ -99,7 +98,7 @@
         name: 'New Hire Onboarding Feedback - January',
         status: 'active',
         participation: participationRing(89, '100/130'),
-        completion:    completionRing(25, '16 completed'),
+        completion:    completionRing(23, '16 completed'),
         avgScore:      avgScoreRing(10, 'Bad score'),
         editHref: '#',
         viewHref: 'survey-preview.html'
