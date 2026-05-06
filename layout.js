@@ -29,6 +29,7 @@
     'settings-payroll-finance.html': { navItem: 'settings', submenu: null },
     'create-new-request.html': { navItem: 'requests', submenu: null },
     'leave.html': { navItem: 'attendance-leave', submenu: 'leave' },
+    'attendance-authentication-screen.html': { navItem: 'attendance-leave', submenu: 'attendance' },
     'business-missions-trip.html': { navItem: 'business-missions', submenu: 'missions-trip' },
     'air-tickets.html': { navItem: 'business-missions', submenu: 'air-tickets' },
     'air-ticket-request.html': { navItem: 'business-missions', submenu: 'air-tickets' },
@@ -96,6 +97,7 @@
     const isDashboardActive = config.navItem === 'dashboard';
     const isRequestsActive = config.navItem === 'requests';
     const isLeaveActive = config.submenu === 'leave';
+    const isAttendanceActive = config.submenu === 'attendance';
     const isAttendanceExpanded = config.navItem === 'attendance-leave';
     const isMissionsTripActive = config.submenu === 'missions-trip';
     const isAirTicketsActive = config.submenu === 'air-tickets';
@@ -170,11 +172,13 @@
         <!-- Attendance sub-items -->
         <div id="attendance-submenu" style="display:${isAttendanceExpanded ? 'flex' : 'none'};flex-direction:column;">
           <!-- Attendance sub-link -->
-          <button class="nav-sub-item"
-            style="display:flex;align-items:center;gap:10px;width:calc(100% - 32px);height:36px;padding:0 8px;margin:1px 8px 1px 24px;text-align:left;outline:none;">
-            <i class="fa-regular fa-clock" style="width:16px;font-size:13px;color:#787085;flex-shrink:0;"></i>
-            <span class="s-label" style="color:#787085;font-size:13px;letter-spacing:-0.13px;line-height:1;white-space:nowrap;">Attendance</span>
-          </button>
+          <a href="attendance-authentication-screen.html" style="text-decoration:none;">
+            <button class="nav-sub-item${isAttendanceActive ? ' active' : ''}"${isAttendanceActive ? ' aria-current="page"' : ''}
+              style="display:flex;align-items:center;gap:10px;width:calc(100% - 32px);height:36px;padding:0 8px;margin:1px 8px 1px 24px;text-align:left;outline:none;">
+              <i class="fa-regular fa-clock" style="width:16px;font-size:13px;color:${isAttendanceActive ? '#1e1033' : '#787085'};flex-shrink:0;"></i>
+              <span class="s-label" style="color:${isAttendanceActive ? '#1e1033' : '#787085'};font-size:13px;${isAttendanceActive ? 'font-weight:500;' : ''}letter-spacing:-0.13px;line-height:1;white-space:nowrap;">Attendance</span>
+            </button>
+          </a>
           <!-- Leave (Time off) -->
           <a href="leave.html" style="text-decoration:none;">
             <button class="nav-sub-item${isLeaveActive ? ' active' : ''}"${isLeaveActive ? ' aria-current="page"' : ''}
@@ -306,6 +310,13 @@
               style="display:flex;align-items:center;gap:10px;width:calc(100% - 32px);height:36px;padding:0 8px;margin:1px 8px 1px 24px;text-align:left;outline:none;">
               <i class="fa-solid fa-briefcase" style="width:16px;font-size:13px;color:${isJobPositionsActive ? '#1e1033' : '#787085'};flex-shrink:0;"></i>
               <span class="s-label" style="color:${isJobPositionsActive ? '#1e1033' : '#787085'};font-size:13px;${isJobPositionsActive ? 'font-weight:500;' : ''}letter-spacing:-0.13px;line-height:1;white-space:nowrap;">Job positions</span>
+            </button>
+          </a>
+          <a href="attendance-authentication-screen.html" style="text-decoration:none;">
+            <button class="nav-sub-item"
+              style="display:flex;align-items:center;gap:10px;width:calc(100% - 32px);height:36px;padding:0 8px;margin:1px 8px 1px 24px;text-align:left;outline:none;">
+              <i class="fa-regular fa-clock" style="width:16px;font-size:13px;color:#787085;flex-shrink:0;"></i>
+              <span class="s-label" style="color:#787085;font-size:13px;letter-spacing:-0.13px;line-height:1;white-space:nowrap;">Attendance</span>
             </button>
           </a>
           <button class="nav-sub-item${isAllCandidatesActive ? ' active' : ''}"
