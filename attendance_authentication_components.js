@@ -67,6 +67,23 @@ const AttendanceAuthenticationComponents = (function() {
   }
 
   function AuthCard(config) {
+    const buttonLabel = escapeHtml(config.buttonText || 'Continue');
+    const buttonIcon = '<i class="fa-solid fa-arrow-right" aria-hidden="true"></i>';
+    const buttonHref = config.buttonHref ? String(config.buttonHref) : '';
+    const buttonMarkup = buttonHref
+      ? `
+        <a class="att-continue-btn" href="${escapeHtml(buttonHref)}">
+          ${buttonLabel}
+          ${buttonIcon}
+        </a>
+      `
+      : `
+        <button type="button" class="att-continue-btn">
+          ${buttonLabel}
+          ${buttonIcon}
+        </button>
+      `;
+
     return `
       <section class="att-auth-card">
         <button type="button" class="att-back-btn">
@@ -79,10 +96,7 @@ const AttendanceAuthenticationComponents = (function() {
           <p class="att-card-subtitle">${escapeHtml(config.subtitle || '')}</p>
         </div>
         ${OtpInputs({ length: config.codeLength, placeholder: config.placeholder })}
-        <button type="button" class="att-continue-btn">
-          ${escapeHtml(config.buttonText || 'Continue')}
-          <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
-        </button>
+        ${buttonMarkup}
       </section>
     `;
   }
