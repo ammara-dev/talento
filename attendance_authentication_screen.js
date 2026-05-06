@@ -12,10 +12,13 @@
     actions: [
       { label: 'Summary', icon: 'fa-regular fa-star' },
       { label: 'Reports', icon: 'fa-regular fa-file-lines' },
-      { label: 'Policies', icon: 'fa-solid fa-shield' },
-      { label: 'Kiosk Mode', icon: 'fa-solid fa-store', active: true },
-      { label: 'Configuration', icon: 'fa-solid fa-sliders' }
+      { label: 'Policies', icon: 'fa-solid fa-scale-balanced' },
+      { label: 'Kiosk Mode', icon: 'fa-solid fa-store', active: true }
     ],
+    configuration: {
+      label: 'Configuration',
+      icon: 'fa-solid fa-gear'
+    },
     card: {
       backText: 'Back',
       greeting: 'Hi Name!',
@@ -54,7 +57,9 @@
 
     if (actionsRoot && typeof AttendanceAuthenticationComponents !== 'undefined') {
       actionsRoot.innerHTML = AttendanceAuthenticationComponents.ActionRow({
-        items: screenData.actions
+        items: screenData.actions,
+        configurationLabel: screenData.configuration.label,
+        configurationIcon: screenData.configuration.icon
       });
     }
 

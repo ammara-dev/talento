@@ -19,7 +19,7 @@ const AttendanceAuthenticationComponents = (function() {
     const activeClass = item.active ? ' is-active' : '';
 
     return `
-      <button type="button" class="att-action-btn${activeClass}" aria-pressed="${item.active ? 'true' : 'false'}">
+      <button type="button" class="ac-chip${activeClass}" aria-pressed="${item.active ? 'true' : 'false'}">
         ${icon}
         <span>${escapeHtml(item.label || '')}</span>
       </button>
@@ -28,7 +28,18 @@ const AttendanceAuthenticationComponents = (function() {
 
   function ActionRow(config) {
     const items = Array.isArray(config.items) ? config.items : [];
-    return items.map(ActionButton).join('');
+    const configLabel = config.configurationLabel || 'Configuration';
+    const configIcon = config.configurationIcon || 'fa-solid fa-gear';
+
+    return `
+      <div class="ac-chip-group">
+        ${items.map(ActionButton).join('')}
+      </div>
+      <button type="button" class="ac-config-btn">
+        <span>${escapeHtml(configLabel)}</span>
+        <i class="${escapeHtml(configIcon)}" aria-hidden="true"></i>
+      </button>
+    `;
   }
 
   function OtpInputs(config) {
