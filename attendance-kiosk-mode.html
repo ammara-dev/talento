@@ -110,13 +110,13 @@
     }
 
     .att-auth-card {
-      width: min(720px, 100%);
-      min-height: 489px;
+      width: min(700px, 100%);
+      min-height: 469px;
       background: #fff;
-      border-radius: 24px;
-      border: 2px solid #eee8f6;
-      padding: 24px 48px 32px;
-      box-shadow: 0 18px 32px rgba(30, 16, 51, 0.1);
+      border-radius: 12px;
+      border: 2px solid rgba(229, 224, 234, 0.4);
+      padding: 20px 140px 119px;
+      box-shadow: 0 12px 24px rgba(30, 16, 51, 0.08);
       display: flex;
       flex-direction: column;
     }
@@ -132,12 +132,12 @@
     }
 
     .att-card-body {
-      margin: 18px auto 0;
+      margin: 130px auto 0;
       text-align: center;
       display: flex;
       flex-direction: column;
       gap: 8px;
-      max-width: 420px;
+      max-width: 100%;
     }
 
     .att-greeting {
@@ -175,13 +175,14 @@
       margin: 14px auto 18px;
       display: grid;
       gap: 8px;
-      width: min(420px, 100%);
+      width: 100%;
+      text-align: center;
     }
 
     .att-input-group {
       display: grid;
       gap: 6px;
-      text-align: left;
+      text-align: center;
     }
 
     .att-input-label {
@@ -190,14 +191,15 @@
     }
 
     .att-input-field {
-      height: 40px;
+      height: 36px;
       border-radius: 10px;
-      border: 1px solid #e7e1ee;
+      border: 1px solid #e5e0ea;
       padding: 0 12px;
       background: #fff;
       font-size: 14px;
       color: #1e1033;
       font-family: 'Alexandria', Helvetica, sans-serif;
+      text-align: center;
     }
 
     .att-input-field::placeholder { color: #b4adc1; }
@@ -228,8 +230,8 @@
     .att-otp-input::placeholder { color: #b4adc1; }
 
     .att-continue-btn {
-      width: min(420px, 100%);
-      min-height: 48px;
+      width: 100%;
+      min-height: 44px;
       border-radius: 12px;
       border: none;
       background: #1e1033;
@@ -241,7 +243,7 @@
       justify-content: center;
       gap: 8px;
       cursor: pointer;
-      box-shadow: 0 10px 20px rgba(30, 16, 51, 0.2);
+      box-shadow: 0 12px 24px rgba(30, 16, 51, 0.18);
       align-self: center;
       text-decoration: none;
     }
@@ -250,7 +252,8 @@
 
     @media (max-width: 900px) {
       .att-shell { padding: 18px 16px 28px; }
-      .att-auth-card { padding: 22px 28px; min-height: 0; }
+      .att-auth-card { padding: 20px 24px; min-height: 0; }
+      .att-card-body { margin-top: 48px; }
       .att-otp-group { height: auto; }
       .att-otp-input { width: 60px; height: 72px; }
     }
