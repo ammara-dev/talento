@@ -21,6 +21,7 @@
     },
     card: {
       backText: 'Back',
+      backHref: 'attendance-kiosk-mode.html',
       greeting: 'Hi Name!',
       title: 'Enter your authentication code',
       subtitle: 'Enter the 5-digit code in authenticator',

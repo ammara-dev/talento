@@ -35,6 +35,28 @@ const AttendanceAuthenticationComponents = (function() {
     return buttonMarkup;
   }
 
+  function buildBackAction(config) {
+    const backLabel = escapeHtml(config.backText || 'Back');
+    const backIcon = '<i class="fa-solid fa-arrow-left" aria-hidden="true"></i>';
+    const backHref = config.backHref ? String(config.backHref) : '';
+
+    if (backHref) {
+      return `
+        <a class="att-back-btn" href="${escapeHtml(backHref)}">
+          ${backIcon}
+          <span>${backLabel}</span>
+        </a>
+      `;
+    }
+
+    return `
+      <button type="button" class="att-back-btn">
+        ${backIcon}
+        <span>${backLabel}</span>
+      </button>
+    `;
+  }
+
   function ActionButton(item) {
     const icon = item.icon ? `<i class="${escapeHtml(item.icon)}" aria-hidden="true"></i>` : '';
     const activeClass = item.active ? ' is-active' : '';
@@ -107,10 +129,7 @@ const AttendanceAuthenticationComponents = (function() {
 
     return `
       <section class="att-auth-card">
-        <button type="button" class="att-back-btn">
-          <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
-          <span>${escapeHtml(config.backText || 'Back')}</span>
-        </button>
+        ${buildBackAction(config)}
         <div class="att-card-body">
           <p class="att-greeting">${escapeHtml(config.greeting || '')}</p>
           <h2 class="att-card-title">${escapeHtml(config.title || '')}</h2>
@@ -126,10 +145,7 @@ const AttendanceAuthenticationComponents = (function() {
     const buttonMarkup = buildPrimaryAction(config);
     return `
       <section class="att-auth-card">
-        <button type="button" class="att-back-btn">
-          <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
-          <span>${escapeHtml(config.backText || 'Back')}</span>
-        </button>
+        ${buildBackAction(config)}
         <div class="att-card-body">
           <h2 class="att-card-title att-card-title--compact">${escapeHtml(config.title || '')}</h2>
           ${config.subtitle ? `<p class="att-card-subtitle">${escapeHtml(config.subtitle)}</p>` : ''}
