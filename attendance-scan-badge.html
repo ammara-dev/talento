@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <title>Talento - Attendance scan badge</title>
+  <meta name="description" content="Talento HR Platform - Attendance badge scan screen" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Alexandria:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="shared-styles.css" />
+  <script src="design-tokens.js"></script>
+  <style>
+    #main-scroll { background: #f6f5f7; }
+
+    .att-shell {
+      min-height: calc(100vh - 56px);
+      padding: 22px 24px 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .att-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .att-page-title {
+      margin: 0;
+      color: #1e1033;
+      font-size: 20px;
+      font-weight: 500;
+      line-height: 1.3;
+    }
+
+    .att-actions {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .ac-chip-group {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid #e2dde9;
+      background: #F6F5F7;
+      border-radius: 12px;
+      padding: 4px;
+      gap: 4px;
+      flex-wrap: wrap;
+    }
+
+    .ac-chip {
+      min-height: 32px;
+      border-radius: 10px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: #5c546d;
+      font-size: 14px;
+      line-height: 1.3;
+      font-family: 'Alexandria', Helvetica, sans-serif;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0 12px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .ac-chip i { color: inherit; }
+
+    .ac-chip.is-active {
+      background: #fff;
+      border-color: #e2dde9;
+      color: #1e1033;
+    }
+
+    .ac-config-btn {
+      min-height: 32px;
+      border-radius: 12px;
+      border: 1px solid #e2dde9;
+      background: #fff;
+      color: #1e1033;
+      font-size: 14px;
+      line-height: 1.3;
+      font-family: 'Alexandria', Helvetica, sans-serif;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 14px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .att-card-wrap {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .scan-card {
+      width: min(720px, 100%);
+      min-height: 440px;
+      background: #fff;
+      border-radius: 24px;
+      border: 2px solid #eee8f6;
+      padding: 24px 48px 32px;
+      box-shadow: 0 18px 32px rgba(30, 16, 51, 0.08);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      gap: 10px;
+    }
+
+    .scan-title-top {
+      margin: 0;
+      color: #4b405c;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    .scan-title-main {
+      margin: 0;
+      color: #1e1033;
+      font-size: 20px;
+      font-weight: 500;
+      line-height: 1.3;
+    }
+
+    .scan-barcode {
+      width: min(380px, 100%);
+      height: 120px;
+      border-radius: 6px;
+      background: repeating-linear-gradient(
+        90deg,
+        #111 0,
+        #111 6px,
+        #fff 6px,
+        #fff 12px,
+        #111 12px,
+        #111 16px,
+        #fff 16px,
+        #fff 22px
+      );
+      margin: 8px 0 6px;
+    }
+
+    .scan-divider {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #787085;
+      font-size: 14px;
+      line-height: 1.4;
+      margin-top: 8px;
+    }
+
+    .scan-divider::before,
+    .scan-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #efe9f2;
+    }
+
+    .scan-manual-btn {
+      min-height: 34px;
+      border-radius: 10px;
+      border: 1px solid #e2dde9;
+      background: #fff;
+      color: #1e1033;
+      font-size: 14px;
+      font-family: 'Alexandria', Helvetica, sans-serif;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 12px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .scan-manual-btn i { color: #4b405c; }
+
+    @media (max-width: 900px) {
+      .att-shell { padding: 18px 16px 28px; }
+      .scan-card { padding: 22px 28px; min-height: 0; }
+    }
+
+    @media (max-width: 640px) {
+      .att-shell { padding: 16px 12px 24px; }
+      .scan-card { padding: 20px; }
+      .scan-barcode { height: 96px; }
+    }
+  </style>
+</head>
+<body>
+<div id="app">
+  <div id="overlay" aria-hidden="true"></div>
+  <aside id="sidebar" aria-label="Main navigation"></aside>
+  <div id="main-col">
+    <header id="navbar" style="display:flex;align-items:center;justify-content:space-between;height:56px;padding:0 16px;background:#fff;border-bottom:1px solid #e8e7eb;flex-shrink:0;min-width:0;"></header>
+    <div id="main-scroll">
+      <main class="att-shell" aria-label="Attendance badge scan">
+        <div class="att-header">
+          <h1 class="att-page-title">Attendance</h1>
+          <div class="att-actions" id="attendance-action-row"></div>
+        </div>
+        <div class="att-card-wrap" id="attendance-scan-root"></div>
+      </main>
+    </div>
+  </div>
+</div>
+
+<script src="layout.js"></script>
+<script src="attendance_authentication_components.js"></script>
+<script src="attendance_scan_badge_components.js"></script>
+<script src="attendance_scan_badge_screen.js"></script>
+</body>
+</html>

@@ -21,6 +21,7 @@
     },
     card: {
       backText: 'Back',
+      backHref: 'attendance-scan-badge.html',
       title: 'Manual authentication',
       subtitle: '',
       inputLabel: 'Enter your name',
