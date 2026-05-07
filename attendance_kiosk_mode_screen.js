@@ -21,11 +21,10 @@
     },
     card: {
       backText: 'Back',
-      greeting: 'Hi Name!',
-      title: 'Enter your authentication code',
-      subtitle: 'Enter the 5-digit code in authenticator',
-      codeLength: 5,
-      placeholder: '0',
+      title: 'Manual authentication',
+      subtitle: '',
+      inputLabel: 'Enter your name',
+      inputPlaceholder: 'Enter your name',
       buttonText: 'Continue',
       buttonHref: 'attendance-authentication-screen.html'
     }
@@ -65,7 +64,7 @@
     }
 
     if (cardRoot && typeof AttendanceAuthenticationComponents !== 'undefined') {
-      cardRoot.innerHTML = AttendanceAuthenticationComponents.AuthCard(screenData.card);
+      cardRoot.innerHTML = AttendanceAuthenticationComponents.ManualAuthCard(screenData.card);
       bindOtpInputs(cardRoot);
     }
   }

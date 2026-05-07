@@ -14,6 +14,27 @@ const AttendanceAuthenticationComponents = (function() {
       .replace(/'/g, '&#39;');
   }
 
+  function buildPrimaryAction(config) {
+    const buttonLabel = escapeHtml(config.buttonText || 'Continue');
+    const buttonIcon = '<i class="fa-solid fa-arrow-right" aria-hidden="true"></i>';
+    const buttonHref = config.buttonHref ? String(config.buttonHref) : '';
+    const buttonMarkup = buttonHref
+      ? `
+        <a class="att-continue-btn" href="${escapeHtml(buttonHref)}">
+          ${buttonLabel}
+          ${buttonIcon}
+        </a>
+      `
+      : `
+        <button type="button" class="att-continue-btn">
+          ${buttonLabel}
+          ${buttonIcon}
+        </button>
+      `;
+
+    return buttonMarkup;
+  }
+
   function ActionButton(item) {
     const icon = item.icon ? `<i class="${escapeHtml(item.icon)}" aria-hidden="true"></i>` : '';
     const activeClass = item.active ? ' is-active' : '';
@@ -66,23 +87,23 @@ const AttendanceAuthenticationComponents = (function() {
     `;
   }
 
+  function TextField(config) {
+    const labelText = config.label ? `<span class="att-input-label">${escapeHtml(config.label)}</span>` : '';
+    return `
+      <label class="att-input-group">
+        ${labelText}
+        <input
+          class="att-input-field"
+          type="${escapeHtml(config.type || 'text')}"
+          placeholder="${escapeHtml(config.placeholder || '')}"
+          value="${escapeHtml(config.value || '')}"
+        />
+      </label>
+    `;
+  }
+
   function AuthCard(config) {
-    const buttonLabel = escapeHtml(config.buttonText || 'Continue');
-    const buttonIcon = '<i class="fa-solid fa-arrow-right" aria-hidden="true"></i>';
-    const buttonHref = config.buttonHref ? String(config.buttonHref) : '';
-    const buttonMarkup = buttonHref
-      ? `
-        <a class="att-continue-btn" href="${escapeHtml(buttonHref)}">
-          ${buttonLabel}
-          ${buttonIcon}
-        </a>
-      `
-      : `
-        <button type="button" class="att-continue-btn">
-          ${buttonLabel}
-          ${buttonIcon}
-        </button>
-      `;
+    const buttonMarkup = buildPrimaryAction(config);
 
     return `
       <section class="att-auth-card">
@@ -101,9 +122,35 @@ const AttendanceAuthenticationComponents = (function() {
     `;
   }
 
+  function ManualAuthCard(config) {
+    const buttonMarkup = buildPrimaryAction(config);
+    return `
+      <section class="att-auth-card">
+        <button type="button" class="att-back-btn">
+          <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+          <span>${escapeHtml(config.backText || 'Back')}</span>
+        </button>
+        <div class="att-card-body">
+          <h2 class="att-card-title att-card-title--compact">${escapeHtml(config.title || '')}</h2>
+          ${config.subtitle ? `<p class="att-card-subtitle">${escapeHtml(config.subtitle)}</p>` : ''}
+        </div>
+        <div class="att-input-stack">
+          ${TextField({
+            label: config.inputLabel || '',
+            placeholder: config.inputPlaceholder || '',
+            value: config.inputValue || '',
+            type: config.inputType || 'text'
+          })}
+        </div>
+        ${buttonMarkup}
+      </section>
+    `;
+  }
+
   return {
     ActionRow,
     AuthCard,
+    ManualAuthCard,
     OtpInputs
   };
 })();
