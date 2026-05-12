@@ -30,6 +30,11 @@ const SalaryScaleComponents = (function() {
   function TopTabs(config) {
     const tabs = config && Array.isArray(config.tabs) ? config.tabs : [];
     const activeTab = config && config.activeTab ? config.activeTab : '';
+    const tabLinks = {
+      'salary-scale': 'salary-scale.html',
+      'level-overview': 'salary-scale-table-screen.html',
+      'degree-matrix': 'salary-scale-degree-matrix-screen.html'
+    };
     return `
       <div class="ss-top-row">
         <div class="ss-search">
@@ -41,7 +46,9 @@ const SalaryScaleComponents = (function() {
             ${tabs.map(function(tab) {
               const icon = tab.id === 'salary-scale' ? Icons.tabsSalary : tab.id === 'level-overview' ? Icons.tabsOverview : Icons.tabsMatrix;
               const activeClass = tab.id === activeTab ? ' active' : '';
-              return `<button type="button" class="ss-tab${activeClass}" data-ss-tab="${escapeHtml(tab.id)}"><span>${icon}</span><span>${escapeHtml(tab.label)}</span></button>`;
+              const href = tab.href || tabLinks[tab.id] || '#';
+              const ariaCurrent = tab.id === activeTab ? ' aria-current="page"' : '';
+              return `<a class="ss-tab${activeClass}" data-ss-tab="${escapeHtml(tab.id)}" href="${escapeHtml(href)}"${ariaCurrent}><span>${icon}</span><span>${escapeHtml(tab.label)}</span></a>`;
             }).join('')}
           </div>
           <button type="button" class="ss-config-btn">Configuration <span>${Icons.tabsSalary}</span></button>
