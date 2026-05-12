@@ -28,13 +28,20 @@ const SalaryScaleTableComponents = (function() {
 
   function TopControls(config) {
     const tabs = Array.isArray(config.tabs) ? config.tabs : [];
+    const tabLinks = {
+      salary: 'salary-scale.html',
+      overview: 'salary-scale-table-screen.html',
+      matrix: 'salary-scale-degree-matrix-screen.html'
+    };
     return `
       <section class="sst-head-row">
         <div class="sst-tabs">
           ${tabs.map(function(tab) {
             const activeClass = tab.active ? ' active' : '';
             const icon = tab.id === 'salary' ? Icons.wallet : tab.id === 'overview' ? Icons.overview : Icons.matrix;
-            return `<button type="button" class="sst-tab${activeClass}">${icon}<span>${escapeHtml(tab.label || '')}</span></button>`;
+            const href = tab.href || tabLinks[tab.id] || '#';
+            const ariaCurrent = tab.active ? ' aria-current="page"' : '';
+            return `<a class="sst-tab${activeClass}" href="${escapeHtml(href)}"${ariaCurrent}>${icon}<span>${escapeHtml(tab.label || '')}</span></a>`;
           }).join('')}
         </div>
         <button type="button" class="sst-config-btn">
